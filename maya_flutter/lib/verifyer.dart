@@ -48,7 +48,14 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                 : () async {
                     String localPhoneNumber = '+81 ${_phoneNumber!.substring(1)}';
                     if (UniversalPlatform.isWeb) {
-                      FirebaseAuth.instance.signInWithPhoneNumber(localPhoneNumber);
+                      ConfirmationResult res = await FirebaseAuth.instance.signInWithPhoneNumber(localPhoneNumber);
+                      showDialog(context: context, builder: (context){
+                        return PhoneVerifyCodeInputDialog(
+                          function: (code) async{
+                            return (await res.confirm(code)).credential!; // TODO credential is optional
+                          },
+                        );
+                      });
                     } else {
                       await FirebaseAuth.instance.verifyPhoneNumber(
                           phoneNumber: localPhoneNumber,
@@ -97,7 +104,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                                 builder: (context) {
                                   return PhoneVerifyCodeInputDialog(
                                     function: (code){
-                                      return PhoneAuthProvider.credential(verificationId: verificationId, smsCode: code);
+                                      return Future.value(PhoneAuthProvider.credential(verificationId: verificationId, smsCode: code));
                                     },
                                   );
                                 });
@@ -117,7 +124,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
 }
 
 class PhoneVerifyCodeInputDialog extends StatefulWidget {
-  AuthCredential Function(String) function;
+  Future<AuthCredential> Function(String) function;
 
   PhoneVerifyCodeInputDialog({Key? key, required this.function});
 
@@ -136,7 +143,7 @@ class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog>
           onCompleted: (String value) async {
             print('onSubmitted');
             // Login
-            AuthCredential credential = widget.function(value);
+            AuthCredential credential = await widget.function(value);
             try {
               await FirebaseAuth.instance.signInWithCredential(credential);
 
