@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_recaptcha/firebase_recaptcha_verifier_modal.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 
@@ -34,39 +35,64 @@ class TitlePage extends StatefulWidget {
 }
 
 class _TitlePageState extends State<TitlePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  String? _token;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Theme.of(context).backgroundColor,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Text("Try Login"),
+            ElevatedButton(
+                onPressed: () {
+                  onLogin(context);
+                },
+                child: Text("Login")),
+
+            if (_token != null)
+              Text("Token: $_token"),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
+  }
+
+  void onLogin(BuildContext context) {
+    var firebaseConfig = {
+      'apiKey': Firebase.app().options.apiKey,
+      'authDomain': "localhost",
+      'projectId': Firebase.app().options.projectId,
+      'storageBucket': Firebase.app().options.storageBucket!,
+      'messagingSenderId': Firebase.app().options.messagingSenderId,
+      'appId': Firebase.app().options.appId
+    };
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          print('config: $firebaseConfig');
+          return FirebaseRecaptchaVerifierModal(
+              firebaseConfig: firebaseConfig,
+              onVerify: (String token) {
+                print("Token: $token");
+                Navigator.pop(context);
+                setState(() {
+                  _token = token;
+                });
+              },
+              onError: () {
+                print("Error");
+              },
+              onFullChallenge: () {
+                print("FullChallenge");
+              },
+              attemptInvisibleVerification: true);
+        });
   }
 }
