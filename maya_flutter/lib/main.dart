@@ -52,7 +52,7 @@ class _TitlePageState extends State<TitlePage> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                    return const PhoneVerifier();
+                    return PhoneVerifier();
                   }));
                 },
                 child: Text("Login")),

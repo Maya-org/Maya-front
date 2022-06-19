@@ -48,6 +48,7 @@ class Messages {
   String get phone_auth_input_auth_code => """認証番号を入力してください""";
   String get phone_auth_input_continue => """決定""";
   String get phone_auth_input_wrong_number => """認証番号が違います。""";
+  String get phone_auth_input_code_title => """認証番号を入力してください""";
 }
 
 Map<String, String> get messagesMap => {
@@ -65,4 +66,5 @@ Map<String, String> get messagesMap => {
       """phone_auth_input_auth_code""": """認証番号を入力してください""",
       """phone_auth_input_continue""": """決定""",
       """phone_auth_input_wrong_number""": """認証番号が違います。""",
+      """phone_auth_input_code_title""": """認証番号を入力してください""",
     };

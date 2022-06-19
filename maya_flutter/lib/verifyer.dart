@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_firebase_recaptcha/firebase_recaptcha_verifier_modal.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 import 'package:pinput/pinput.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -10,115 +8,13 @@ import 'package:universal_platform/universal_platform.dart';
 import 'mainPage.dart';
 
 class PhoneVerifier extends StatefulWidget {
-  const PhoneVerifier({Key? key}) : super(key: key);
+  PhoneVerifier({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PhoneVerifierState();
 }
 
 class _PhoneVerifierState extends State<PhoneVerifier> {
-  @override
-  void initState() {
-    super.initState();
-    Future(() {
-      onLogin(context);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox.shrink();
-  }
-
-  void onLogin(BuildContext context) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-      return _FirebaseStack();
-    }));
-  }
-}
-
-class _FirebaseStack extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _FirebaseStackState();
-}
-
-class _FirebaseStackState extends State<_FirebaseStack> {
-  bool _toShowLoading = true;
-
-  @override
-  Widget build(BuildContext context) {
-    var firebaseConfig = {
-      'apiKey': Firebase.app().options.apiKey,
-      'authDomain': "localhost",
-      'projectId': Firebase.app().options.projectId,
-      'storageBucket': Firebase.app().options.storageBucket!,
-      'messagingSenderId': Firebase.app().options.messagingSenderId,
-      'appId': Firebase.app().options.appId
-    };
-
-    return Stack(
-      children: [
-        FirebaseRecaptchaVerifierModal(
-            firebaseConfig: firebaseConfig,
-            onVerify: (String token) {
-              print("Token: $token");
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                return PhoneVerifyPage(token: token);
-              }));
-            },
-            onError: () {
-              print("Error");
-            },
-            onFullChallenge: () {
-              print("FullChallenge");
-              setState(() {
-                _toShowLoading = false;
-              });
-            },
-            onLoad: () {
-              print("Load");
-            },
-            attemptInvisibleVerification: true),
-        if (_toShowLoading)
-          Expanded(
-              child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  const Messages().reCaptcha_loading_text,
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const CircularProgressIndicator(
-                  color: Colors.blue,
-                  strokeWidth: 3,
-                  backgroundColor: Colors.white,
-                ),
-              ],
-            )),
-          ))
-      ],
-    );
-  }
-}
-
-class PhoneVerifyPage extends StatefulWidget {
-  String token;
-
-  PhoneVerifyPage({Key? key, required this.token}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _PhoneVerifyPageState();
-}
-
-class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
   final TextEditingController _controller = TextEditingController();
   String? _phoneNumber;
 
@@ -151,16 +47,20 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
                 ? null
                 : () async {
                     String localPhoneNumber = '+81 ${_phoneNumber!.substring(1)}';
-
                     if (UniversalPlatform.isWeb) {
                       FirebaseAuth.instance.signInWithPhoneNumber(localPhoneNumber);
                     } else {
                       await FirebaseAuth.instance.verifyPhoneNumber(
                           phoneNumber: localPhoneNumber,
                           verificationCompleted: (PhoneAuthCredential credential) async {
-                            await FirebaseAuth.instance.signInWithCredential(credential);
+                            print('verificationCompleted');
+                              await FirebaseAuth.instance.signInWithCredential(credential);
+                              Navigator.of(this.context).pushReplacement(MaterialPageRoute(builder: (context) {
+                                return const MainPage();
+                              }));
                           },
                           verificationFailed: (FirebaseAuthException ex) {
+                            print('verificationFailed');
                             // Handle error here.
                             late String bodyString;
                             switch (ex.code) {
@@ -191,11 +91,14 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
                                 });
                           },
                           codeSent: (String verificationId, int? resendToken) {
+                            print('codeSent');
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return PhoneVerifyCodeInputDialog(
-                                    verificationId: verificationId,
+                                    function: (code){
+                                      return PhoneAuthProvider.credential(verificationId: verificationId, smsCode: code);
+                                    },
                                   );
                                 });
                           },
@@ -214,9 +117,9 @@ class _PhoneVerifyPageState extends State<PhoneVerifyPage> {
 }
 
 class PhoneVerifyCodeInputDialog extends StatefulWidget {
-  String verificationId;
+  AuthCredential Function(String) function;
 
-  PhoneVerifyCodeInputDialog({Key? key, required this.verificationId});
+  PhoneVerifyCodeInputDialog({Key? key, required this.function});
 
   @override
   State<StatefulWidget> createState() => _PhoneVerifyCodeInputDialogState();
@@ -225,51 +128,54 @@ class PhoneVerifyCodeInputDialog extends StatefulWidget {
 class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog> {
   @override
   Widget build(BuildContext context) {
-    return Pinput(
-        length: 4,
-        pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-        onSubmitted: (String value) async {
-          // Login
-          PhoneAuthCredential credential =
-              PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: value);
-          try {
-            await FirebaseAuth.instance.signInWithCredential(credential);
+    return AlertDialog(
+      title: Text(const Messages().phone_auth_input_code_title),
+      content: Pinput(
+          length: 6,
+          pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+          onCompleted: (String value) async {
+            print('onSubmitted');
+            // Login
+            AuthCredential credential = widget.function(value);
+            try {
+              await FirebaseAuth.instance.signInWithCredential(credential);
 
-            // 正常にログインできた
-            Navigator.of(this.context).pushReplacement(MaterialPageRoute(builder: (context) {
-              return const MainPage();
-            }));
-          } on FirebaseAuthException catch (e) {
-            late String bodyString;
-            switch (e.code) {
-              case "invalid-verification-code":
-                // 打ち込まれたコードが間違っている
-                bodyString = const Messages().phone_auth_input_wrong_number;
-                break;
-              default:
-                // その他のエラー
-                bodyString = "${const Messages().phone_auth_error_title}\nエラーコード: ${e.code}";
-                break;
+              // 正常にログインできた
+              Navigator.of(this.context).pushReplacement(MaterialPageRoute(builder: (context) {
+                return const MainPage();
+              }));
+            } on FirebaseAuthException catch (e) {
+              late String bodyString;
+              switch (e.code) {
+                case "invalid-verification-code":
+                  // 打ち込まれたコードが間違っている
+                  bodyString = const Messages().phone_auth_input_wrong_number;
+                  break;
+                default:
+                  // その他のエラー
+                  bodyString = "${const Messages().phone_auth_error_title}\nエラーコード: ${e.code}";
+                  break;
+              }
+
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(const Messages().phone_auth_error_title),
+                      content: Center(
+                        child: Text(bodyString),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(const Messages().phone_auth_error_return))
+                      ],
+                    );
+                  });
             }
-
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text(const Messages().phone_auth_error_title),
-                    content: Center(
-                      child: Text(bodyString),
-                    ),
-                    actions: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(const Messages().phone_auth_error_return))
-                    ],
-                  );
-                });
-          }
-        });
+          }),
+    );
   }
 }
