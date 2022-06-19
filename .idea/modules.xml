@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Maya-front.iml" filepath="$PROJECT_DIR$/.idea/Maya-front.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maya_flutter/maya_flutter.iml" filepath="$PROJECT_DIR$/maya_flutter/maya_flutter.iml" />
+    </modules>
+  </component>
+</project>
