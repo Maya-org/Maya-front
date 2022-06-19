@@ -16,18 +16,19 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(const Messages().app_title),
       ),
-      body: Container(
-        child: Column(children: [
+      body: SizedBox.expand(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
             const Text("認証完了！！！！"),
             SizedBox(height: 10),
             Text("電話番号:"),
             Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? ""),
+            Text("UID:"),
+            Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
           ],
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
         ),
-        height: double.infinity,
-        width: double.infinity,
       ),
     );
   }

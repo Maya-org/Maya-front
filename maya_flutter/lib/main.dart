@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
+import 'package:maya_flutter/mainPage.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/verifyer.dart';
 
@@ -35,8 +37,6 @@ class TitlePage extends StatefulWidget {
 }
 
 class _TitlePageState extends State<TitlePage> {
-  String? _token;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,15 +48,20 @@ class _TitlePageState extends State<TitlePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Try Login"),
+            const Text("Try Login"),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                    return PhoneVerifier();
-                  }));
+                  if (FirebaseAuth.instance.currentUser == null) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                      return PhoneVerifier();
+                    }));
+                  } else {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                      return const MainPage();
+                    }));
+                  }
                 },
-                child: Text("Login")),
-            if (_token != null) Text("Token: $_token"),
+                child: const Text("Login"))
           ],
         ),
       ),
