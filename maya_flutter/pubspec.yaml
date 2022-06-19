@@ -38,6 +38,8 @@ dependencies:
   firebase_core: ^1.18.0
   firebase_auth:
   flutter_firebase_recaptcha: ^1.0.2
+  universal_platform: ^1.0.0+1
+  pinput: ^2.2.11
 
 dev_dependencies:
   flutter_test:
