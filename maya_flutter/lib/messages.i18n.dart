@@ -36,9 +36,13 @@ class Messages {
   String get languageCode => "en";
   String get app_title => """Maya Flutter App""";
   String get page_title => """Maya""";
+  String get phone_auth_title => """Phone Number Authentication""";
+  String get reCaptcha_loading_text => """認証中です...""";
 }
 
 Map<String, String> get messagesMap => {
       """app_title""": """Maya Flutter App""",
       """page_title""": """Maya""",
+      """phone_auth_title""": """Phone Number Authentication""",
+      """reCaptcha_loading_text""": """認証中です...""",
     };

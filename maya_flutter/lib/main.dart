@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_recaptcha/firebase_recaptcha_verifier_modal.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
+import 'package:maya_flutter/verifyer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,48 +51,15 @@ class _TitlePageState extends State<TitlePage> {
             Text("Try Login"),
             ElevatedButton(
                 onPressed: () {
-                  onLogin(context);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                    return const PhoneVerifier();
+                  }));
                 },
                 child: Text("Login")),
-
-            if (_token != null)
-              Text("Token: $_token"),
+            if (_token != null) Text("Token: $_token"),
           ],
         ),
       ),
     );
-  }
-
-  void onLogin(BuildContext context) {
-    var firebaseConfig = {
-      'apiKey': Firebase.app().options.apiKey,
-      'authDomain': "localhost",
-      'projectId': Firebase.app().options.projectId,
-      'storageBucket': Firebase.app().options.storageBucket!,
-      'messagingSenderId': Firebase.app().options.messagingSenderId,
-      'appId': Firebase.app().options.appId
-    };
-
-    showDialog(
-        context: context,
-        builder: (context) {
-          print('config: $firebaseConfig');
-          return FirebaseRecaptchaVerifierModal(
-              firebaseConfig: firebaseConfig,
-              onVerify: (String token) {
-                print("Token: $token");
-                Navigator.pop(context);
-                setState(() {
-                  _token = token;
-                });
-              },
-              onError: () {
-                print("Error");
-              },
-              onFullChallenge: () {
-                print("FullChallenge");
-              },
-              attemptInvisibleVerification: true);
-        });
   }
 }
