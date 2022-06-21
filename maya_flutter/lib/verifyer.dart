@@ -8,7 +8,7 @@ import 'package:maya_flutter/ui/WidgetSwitcher.dart';
 import 'package:pinput/pinput.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'mainPage.dart';
+import 'pages/mainPage.dart';
 
 class PhoneVerifier extends StatefulWidget {
   PhoneVerifier({Key? key}) : super(key: key);
