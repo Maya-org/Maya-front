@@ -23,28 +23,33 @@ class _MainPageState extends State<MainPage> {
       ),
       body: SizedBox.expand(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text("認証完了！！！！"),
-              SizedBox(height: 10),
-              Text("電話番号:"),
-              Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? ""),
-              Text("UID:"),
-              Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
-              SizedBox(height: 10),
-              AsyncButton(
-                  notLoadingButtonContent: const Text("新規登録処理!"),
-                  task: () async {
-                    Response res = await register(
-                        MayaUser("苗字", "名前", DateTime.now(), UserAuthentication.getCurrent()!));
-                    showOKDialog(this.context,
-                      title: Text("登録結果"),
-                      body: Text("Status: ${res.statusCode}\nBody: ${res.body}"),
-                    );
-                  }),
-            ],
-          )),
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("認証完了！！！！"),
+          SizedBox(height: 10),
+          Text("電話番号:"),
+          Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? ""),
+          Text("UID:"),
+          Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
+          SizedBox(height: 10),
+          AsyncButton<Response>(
+              notLoadingButtonContent: const Text("新規登録処理!"),
+              asyncTask: () async {
+                return await register(
+                    MayaUser("苗字", "名前", DateTime.now(), UserAuthentication.getCurrent()!));
+              },
+              after: (dynamic r) {
+                r as Response;
+                showOKDialog(
+                  this.context,
+                  title: Text("登録結果"),
+                  body: Text("Status: ${r.statusCode}\nBody: ${r.body}"),
+                );
+              },
+              isFullScreenLoading: true),
+        ],
+      )),
     );
   }
 }
