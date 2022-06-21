@@ -51,13 +51,13 @@ class _TitlePageState extends State<TitlePage> {
             const Text("Try Login"),
             ElevatedButton(
                 onPressed: () {
-                  if (FirebaseAuth.instance.currentUser == null) {
+                  if (FirebaseAuth.instance.currentUser != null) {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                      return PhoneVerifier();
+                      return const MainPage();
                     }));
                   } else {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                      return const MainPage();
+                      return PhoneVerifier();
                     }));
                   }
                 },

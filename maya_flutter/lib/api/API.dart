@@ -32,7 +32,7 @@ Future<Response> post(String path, {Map<String, dynamic>? body}) async {
   return await http.post(url, body: body, headers: await headers());
 }
 
-Future<void> register(MayaUser user) async {
+Future<http.Response> register(MayaUser user) async {
   Map<String, String> map = {"firstName": user.firstName, "lastName": user.lastName};
 
   http.Response res = await post("register", body: map);
@@ -52,5 +52,5 @@ Future<void> register(MayaUser user) async {
       print("Unknown error");
       break;
   }
-  print(res.body);
+  return res;
 }

@@ -1,30 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:maya_flutter/WidgetSwitcher.dart';
 
-class SimpleDialog extends StatefulWidget {
-  Widget? body;
-  Widget? title;
-  List<Widget>? actions;
+import 'WidgetSwitcher.dart';
 
-  SimpleDialog({this.body, this.title, this.actions, Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _SimpleDialogState();
-}
-
-class _SimpleDialogState extends State<SimpleDialog> {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: widget.title,
-      content: widget.body,
-      actions: widget.actions,
-    );
-  }
-}
-
-/// Asyncでタスクを実行しているときには、読み込み中のダイアログを表示する
+/// Asyncでタスクを実行しているときには、読み込み中のくるくるマークを表示する
 class AsyncButton extends StatefulWidget {
   final Widget notLoadingButtonContent;
   final Future<dynamic> Function() task;
