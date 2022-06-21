@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:maya_flutter/api/API.dart';
+import 'package:maya_flutter/messages.i18n.dart';
 
-import '../verifyer.dart';
 import 'mainPage.dart';
+import 'verifyer.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key, required this.title}) : super(key: key);
@@ -24,7 +26,7 @@ class _TitlePageState extends State<SignUpPage> {
   }
 
   Future<void> autoRedirect() async {
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (FirebaseAuth.instance.currentUser != null && await user() != null) {
       // 認証済みの場合はメインページに遷移
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
         return const MainPage();
@@ -32,6 +34,7 @@ class _TitlePageState extends State<SignUpPage> {
     }
   }
 
+  // TODO Restyle
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,18 +42,13 @@ class _TitlePageState extends State<SignUpPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text("Try Login"),
+            Text(const Messages().sign_up_message),
             ElevatedButton(
                 onPressed: () {
-                  if (FirebaseAuth.instance.currentUser != null) {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                      return const MainPage();
-                    }));
-                  } else {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                      return PhoneVerifier();
-                    }));
-                  }
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                    // 電話認証にすっとばす
+                    return PhoneVerifier();
+                  }));
                 },
                 child: const Text("Login"))
           ],

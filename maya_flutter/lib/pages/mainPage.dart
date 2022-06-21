@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/ui/AsyncButton.dart';
-import 'package:maya_flutter/ui/UI.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,6 +12,29 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  String? _firstName;
+  String? _lastName;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> updateName() async {
+    MayaUser? us = await user();
+    if (us != null) {
+      setState(() {
+        _firstName = us.firstName;
+        _lastName = us.lastName;
+      });
+    } else {
+      setState(() {
+        _firstName = "none";
+        _lastName = "none";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,21 +51,10 @@ class _MainPageState extends State<MainPage> {
             Text("UID:"),
             Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
             SizedBox(height: 10),
-            AsyncButton<Response>(
-                notLoadingButtonContent: const Text("新規登録処理!"),
-                asyncTask: () async {
-                  return await register(
-                      MayaUser("苗字", "名前", DateTime.now(), UserAuthentication.getCurrent()!));
-                },
-                after: (dynamic r) {
-                  r as Response;
-                  showOKDialog(
-                    this.context,
-                    title: Text("登録結果"),
-                    body: Text("Status: ${r.statusCode}\nBody: ${r.body}"),
-                  );
-                },
-                isFullScreenLoading: true),
+            Text("名前:"),
+            Text("${_firstName ?? ""} ${_lastName ?? ""}"),
+            SizedBox(height: 10),
+            AsyncButton(notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r){})
           ],
         )),
       ),

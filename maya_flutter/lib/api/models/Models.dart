@@ -101,14 +101,36 @@ class Reservation {
 class MayaUser {
   String firstName;
   String lastName;
-  DateTime createdAt;
-  UserAuthentication auth;
+  TimeStamp createdDate;
 
-  MayaUser(this.firstName, this.lastName, this.createdAt, this.auth);
+  MayaUser(this.firstName, this.lastName, this.createdDate);
 
   factory MayaUser.fromJson(Map<String, dynamic> json) => _$MayaUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$MayaUserToJson(this);
+}
+
+@JsonSerializable()
+class TimeStamp {
+  @JsonKey(name: '_seconds')
+  int seconds;
+  @JsonKey(name: '_nanoseconds')
+  int nanoseconds;
+
+  TimeStamp(this.seconds, this.nanoseconds);
+
+  factory TimeStamp.fromJson(Map<String, dynamic> json) => _$TimeStampFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TimeStampToJson(this);
+
+  DateTime toDateTime() {
+    return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+  }
+
+  static now() {
+    return TimeStamp(DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        DateTime.now().millisecondsSinceEpoch % 1000);
+  }
 }
 
 @JsonSerializable()
@@ -126,7 +148,8 @@ class UserAuthentication {
     }
   }
 
-  factory UserAuthentication.fromJson(Map<String, dynamic> json) => _$UserAuthenticationFromJson(json);
+  factory UserAuthentication.fromJson(Map<String, dynamic> json) =>
+      _$UserAuthenticationFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAuthenticationToJson(this);
 }

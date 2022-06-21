@@ -24,8 +24,8 @@ class OKDialog extends ContainerDialog {
       actions: [
         ElevatedButton(
             onPressed: () {
-              onOK?.call();
               if (toClose?? false) Navigator.pop(context);
+              onOK?.call();
             },
             child: Text(okText ?? "OK"))
       ],

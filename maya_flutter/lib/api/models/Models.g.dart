@@ -93,15 +93,23 @@ Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
 MayaUser _$MayaUserFromJson(Map<String, dynamic> json) => MayaUser(
       json['firstName'] as String,
       json['lastName'] as String,
-      DateTime.parse(json['createdAt'] as String),
-      UserAuthentication.fromJson(json['auth'] as Map<String, dynamic>),
+      TimeStamp.fromJson(json['createdDate'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MayaUserToJson(MayaUser instance) => <String, dynamic>{
       'firstName': instance.firstName,
       'lastName': instance.lastName,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'auth': instance.auth,
+      'createdDate': instance.createdDate,
+    };
+
+TimeStamp _$TimeStampFromJson(Map<String, dynamic> json) => TimeStamp(
+      json['_seconds'] as int,
+      json['_nanoseconds'] as int,
+    );
+
+Map<String, dynamic> _$TimeStampToJson(TimeStamp instance) => <String, dynamic>{
+      '_seconds': instance.seconds,
+      '_nanoseconds': instance.nanoseconds,
     };
 
 UserAuthentication _$UserAuthenticationFromJson(Map<String, dynamic> json) =>

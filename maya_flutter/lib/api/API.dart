@@ -1,9 +1,19 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 
 const end_point = "https://us-central1-maya-e0346.cloudfunctions.net/";
+
+dynamic safeJsonDecode(Response res) {
+  try {
+    return jsonDecode(res.body);
+  } catch (e) {
+    return null;
+  }
+}
 
 Uri fullURL(String path) {
   Uri uri = Uri.parse(end_point + path);
@@ -53,4 +63,29 @@ Future<http.Response> register(MayaUser user) async {
       break;
   }
   return res;
+}
+
+Future<MayaUser?> user() async {
+  http.Response res = await get("user");
+
+  print('user res: ${res.body}');
+
+  switch (res.statusCode) {
+    case 200:
+      print("Successfully got user");
+      try{
+        return MayaUser.fromJson(safeJsonDecode(res));
+      }catch(e){
+        return null;
+      }
+    case 401:
+      print("Authentication failed");
+      return null;
+    case 404:
+      print("User not found");
+      return null;
+    default:
+      print("Unknown error");
+      return null;
+  }
 }

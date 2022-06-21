@@ -19,6 +19,8 @@ class MayaApp extends StatelessWidget {
       title: const Messages().app_title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: Theme.of(context).textTheme.apply(
+        )
       ),
       home: SignUpPage(title: const Messages().page_title),
     );
