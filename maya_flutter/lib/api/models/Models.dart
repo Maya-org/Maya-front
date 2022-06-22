@@ -49,7 +49,7 @@ enum GuestType {
 
 @JsonSerializable()
 class ReservableEvent {
-  int event_id;
+  String event_id;
   String display_name;
   String? description;
   TimeStamp date_start;
@@ -58,17 +58,27 @@ class ReservableEvent {
   int? capacity;
   int taken_capacity;
   List<String> reservations;
-  Reservation? required_reservation;
+  Reference? required_reservation; // Reference to a reservation that is required to attend this event.
 
-  ReservableEvent(this.event_id, this.display_name, this.description, this.date_start, this.date_end, this.available_at, this.capacity, this.taken_capacity, this.reservations, this.required_reservation);
+  ReservableEvent(
+      this.event_id,
+      this.display_name,
+      this.description,
+      this.date_start,
+      this.date_end,
+      this.available_at,
+      this.capacity,
+      this.taken_capacity,
+      this.reservations,
+      this.required_reservation);
 
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReservableEventToJson(this);
 
   @override
-  String toString(){
-    return "イベント:$display_name";
+  String toString() {
+    return "イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation";
   }
 }
 
@@ -145,4 +155,41 @@ class UserAuthentication {
       _$UserAuthenticationFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAuthenticationToJson(this);
+}
+
+@JsonSerializable()
+class Reference{
+  @JsonKey(name: '_firestore')
+  FireStore fireStore;
+  @JsonKey(name: '_path')
+  Path path;
+
+  Reference(this.fireStore, this.path);
+
+  factory Reference.fromJson(Map<String, dynamic> json) => _$ReferenceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReferenceToJson(this);
+}
+
+@JsonSerializable()
+class FireStore{
+  String projectId;
+  FireStore(this.projectId);
+
+  factory FireStore.fromJson(Map<String, dynamic> json) => _$FireStoreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FireStoreToJson(this);
+}
+
+@JsonSerializable()
+class Path{
+  List<String> segments;
+  @JsonKey(name: '_converter')
+  dynamic converter;
+
+  Path(this.segments, this.converter);
+
+  factory Path.fromJson(Map<String, dynamic> json) => _$PathFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PathToJson(this);
 }

@@ -36,7 +36,7 @@ const _$GuestTypeEnumMap = {
 
 ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
     ReservableEvent(
-      json['event_id'] as int,
+      json['event_id'] as String,
       json['display_name'] as String,
       json['description'] as String?,
       TimeStamp.fromJson(json['date_start'] as Map<String, dynamic>),
@@ -51,7 +51,7 @@ ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
       (json['reservations'] as List<dynamic>).map((e) => e as String).toList(),
       json['required_reservation'] == null
           ? null
-          : Reservation.fromJson(
+          : Reference.fromJson(
               json['required_reservation'] as Map<String, dynamic>),
     );
 
@@ -112,4 +112,32 @@ UserAuthentication _$UserAuthenticationFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$UserAuthenticationToJson(UserAuthentication instance) =>
     <String, dynamic>{
       'firebase_auth_uid': instance.firebase_auth_uid,
+    };
+
+Reference _$ReferenceFromJson(Map<String, dynamic> json) => Reference(
+      FireStore.fromJson(json['_firestore'] as Map<String, dynamic>),
+      Path.fromJson(json['_path'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ReferenceToJson(Reference instance) => <String, dynamic>{
+      '_firestore': instance.fireStore,
+      '_path': instance.path,
+    };
+
+FireStore _$FireStoreFromJson(Map<String, dynamic> json) => FireStore(
+      json['projectId'] as String,
+    );
+
+Map<String, dynamic> _$FireStoreToJson(FireStore instance) => <String, dynamic>{
+      'projectId': instance.projectId,
+    };
+
+Path _$PathFromJson(Map<String, dynamic> json) => Path(
+      (json['segments'] as List<dynamic>).map((e) => e as String).toList(),
+      json['_converter'],
+    );
+
+Map<String, dynamic> _$PathToJson(Path instance) => <String, dynamic>{
+      'segments': instance.segments,
+      '_converter': instance.converter,
     };
