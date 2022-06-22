@@ -52,31 +52,24 @@ class ReservableEvent {
   int event_id;
   String display_name;
   String? description;
-  Dating dating;
+  TimeStamp date_start;
+  TimeStamp? date_end;
+  TimeStamp? available_at;
   int? capacity;
   int taken_capacity;
-  List<Reservation> reservations;
-  Reservation required_reservation;
+  List<String> reservations;
+  Reservation? required_reservation;
 
-  ReservableEvent(this.event_id, this.display_name, this.description, this.dating, this.capacity,
-      this.taken_capacity, this.reservations, this.required_reservation);
+  ReservableEvent(this.event_id, this.display_name, this.description, this.date_start, this.date_end, this.available_at, this.capacity, this.taken_capacity, this.reservations, this.required_reservation);
 
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReservableEventToJson(this);
-}
 
-@JsonSerializable()
-class Dating {
-  DateTime date_start;
-  DateTime? date_end;
-  DateTime? available_at;
-
-  Dating(this.date_start, this.date_end, this.available_at);
-
-  factory Dating.fromJson(Map<String, dynamic> json) => _$DatingFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DatingToJson(this);
+  @override
+  String toString(){
+    return "イベント:$display_name";
+  }
 }
 
 @JsonSerializable()

@@ -39,14 +39,20 @@ ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
       json['event_id'] as int,
       json['display_name'] as String,
       json['description'] as String?,
-      Dating.fromJson(json['dating'] as Map<String, dynamic>),
+      TimeStamp.fromJson(json['date_start'] as Map<String, dynamic>),
+      json['date_end'] == null
+          ? null
+          : TimeStamp.fromJson(json['date_end'] as Map<String, dynamic>),
+      json['available_at'] == null
+          ? null
+          : TimeStamp.fromJson(json['available_at'] as Map<String, dynamic>),
       json['capacity'] as int?,
       json['taken_capacity'] as int,
-      (json['reservations'] as List<dynamic>)
-          .map((e) => Reservation.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      Reservation.fromJson(
-          json['required_reservation'] as Map<String, dynamic>),
+      (json['reservations'] as List<dynamic>).map((e) => e as String).toList(),
+      json['required_reservation'] == null
+          ? null
+          : Reservation.fromJson(
+              json['required_reservation'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
@@ -54,27 +60,13 @@ Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
       'event_id': instance.event_id,
       'display_name': instance.display_name,
       'description': instance.description,
-      'dating': instance.dating,
+      'date_start': instance.date_start,
+      'date_end': instance.date_end,
+      'available_at': instance.available_at,
       'capacity': instance.capacity,
       'taken_capacity': instance.taken_capacity,
       'reservations': instance.reservations,
       'required_reservation': instance.required_reservation,
-    };
-
-Dating _$DatingFromJson(Map<String, dynamic> json) => Dating(
-      DateTime.parse(json['date_start'] as String),
-      json['date_end'] == null
-          ? null
-          : DateTime.parse(json['date_end'] as String),
-      json['available_at'] == null
-          ? null
-          : DateTime.parse(json['available_at'] as String),
-    );
-
-Map<String, dynamic> _$DatingToJson(Dating instance) => <String, dynamic>{
-      'date_start': instance.date_start.toIso8601String(),
-      'date_end': instance.date_end?.toIso8601String(),
-      'available_at': instance.available_at?.toIso8601String(),
     };
 
 Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(

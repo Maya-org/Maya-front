@@ -73,9 +73,9 @@ Future<MayaUser?> user() async {
   switch (res.statusCode) {
     case 200:
       print("Successfully got user");
-      try{
+      try {
         return MayaUser.fromJson(safeJsonDecode(res));
-      }catch(e){
+      } catch (e) {
         return null;
       }
     case 401:
@@ -83,6 +83,34 @@ Future<MayaUser?> user() async {
       return null;
     case 404:
       print("User not found");
+      return null;
+    default:
+      print("Unknown error");
+      return null;
+  }
+}
+
+Future<List<ReservableEvent>?> event() async {
+  http.Response res = await get("event");
+
+  print('event res: ${res.body}');
+
+  switch (res.statusCode) {
+    case 200:
+      print("Successfully got event");
+      try {
+        return (safeJsonDecode(res) as List<dynamic>)
+            .map((e) => ReservableEvent.fromJson(e))
+            .toList();
+      } catch (e) {
+        return null;
+      }
+
+    case 401:
+      print("Authentication failed");
+      return null;
+    case 404:
+      print("Event not found");
       return null;
     default:
       print("Unknown error");

@@ -14,6 +14,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   String? _firstName;
   String? _lastName;
+  List<ReservableEvent>? es;
 
   @override
   void initState() {
@@ -35,6 +36,13 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  Future<void> _getEvents() async {
+    List<ReservableEvent>? events = await event();
+    setState(() {
+      es = events;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +62,12 @@ class _MainPageState extends State<MainPage> {
             Text("名前:"),
             Text("${_firstName ?? ""} ${_lastName ?? ""}"),
             SizedBox(height: 10),
-            AsyncButton(notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r){})
+            AsyncButton(notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r){}),
+            SizedBox(height: 10),
+            Text("イベント一覧:"),
+            Text(es?.toString() ?? ""),
+            SizedBox(height: 10),
+            AsyncButton(notLoadingButtonContent: Text("イベント取得"), asyncTask: _getEvents, after: (r){}),
           ],
         )),
       ),
