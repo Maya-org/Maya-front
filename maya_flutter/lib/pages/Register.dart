@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:maya_flutter/messages.i18n.dart';
-import 'package:maya_flutter/pages/mainPage.dart';
 import 'package:maya_flutter/ui/UI.dart';
 
 import '../api/API.dart';
@@ -109,9 +108,7 @@ class _RegisterState extends State<Register> {
         showOKDialog(this.context,
             title: Text(const Messages().sign_up_name_register_complete_message_title),
             body: Text(const Messages().sign_up_name_register_complete_message_body), onOK: () {
-          Navigator.of(this.context).pushReplacement(MaterialPageRoute(builder: (context) {
-            return const MainPage();
-          }));
+          Navigator.of(context).pushReplacementNamed("/main");
         });
         break;
       default:

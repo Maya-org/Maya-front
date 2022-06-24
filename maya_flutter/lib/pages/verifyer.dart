@@ -2,14 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maya_flutter/messages.i18n.dart';
-import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/ui/ContainerDialog.dart';
 import 'package:maya_flutter/ui/UI.dart';
 import 'package:pinput/pinput.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class PhoneVerifier extends StatefulWidget {
-  PhoneVerifier({Key? key}) : super(key: key);
+  const PhoneVerifier({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PhoneVerifierState();
@@ -18,7 +17,6 @@ class PhoneVerifier extends StatefulWidget {
 class _PhoneVerifierState extends State<PhoneVerifier> {
   final TextEditingController _controller = TextEditingController();
   String _phoneNumber = "";
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +72,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                             print('verificationCompleted');
                             await FirebaseAuth.instance.signInWithCredential(credential);
                             Navigator.of(this.context, rootNavigator: true).pop();
-                            Navigator.of(this.context)
-                                .pushReplacement(MaterialPageRoute(builder: (context) {
-                              return const Register();
-                            }));
+                            Navigator.of(this.context).pushReplacementNamed("/register/nameRegister");
                           },
                           verificationFailed: (FirebaseAuthException ex) {
                             print('verificationFailed');
@@ -154,9 +149,7 @@ class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog>
               await FirebaseAuth.instance.signInWithCredential(credential);
 
               // 正常にログインできた
-              Navigator.of(this.context).pushReplacement(MaterialPageRoute(builder: (context) {
-                return const Register();
-              }));
+              Navigator.of(this.context).pushReplacementNamed("/register/nameRegister");
             } on FirebaseAuthException catch (e) {
               late String bodyString;
               switch (e.code) {

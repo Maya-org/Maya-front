@@ -4,9 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 
-import 'mainPage.dart';
-import 'verifyer.dart';
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key, required this.title}) : super(key: key);
 
@@ -28,9 +25,7 @@ class _TitlePageState extends State<SignUpPage> {
   Future<void> autoRedirect() async {
     if (FirebaseAuth.instance.currentUser != null && await user() != null) {
       // 認証済みの場合はメインページに遷移
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-        return const MainPage();
-      }));
+      Navigator.of(context).pushReplacementNamed("/main");
     }
   }
 
@@ -45,10 +40,7 @@ class _TitlePageState extends State<SignUpPage> {
             Text(const Messages().sign_up_message),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-                    // 電話認証にすっとばす
-                    return PhoneVerifier();
-                  }));
+                  Navigator.of(context).pushReplacementNamed("/register/phoneVerifier");
                 },
                 child: const Text("Login"))
           ],

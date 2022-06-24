@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
+import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/pages/SignUp.dart';
+import 'package:maya_flutter/pages/mainPage.dart';
+import 'package:maya_flutter/pages/verifyer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +25,14 @@ class MayaApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(
         )
       ),
-      home: SignUpPage(title: const Messages().page_title),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => SignUpPage(title: const Messages().page_title),
+        "/main": (context) => const MainPage(),
+        "/register/phoneVerifier": (context) => const PhoneVerifier(),
+        "/register/nameRegister": (context) => const Register(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
