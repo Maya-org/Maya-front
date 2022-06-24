@@ -1,8 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/ui/AsyncButton.dart';
+import 'package:provider/provider.dart';
+
+import '../models/UserChangeNotifier.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -55,19 +57,25 @@ class _MainPageState extends State<MainPage> {
             const Text("認証完了！！！！"),
             SizedBox(height: 10),
             Text("電話番号:"),
-            Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? ""),
+            Consumer<UserChangeNotifier>(
+              builder: (context, user, _) => Text(user.user?.phoneNumber ?? ""),
+            ),
             Text("UID:"),
-            Text(FirebaseAuth.instance.currentUser?.uid ?? ""),
+            Consumer<UserChangeNotifier>(
+              builder: (context, user, _) => Text(user.user?.uid ?? ""),
+            ),
             SizedBox(height: 10),
             Text("名前:"),
             Text("${_firstName ?? ""} ${_lastName ?? ""}"),
             SizedBox(height: 10),
-            AsyncButton(notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r){}),
+            AsyncButton(
+                notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r) {}),
             SizedBox(height: 10),
             Text("イベント一覧:"),
             Text(es?.toString() ?? ""),
             SizedBox(height: 10),
-            AsyncButton(notLoadingButtonContent: Text("イベント取得"), asyncTask: _getEvents, after: (r){}),
+            AsyncButton(
+                notLoadingButtonContent: Text("イベント取得"), asyncTask: _getEvents, after: (r) {}),
           ],
         )),
       ),

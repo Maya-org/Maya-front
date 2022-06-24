@@ -394,6 +394,13 @@
             </list>
           </value>
         </entry>
+        <entry key="nested">
+          <value>
+            <list>
+              <option value="C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="package_config">
           <value>
             <list>
@@ -426,6 +433,13 @@
           <value>
             <list>
               <option value="C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.5.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="provider">
+          <value>
+            <list>
+              <option value="C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.3/lib" />
             </list>
           </value>
         </entry>
@@ -653,11 +667,13 @@
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/material_color_utilities-0.1.4/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/mime-1.0.2/lib" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.1.0/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.1/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pinput-2.2.11/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.2/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pool-1.5.1/lib" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.3/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-2.1.1/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/quick_log-5.2.1/lib" />

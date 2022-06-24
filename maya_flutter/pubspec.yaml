@@ -42,6 +42,7 @@ dependencies:
   pinput: ^2.2.11
   http: ^0.13.4
   json_annotation: ^4.5.0
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:
