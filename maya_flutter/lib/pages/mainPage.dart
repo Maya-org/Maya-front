@@ -5,6 +5,7 @@ import 'package:maya_flutter/ui/AsyncButton.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserChangeNotifier.dart';
+import '../ui/UI.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _MainPageState extends State<MainPage> {
   String? _firstName;
   String? _lastName;
   List<ReservableEvent>? es;
+  List<Reservation>? rs;
 
   @override
   void initState() {
@@ -43,6 +45,30 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       es = events;
     });
+  }
+
+  Future<void> _getReservations() async {
+    List<Reservation>? reservations = await getReserve();
+    setState(() {
+      rs = reservations;
+    });
+  }
+
+  Future<bool> _postReservation() async {
+    bool b = await postReserve(Reservation(
+        reservation_id:"randomreservationid",
+        event:ReservableEvent(
+            event_id:"gSpLm6iBDEQKR5K1Etqj",
+            display_name:"予約のテスト",
+            date_start:TimeStamp.now(),
+            taken_capacity:0,
+            reservations:[]
+      ),
+        group_data:Group(
+        [Guest(GuestType.Parent)]
+      )
+    ));
+    return b;
   }
 
   @override
@@ -76,6 +102,17 @@ class _MainPageState extends State<MainPage> {
             SizedBox(height: 10),
             AsyncButton(
                 notLoadingButtonContent: Text("イベント取得"), asyncTask: _getEvents, after: (r) {}),
+            SizedBox(height: 10),
+            Text("予約一覧:"),
+            Text(rs?.toString() ?? ""),
+            SizedBox(height: 10),
+            AsyncButton(
+                notLoadingButtonContent: Text("予約取得"), asyncTask: _getReservations, after: (r) {}),
+            SizedBox(height: 10),
+            AsyncButton(
+                notLoadingButtonContent: Text("予約登録"), asyncTask: _postReservation, after: (r) {
+              showOKDialog(context,title:Text("Result:$r"));
+            }),
           ],
         )),
       ),

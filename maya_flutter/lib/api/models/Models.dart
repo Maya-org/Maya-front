@@ -21,9 +21,8 @@ class Group {
 @JsonSerializable()
 class Guest {
   GuestType type;
-  Group relatingGroup;
 
-  Guest(this.type, this.relatingGroup);
+  Guest(this.type);
 
   factory Guest.fromJson(Map<String, dynamic> json) => _$GuestFromJson(json);
 
@@ -57,20 +56,21 @@ class ReservableEvent {
   TimeStamp? available_at;
   int? capacity;
   int taken_capacity;
-  List<String> reservations;
-  Reference? required_reservation; // Reference to a reservation that is required to attend this event.
+  List<Reference> reservations;
+  Reference?
+      required_reservation; // Reference to a reservation that is required to attend this event.
 
   ReservableEvent(
-      this.event_id,
-      this.display_name,
+      {required this.event_id,
+      required this.display_name,
       this.description,
-      this.date_start,
+      required this.date_start,
       this.date_end,
       this.available_at,
       this.capacity,
-      this.taken_capacity,
-      this.reservations,
-      this.required_reservation);
+      required this.taken_capacity,
+      required this.reservations,
+      this.required_reservation});
 
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
@@ -78,13 +78,13 @@ class ReservableEvent {
 
   @override
   String toString() {
-    return "イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation";
+    return "{イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation}";
   }
 }
 
 @JsonSerializable()
 class Reservation {
-  int reservation_id;
+  String reservation_id;
   ReservableEvent event;
 
   int member_all() {
@@ -93,11 +93,16 @@ class Reservation {
 
   Group group_data;
 
-  Reservation(this.reservation_id, this.event, this.group_data);
+  Reservation({required this.reservation_id, required this.event, required this.group_data});
 
   factory Reservation.fromJson(Map<String, dynamic> json) => _$ReservationFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReservationToJson(this);
+
+  @override
+  String toString() {
+    return "{予約:$reservation_id,イベント:$event,参加人数:${member_all()}}";
+  }
 }
 
 @JsonSerializable()
@@ -158,7 +163,7 @@ class UserAuthentication {
 }
 
 @JsonSerializable()
-class Reference{
+class Reference {
   @JsonKey(name: '_firestore')
   FireStore fireStore;
   @JsonKey(name: '_path')
@@ -172,8 +177,9 @@ class Reference{
 }
 
 @JsonSerializable()
-class FireStore{
+class FireStore {
   String projectId;
+
   FireStore(this.projectId);
 
   factory FireStore.fromJson(Map<String, dynamic> json) => _$FireStoreFromJson(json);
@@ -182,7 +188,7 @@ class FireStore{
 }
 
 @JsonSerializable()
-class Path{
+class Path {
   List<String> segments;
   @JsonKey(name: '_converter')
   dynamic converter;

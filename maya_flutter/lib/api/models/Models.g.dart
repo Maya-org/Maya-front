@@ -18,12 +18,10 @@ Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
 
 Guest _$GuestFromJson(Map<String, dynamic> json) => Guest(
       $enumDecode(_$GuestTypeEnumMap, json['type']),
-      Group.fromJson(json['relatingGroup'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$GuestToJson(Guest instance) => <String, dynamic>{
       'type': _$GuestTypeEnumMap[instance.type],
-      'relatingGroup': instance.relatingGroup,
     };
 
 const _$GuestTypeEnumMap = {
@@ -36,20 +34,23 @@ const _$GuestTypeEnumMap = {
 
 ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
     ReservableEvent(
-      json['event_id'] as String,
-      json['display_name'] as String,
-      json['description'] as String?,
-      TimeStamp.fromJson(json['date_start'] as Map<String, dynamic>),
-      json['date_end'] == null
+      event_id: json['event_id'] as String,
+      display_name: json['display_name'] as String,
+      description: json['description'] as String?,
+      date_start:
+          TimeStamp.fromJson(json['date_start'] as Map<String, dynamic>),
+      date_end: json['date_end'] == null
           ? null
           : TimeStamp.fromJson(json['date_end'] as Map<String, dynamic>),
-      json['available_at'] == null
+      available_at: json['available_at'] == null
           ? null
           : TimeStamp.fromJson(json['available_at'] as Map<String, dynamic>),
-      json['capacity'] as int?,
-      json['taken_capacity'] as int,
-      (json['reservations'] as List<dynamic>).map((e) => e as String).toList(),
-      json['required_reservation'] == null
+      capacity: json['capacity'] as int?,
+      taken_capacity: json['taken_capacity'] as int,
+      reservations: (json['reservations'] as List<dynamic>)
+          .map((e) => Reference.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      required_reservation: json['required_reservation'] == null
           ? null
           : Reference.fromJson(
               json['required_reservation'] as Map<String, dynamic>),
@@ -70,9 +71,9 @@ Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
     };
 
 Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
-      json['reservation_id'] as int,
-      ReservableEvent.fromJson(json['event'] as Map<String, dynamic>),
-      Group.fromJson(json['group_data'] as Map<String, dynamic>),
+      reservation_id: json['reservation_id'] as String,
+      event: ReservableEvent.fromJson(json['event'] as Map<String, dynamic>),
+      group_data: Group.fromJson(json['group_data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ReservationToJson(Reservation instance) =>

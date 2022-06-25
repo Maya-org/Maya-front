@@ -39,7 +39,7 @@ Future<Response> get(String path) async {
 
 Future<Response> post(String path, {Map<String, dynamic>? body}) async {
   Uri url = fullURL(path);
-  return await http.post(url, body: body, headers: await headers());
+  return await http.post(url, body: jsonEncode(body), headers: await headers());
 }
 
 Future<http.Response> register(MayaUser user) async {
@@ -115,5 +115,56 @@ Future<List<ReservableEvent>?> event() async {
     default:
       print("Unknown error");
       return null;
+  }
+}
+
+Future<List<Reservation>?> getReserve() async {
+  Response res = await get("reserve");
+  print('reserve res: ${res.body}');
+
+  switch (res.statusCode) {
+    case 200:
+      print("Successfully got reserve");
+      try {
+        List<dynamic> arr = safeJsonDecode(res);
+        return arr.map((e) => Reservation.fromJson(e)).toList();
+      } catch (e) {
+        print('error: $e');
+        return null;
+      }
+    case 401:
+      print("Authentication failed");
+      return null;
+    case 404:
+      print("Reserve not found");
+      return null;
+    default:
+      print("Unknown error");
+      return null;
+  }
+}
+
+Future<bool> postReserve(Reservation reservation) async {
+  Map<String,dynamic> json = reservation.toJson();
+
+  print('Request: ${jsonEncode(json)}');
+
+  Response res = await post("reserve", body: json);
+
+  print('reserve res: ${res.body}');
+
+  switch (res.statusCode) {
+    case 200:
+      print("Successfully posted reserve");
+      return true;
+    case 401:
+      print("Authentication failed");
+      return false;
+    case 400:
+      print("Internal Exception");
+      return false;
+    default:
+      print("Unknown error");
+      return false;
   }
 }
