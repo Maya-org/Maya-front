@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/ui/AsyncButton.dart';
@@ -54,8 +55,8 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  Future<bool> _postReservation() async {
-    bool b = await postReserve(Reservation(
+  Future<Response> _postReservation() async {
+    Response res = await postReserve(Reservation(
         reservation_id:"randomreservationid",
         event:ReservableEvent(
             event_id:"gSpLm6iBDEQKR5K1Etqj",
@@ -68,7 +69,7 @@ class _MainPageState extends State<MainPage> {
         [Guest(GuestType.Parent)]
       )
     ));
-    return b;
+    return res;
   }
 
   @override
@@ -111,7 +112,8 @@ class _MainPageState extends State<MainPage> {
             SizedBox(height: 10),
             AsyncButton(
                 notLoadingButtonContent: Text("予約登録"), asyncTask: _postReservation, after: (r) {
-              showOKDialog(context,title:Text("Result:$r"));
+                  r as Response;
+              showOKDialog(context,title:Text("Result:${r.statusCode}"),body:Text(r.body));
             }),
           ],
         )),

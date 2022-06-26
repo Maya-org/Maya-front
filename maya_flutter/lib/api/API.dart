@@ -144,7 +144,7 @@ Future<List<Reservation>?> getReserve() async {
   }
 }
 
-Future<bool> postReserve(Reservation reservation) async {
+Future<http.Response> postReserve(Reservation reservation) async {
   Map<String,dynamic> json = reservation.toJson();
 
   print('Request: ${jsonEncode(json)}');
@@ -156,15 +156,16 @@ Future<bool> postReserve(Reservation reservation) async {
   switch (res.statusCode) {
     case 200:
       print("Successfully posted reserve");
-      return true;
+      break;
     case 401:
       print("Authentication failed");
-      return false;
+      break;
     case 400:
       print("Internal Exception");
-      return false;
+      break;
     default:
       print("Unknown error");
-      return false;
   }
+
+  return res;
 }
