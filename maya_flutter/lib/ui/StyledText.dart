@@ -6,10 +6,12 @@ class StyledTextWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return Expanded(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child:text,
+    return Container(
+      child: Expanded(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child:text,
+        ),
       ),
     );
   }
