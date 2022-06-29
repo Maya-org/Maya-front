@@ -3,7 +3,13 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
+import 'package:maya_flutter/api/processer/EventProcesser.dart';
+import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
+import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
+import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
+import 'package:maya_flutter/api/processer/UserProcesser.dart';
 
 const end_point = "https://us-central1-maya-e0346.cloudfunctions.net/";
 
@@ -37,135 +43,42 @@ Future<Response> get(String path) async {
   return await http.get(url, headers: await headers());
 }
 
+Future<APIResponse<T?>> getProcessed<T>(String path, APIResponseProcesser<T> processer) async {
+  Response res = await get(path);
+  return processResponse(res, processer);
+}
+
 Future<Response> post(String path, {Map<String, dynamic>? body}) async {
   Uri url = fullURL(path);
   return await http.post(url, body: jsonEncode(body), headers: await headers());
 }
 
-Future<http.Response> register(MayaUser user) async {
+Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcesser<T> processer,
+    {Map<String, dynamic>? body}) async {
+  Response res = await post(path, body: body);
+  return processResponse(res, processer);
+}
+
+Future<APIResponse<bool?>> register(MayaUser user) async {
   Map<String, String> map = {"firstName": user.firstName, "lastName": user.lastName};
 
-  http.Response res = await post("register", body: map);
-
-  switch (res.statusCode) {
-    case 200:
-      print("Successfully registered");
-      break;
-    case 400:
-      print("Internal Exception");
-      break;
-    case 401:
-      print("Authentication failed");
-      print("User already exists");
-      break;
-    default:
-      print("Unknown error");
-      break;
-  }
-  return res;
+  return await postProcessed("register", const RegisterProcesser(), body: map);
 }
 
-Future<MayaUser?> user() async {
-  http.Response res = await get("user");
-
-  print('user res: ${res.body}');
-
-  switch (res.statusCode) {
-    case 200:
-      print("Successfully got user");
-      try {
-        return MayaUser.fromJson(safeJsonDecode(res));
-      } catch (e) {
-        return null;
-      }
-    case 401:
-      print("Authentication failed");
-      return null;
-    case 404:
-      print("User not found");
-      return null;
-    default:
-      print("Unknown error");
-      return null;
-  }
+Future<APIResponse<MayaUser?>> user() async {
+  return await getProcessed("user", const UserProcesser());
 }
 
-Future<List<ReservableEvent>?> event() async {
-  http.Response res = await get("event");
-
-  print('event res: ${res.body}');
-
-  switch (res.statusCode) {
-    case 200:
-      print("Successfully got event");
-      try {
-        return (safeJsonDecode(res) as List<dynamic>)
-            .map((e) => ReservableEvent.fromJson(e))
-            .toList();
-      } catch (e) {
-        return null;
-      }
-
-    case 401:
-      print("Authentication failed");
-      return null;
-    case 404:
-      print("Event not found");
-      return null;
-    default:
-      print("Unknown error");
-      return null;
-  }
+Future<APIResponse<List<ReservableEvent>?>> event() async {
+  return await getProcessed("event", const EventProcesser());
 }
 
-Future<List<Reservation>?> getReserve() async {
-  Response res = await get("reserve");
-  print('reserve res: ${res.body}');
-
-  switch (res.statusCode) {
-    case 200:
-      print("Successfully got reserve");
-      try {
-        List<dynamic> arr = safeJsonDecode(res);
-        return arr.map((e) => Reservation.fromJson(e)).toList();
-      } catch (e) {
-        print('error: $e');
-        return null;
-      }
-    case 401:
-      print("Authentication failed");
-      return null;
-    case 404:
-      print("Reserve not found");
-      return null;
-    default:
-      print("Unknown error");
-      return null;
-  }
+Future<APIResponse<List<Reservation>?>> getReserve() async {
+  return await getProcessed("reserve", const GetReserveProcesser());
 }
 
-Future<http.Response> postReserve(Reservation reservation) async {
-  Map<String,dynamic> json = reservation.toJson();
+Future<APIResponse<bool?>> postReserve(Reservation reservation) async {
+  Map<String, dynamic> json = reservation.toJson();
 
-  print('Request: ${jsonEncode(json)}');
-
-  Response res = await post("reserve", body: json);
-
-  print('reserve res: ${res.body}');
-
-  switch (res.statusCode) {
-    case 200:
-      print("Successfully posted reserve");
-      break;
-    case 401:
-      print("Authentication failed");
-      break;
-    case 400:
-      print("Internal Exception");
-      break;
-    default:
-      print("Unknown error");
-  }
-
-  return res;
+  return await postProcessed("reserve", const PostReserveProcesser(), body: json);
 }

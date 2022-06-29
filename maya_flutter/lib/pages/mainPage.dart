@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/api/models/Models.dart';
+import 'package:maya_flutter/ui/APIResponceHandler.dart';
 import 'package:maya_flutter/ui/AsyncButton.dart';
 import 'package:provider/provider.dart';
 
+import '../api/APIResponse.dart';
 import '../models/UserChangeNotifier.dart';
 import '../ui/UI.dart';
 
@@ -26,50 +27,71 @@ class _MainPageState extends State<MainPage> {
     super.initState();
   }
 
-  Future<void> updateName() async {
-    MayaUser? us = await user();
-    if (us != null) {
-      setState(() {
-        _firstName = us.firstName;
-        _lastName = us.lastName;
-      });
-    } else {
-      setState(() {
-        _firstName = "none";
-        _lastName = "none";
-      });
-    }
+  Future<APIResponse<MayaUser?>> _updateName() async {
+    return await user();
   }
 
-  Future<void> _getEvents() async {
-    List<ReservableEvent>? events = await event();
-    setState(() {
-      es = events;
-    });
+  void _processUpdateName(dynamic r) {
+    r as APIResponse<MayaUser?>;
+    handle<MayaUser?>(
+        context,
+        r,
+        (p0) => {
+              setState(() {
+                _firstName = p0?.firstName;
+                _lastName = p0?.lastName;
+              })
+            });
   }
 
-  Future<void> _getReservations() async {
-    List<Reservation>? reservations = await getReserve();
-    setState(() {
-      rs = reservations;
-    });
+  Future<APIResponse<List<ReservableEvent>?>> _getEvents() async {
+    return await event();
   }
 
-  Future<Response> _postReservation() async {
-    Response res = await postReserve(Reservation(
-        reservation_id:"randomreservationid",
-        event:ReservableEvent(
-            event_id:"gSpLm6iBDEQKR5K1Etqj",
-            display_name:"予約のテスト",
-            date_start:TimeStamp.now(),
-            taken_capacity:0,
-            reservations:[]
-      ),
-        group_data:Group(
-        [Guest(GuestType.Parent)]
-      )
-    ));
-    return res;
+  void _processEvents(dynamic r) {
+    r as APIResponse<List<ReservableEvent>?>;
+    handle<List<ReservableEvent>?>(
+        context,
+        r,
+        (p0) => {
+              setState(() {
+                es = p0;
+              })
+            });
+  }
+
+  Future<APIResponse<List<Reservation>?>> _getReservations() async {
+    return await getReserve();
+  }
+
+  void _handleGetReservations(dynamic r) {
+    r as APIResponse<List<Reservation>?>;
+    handle<List<Reservation>?>(
+        context,
+        r,
+        (p0) => {
+              setState(() {
+                rs = p0;
+              })
+            });
+  }
+
+  Future<APIResponse<bool?>> _postReservation() async {
+    return await postReserve(Reservation(
+        reservation_id: "randomreservationid",
+        event: ReservableEvent(
+            event_id: "gSpLm6iBDEQKR5K1Etqj",
+            display_name: "予約のテスト",
+            date_start: TimeStamp.now(),
+            taken_capacity: 0,
+            reservations: []),
+        group_data: Group([Guest(GuestType.Parent)])));
+  }
+
+  void _handlePostReservation(dynamic r) {
+    r as APIResponse<bool?>;
+    handle<bool?>(context, r,
+        (p0) => {showOKDialog(context, title: const Text("予約確認"), body: const Text("予約しました"))});
   }
 
   @override
@@ -96,25 +118,30 @@ class _MainPageState extends State<MainPage> {
             Text("${_firstName ?? ""} ${_lastName ?? ""}"),
             SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("名前取得"), asyncTask: updateName, after: (r) {}),
+                notLoadingButtonContent: Text("名前取得"),
+                asyncTask: _updateName,
+                after: _processUpdateName),
             SizedBox(height: 10),
             Text("イベント一覧:"),
             Text(es?.toString() ?? ""),
             SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("イベント取得"), asyncTask: _getEvents, after: (r) {}),
+                notLoadingButtonContent: Text("イベント取得"),
+                asyncTask: _getEvents,
+                after: _processEvents),
             SizedBox(height: 10),
             Text("予約一覧:"),
             Text(rs?.toString() ?? ""),
             SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("予約取得"), asyncTask: _getReservations, after: (r) {}),
+                notLoadingButtonContent: Text("予約取得"),
+                asyncTask: _getReservations,
+                after: _handleGetReservations),
             SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("予約登録"), asyncTask: _postReservation, after: (r) {
-                  r as Response;
-              showOKDialog(context,title:Text("Result:${r.statusCode}"),body:Text(r.body));
-            }),
+                notLoadingButtonContent: Text("予約登録"),
+                asyncTask: _postReservation,
+                after: _handlePostReservation),
           ],
         )),
       ),
