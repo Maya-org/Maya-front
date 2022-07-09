@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../api/APIResponse.dart';
 import '../models/UserChangeNotifier.dart';
+import '../ui/StyledText.dart';
 import '../ui/UI.dart';
 
 class MainPage extends StatefulWidget {
@@ -19,8 +20,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   String? _firstName;
   String? _lastName;
-  List<ReservableEvent>? es;
-  List<Reservation>? rs;
 
   @override
   void initState() {
@@ -48,15 +47,15 @@ class _MainPageState extends State<MainPage> {
     return await event();
   }
 
-  void _processEvents(dynamic r) {
+  void _handleEvents(dynamic r) {
     r as APIResponse<List<ReservableEvent>?>;
     handle<List<ReservableEvent>?>(
         context,
         r,
         (p0) => {
-              setState(() {
-                es = p0;
-              })
+              showOKDialog(context,
+                  title: Text("イベント一覧"),
+                  body: StyledTextWidget(Text((p0 as List<ReservableEvent>).toString())))
             });
   }
 
@@ -70,9 +69,9 @@ class _MainPageState extends State<MainPage> {
         context,
         r,
         (p0) => {
-              setState(() {
-                rs = p0;
-              })
+              showOKDialog(context,
+                  title: Text("予約一覧"),
+                  body: StyledTextWidget(Text((p0 as List<Reservation>).toString())))
             });
   }
 
@@ -92,6 +91,22 @@ class _MainPageState extends State<MainPage> {
     r as APIResponse<bool?>;
     handle<bool?>(context, r,
         (p0) => {showOKDialog(context, title: const Text("予約確認"), body: const Text("予約しました"))});
+  }
+
+  Future<APIResponse<List<String>?>> _getPermissions() async {
+    return await getPermissions();
+  }
+
+  void _handleGetPermissions(dynamic r) {
+    r as APIResponse<List<String>?>;
+    handle<List<String>?>(
+        context,
+        r,
+        (p0) => {
+              showOKDialog(context,
+                  title: const Text("権限確認"),
+                  body: StyledTextWidget(Text((p0 as List<String>).toString())))
+            });
   }
 
   @override
@@ -122,16 +137,10 @@ class _MainPageState extends State<MainPage> {
                 asyncTask: _updateName,
                 after: _processUpdateName),
             SizedBox(height: 10),
-            Text("イベント一覧:"),
-            Text(es?.toString() ?? ""),
-            SizedBox(height: 10),
             AsyncButton(
                 notLoadingButtonContent: Text("イベント取得"),
                 asyncTask: _getEvents,
-                after: _processEvents),
-            SizedBox(height: 10),
-            Text("予約一覧:"),
-            Text(rs?.toString() ?? ""),
+                after: _handleEvents),
             SizedBox(height: 10),
             AsyncButton(
                 notLoadingButtonContent: Text("予約取得"),
@@ -142,6 +151,12 @@ class _MainPageState extends State<MainPage> {
                 notLoadingButtonContent: Text("予約登録"),
                 asyncTask: _postReservation,
                 after: _handlePostReservation),
+            SizedBox(height: 10),
+            AsyncButton(
+              notLoadingButtonContent: Text("権限取得"),
+              asyncTask: _getPermissions,
+              after: _handleGetPermissions,
+            )
           ],
         )),
       ),
