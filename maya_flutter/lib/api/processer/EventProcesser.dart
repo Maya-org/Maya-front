@@ -2,8 +2,8 @@ import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:tuple/tuple.dart';
 
-class EventProcesser extends APIResponseProcesser<List<ReservableEvent>> {
-  const EventProcesser();
+class EventProcessor extends APIResponseProcesser<List<ReservableEvent>> {
+  const EventProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "events";

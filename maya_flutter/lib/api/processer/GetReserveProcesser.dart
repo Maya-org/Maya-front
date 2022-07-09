@@ -3,8 +3,8 @@ import 'package:tuple/tuple.dart';
 
 import '../APIResponse.dart';
 
-class GetReserveProcesser extends APIResponseProcesser<List<Reservation>>{
-  const GetReserveProcesser();
+class GetReserveProcessor extends APIResponseProcesser<List<Reservation>>{
+  const GetReserveProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "get-reservation";

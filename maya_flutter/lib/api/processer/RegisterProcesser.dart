@@ -1,8 +1,8 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class RegisterProcesser extends APIResponseProcesser<bool> {
-  const RegisterProcesser();
+class RegisterProcessor extends APIResponseProcesser<bool> {
+  const RegisterProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "register";

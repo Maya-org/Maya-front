@@ -3,8 +3,8 @@ import 'package:tuple/tuple.dart';
 
 import '../APIResponse.dart';
 
-class UserProcesser extends APIResponseProcesser<MayaUser> {
-  const UserProcesser();
+class UserProcessor extends APIResponseProcesser<MayaUser> {
+  const UserProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "user";

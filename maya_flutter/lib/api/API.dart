@@ -62,23 +62,23 @@ Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcesser<T> pr
 Future<APIResponse<bool?>> register(MayaUser user) async {
   Map<String, String> map = {"firstName": user.firstName, "lastName": user.lastName};
 
-  return await postProcessed("register", const RegisterProcesser(), body: map);
+  return await postProcessed("register", const RegisterProcessor(), body: map);
 }
 
 Future<APIResponse<MayaUser?>> user() async {
-  return await getProcessed("user", const UserProcesser());
+  return await getProcessed("user", const UserProcessor());
 }
 
 Future<APIResponse<List<ReservableEvent>?>> event() async {
-  return await getProcessed("event", const EventProcesser());
+  return await getProcessed("event", const EventProcessor());
 }
 
 Future<APIResponse<List<Reservation>?>> getReserve() async {
-  return await getProcessed("reserve", const GetReserveProcesser());
+  return await getProcessed("reserve", const GetReserveProcessor());
 }
 
 Future<APIResponse<bool?>> postReserve(Reservation reservation) async {
   Map<String, dynamic> json = reservation.toJson();
 
-  return await postProcessed("reserve", const PostReserveProcesser(), body: json);
+  return await postProcessed("reserve", const PostReserveProcessor(), body: json);
 }

@@ -1,8 +1,8 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class PostReserveProcesser extends APIResponseProcesser<bool> {
-  const PostReserveProcesser();
+class PostReserveProcessor extends APIResponseProcesser<bool> {
+  const PostReserveProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "post-reservation";
