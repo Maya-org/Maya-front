@@ -4,7 +4,7 @@ import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
 
-import '../ui/ReservationCard.dart';
+import '../ui/card/ReservationCard.dart';
 
 class ReservationsView extends StatefulWidget {
   const ReservationsView({Key? key}) : super(key: key);

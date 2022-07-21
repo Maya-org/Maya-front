@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/ui/StyledText.dart';
 import 'package:maya_flutter/ui/UI.dart';
-import 'package:maya_flutter/ui/UICard.dart';
+import 'package:maya_flutter/ui/card/UICard.dart';
 
-import '../api/models/Models.dart';
+import '../../api/models/Models.dart';
 
 class ReservationCard extends StatelessWidget {
   final Reservation reservation;
