@@ -10,14 +10,14 @@ import '../models/UserChangeNotifier.dart';
 import '../ui/StyledText.dart';
 import '../ui/UI.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class DebugPage extends StatefulWidget {
+  const DebugPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MainPageState();
+  State<StatefulWidget> createState() => _DebugPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _DebugPageState extends State<DebugPage> {
   String? _firstName;
   String? _lastName;
 

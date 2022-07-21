@@ -24,7 +24,8 @@ class _TitlePageState extends State<SignUpPage> {
     print('checkAutoRedirect');
     UserChangeNotifier notifier = Provider.of<UserChangeNotifier>(context, listen: true);
     if (notifier.user != null && await user() != null) {
-      Navigator.pushReplacementNamed(this.context, "/main");
+      // TODO なんだこれ
+      Navigator.pushReplacementNamed(this.context, "/debug");
     }
   }
 

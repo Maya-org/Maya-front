@@ -109,7 +109,7 @@ class _RegisterState extends State<Register> {
         (p0) => showOKDialog(this.context,
                 title: Text(const Messages().sign_up_name_register_complete_message_title),
                 body: Text(const Messages().sign_up_name_register_complete_message_body), onOK: () {
-              Navigator.of(context).pushReplacementNamed("/main");
+              Navigator.of(context).pushReplacementNamed("/debug");
             }),
         onError: () => showOKDialog(this.context,
             title: Text(const Messages().sign_up_name_register_failed_message_title),

@@ -5,7 +5,7 @@ import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/pages/SignUp.dart';
-import 'package:maya_flutter/pages/mainPage.dart';
+import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/verifyer.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,7 @@ class MayaApp extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) => SignUpPage(title: const Messages().page_title),
-          "/main": (context) => const MainPage(),
+          "/debug": (context) => const DebugPage(),
           "/register/phoneVerifier": (context) => const PhoneVerifier(),
           "/register/nameRegister": (context) => const Register(),
         },
