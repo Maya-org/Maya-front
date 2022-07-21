@@ -119,41 +119,41 @@ class _DebugPageState extends State<DebugPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text("認証完了！！！！"),
-            SizedBox(height: 10),
-            Text("電話番号:"),
+            const SizedBox(height: 10),
+            const Text("電話番号:"),
             Consumer<UserChangeNotifier>(
               builder: (context, user, _) => Text(user.user?.phoneNumber ?? ""),
             ),
-            Text("UID:"),
+            const Text("UID:"),
             Consumer<UserChangeNotifier>(
               builder: (context, user, _) => Text(user.user?.uid ?? ""),
             ),
-            SizedBox(height: 10),
-            Text("名前:"),
+            const SizedBox(height: 10),
+            const Text("名前:"),
             Text("${_firstName ?? ""} ${_lastName ?? ""}"),
-            SizedBox(height: 10),
-            AsyncButton(
-                notLoadingButtonContent: Text("名前取得"),
+            const SizedBox(height: 10),
+            AsyncButton<APIResponse<MayaUser?>>(
+                notLoadingButtonContent: const Text("名前取得"),
                 asyncTask: _updateName,
-                after: _processUpdateName),
-            SizedBox(height: 10),
+                after: (r) => {_processUpdateName(r)}),
+            const SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("イベント取得"),
+                notLoadingButtonContent: const Text("イベント取得"),
                 asyncTask: _getEvents,
                 after: _handleEvents),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("予約取得"),
+                notLoadingButtonContent: const Text("予約取得"),
                 asyncTask: _getReservations,
                 after: _handleGetReservations),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             AsyncButton(
-                notLoadingButtonContent: Text("予約登録"),
+                notLoadingButtonContent: const Text("予約登録"),
                 asyncTask: _postReservation,
                 after: _handlePostReservation),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             AsyncButton(
-              notLoadingButtonContent: Text("権限取得"),
+              notLoadingButtonContent: const Text("権限取得"),
               asyncTask: _getPermissions,
               after: _handleGetPermissions,
             )

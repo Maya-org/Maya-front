@@ -21,11 +21,10 @@ class _TitlePageState extends State<SignUpPage> {
   }
 
   Future<void> checkAutoRedirect(BuildContext context) async {
-    print('checkAutoRedirect');
     UserChangeNotifier notifier = Provider.of<UserChangeNotifier>(context, listen: true);
     if (notifier.user != null && await user() != null) {
       // TODO なんだこれ
-      Navigator.pushReplacementNamed(this.context, "/debug");
+      Navigator.pushReplacementNamed(this.context, "/main");
     }
   }
 

@@ -10,7 +10,7 @@ class AsyncButton<R> extends StatefulWidget {
   final void Function(dynamic) after;
   final bool isFullScreenLoading;
 
-  AsyncButton(
+  const AsyncButton(
       {Key? key,
       required this.notLoadingButtonContent,
       required this.asyncTask,

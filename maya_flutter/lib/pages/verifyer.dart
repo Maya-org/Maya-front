@@ -69,13 +69,11 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                       await FirebaseAuth.instance.verifyPhoneNumber(
                           phoneNumber: localPhoneNumber,
                           verificationCompleted: (PhoneAuthCredential credential) async {
-                            print('verificationCompleted');
                             await FirebaseAuth.instance.signInWithCredential(credential);
                             Navigator.of(this.context, rootNavigator: true).pop();
                             Navigator.of(this.context).pushReplacementNamed("/register/nameRegister");
                           },
                           verificationFailed: (FirebaseAuthException ex) {
-                            print('verificationFailed');
                             // Handle error here.
                             late String bodyString;
                             switch (ex.code) {
@@ -97,7 +95,6 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                             }, okText: const Messages().phone_auth_error_return);
                           },
                           codeSent: (String verificationId, int? resendToken) {
-                            print('codeSent');
                             Navigator.of(context, rootNavigator: true).pop();
                             showDialog(
                                 context: context,
@@ -142,7 +139,6 @@ class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog>
           length: 6,
           pinputAutovalidateMode: PinputAutovalidateMode.disabled,
           onCompleted: (String value) async {
-            print('onSubmitted');
             // Login
             AuthCredential credential = await widget.function(value);
             try {

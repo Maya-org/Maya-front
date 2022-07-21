@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
+import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/pages/SignUp.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
@@ -29,6 +30,7 @@ class MayaApp extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) => SignUpPage(title: const Messages().page_title),
+          "/main": (context) => const MainPage(),
           "/debug": (context) => const DebugPage(),
           "/register/phoneVerifier": (context) => const PhoneVerifier(),
           "/register/nameRegister": (context) => const Register(),
