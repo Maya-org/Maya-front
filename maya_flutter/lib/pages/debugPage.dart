@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/ui/APIResponceHandler.dart';
+import 'package:maya_flutter/ui/APIResponseHandler.dart';
 import 'package:maya_flutter/ui/AsyncButton.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _DebugPageState extends State<DebugPage> {
 
   void _processUpdateName(dynamic r) {
     r as APIResponse<MayaUser?>;
-    handle<MayaUser?>(
+    handleVoid<MayaUser?>(
         context,
         r,
         (p0) => {
@@ -49,12 +49,12 @@ class _DebugPageState extends State<DebugPage> {
 
   void _handleEvents(dynamic r) {
     r as APIResponse<List<ReservableEvent>?>;
-    handle<List<ReservableEvent>?>(
+    handleVoid<List<ReservableEvent>?>(
         context,
         r,
         (p0) => {
               showOKDialog(context,
-                  title: Text("イベント一覧"),
+                  title: const Text("イベント一覧"),
                   body: StyledTextWidget(Text((p0 as List<ReservableEvent>).toString())))
             });
   }
@@ -65,12 +65,12 @@ class _DebugPageState extends State<DebugPage> {
 
   void _handleGetReservations(dynamic r) {
     r as APIResponse<List<Reservation>?>;
-    handle<List<Reservation>?>(
+    handleVoid<List<Reservation>?>(
         context,
         r,
         (p0) => {
               showOKDialog(context,
-                  title: Text("予約一覧"),
+                  title: const Text("予約一覧"),
                   body: StyledTextWidget(Text((p0 as List<Reservation>).toString())))
             });
   }
@@ -89,7 +89,7 @@ class _DebugPageState extends State<DebugPage> {
 
   void _handlePostReservation(dynamic r) {
     r as APIResponse<bool?>;
-    handle<bool?>(context, r,
+    handleVoid<bool?>(context, r,
         (p0) => {showOKDialog(context, title: const Text("予約確認"), body: const Text("予約しました"))});
   }
 
@@ -99,7 +99,7 @@ class _DebugPageState extends State<DebugPage> {
 
   void _handleGetPermissions(dynamic r) {
     r as APIResponse<List<String>?>;
-    handle<List<String>?>(
+    handleVoid<List<String>?>(
         context,
         r,
         (p0) => {

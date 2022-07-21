@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:tuple/tuple.dart';
 
@@ -12,11 +13,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   static const List<Tuple2<Widget, BottomNavigationBarItem>> _pages = [
     Tuple2(
-        DebugPage(),
+        HomePage(),
         BottomNavigationBarItem(
           icon: Icon(Icons.abc),
           activeIcon: Icon(Icons.abc, color: Colors.blue),
-          label: 'Debug',
+          label: 'Home',
         )),
     Tuple2(
         DebugPage(),
@@ -41,30 +42,41 @@ class _MainPageState extends State<MainPage> {
         ))
   ];
   int _currentIndex = 0;
+  final PageController _controller = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-        itemBuilder: (ctx, index) {
-          return _pages[index].item1;
-        },
-        itemCount: _pages.length,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      body: SafeArea(
+        child: PageView.builder(
+          itemBuilder: (ctx, index) {
+            return _pages[index].item1;
+          },
+          itemCount: _pages.length,
+          onPageChanged: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          controller: _controller,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: _pages.map((e) => e.item2).toList(),
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          _moveTo(index);
         },
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
       ),
     );
+  }
+
+  void _moveTo(int page) {
+    setState(() {
+      _currentIndex = page;
+    });
+    _controller.animateToPage(page, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
   }
 }

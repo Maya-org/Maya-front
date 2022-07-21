@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/messages.i18n.dart';
-import 'package:maya_flutter/ui/APIResponceHandler.dart';
+import 'package:maya_flutter/ui/APIResponseHandler.dart';
 import 'package:maya_flutter/ui/UI.dart';
 
 import '../api/API.dart';
@@ -103,15 +103,14 @@ class _RegisterState extends State<Register> {
     showFullScreenLoadingCircular(context);
     APIResponse<bool?> r = await rg(context, firstName, lastName);
     Navigator.of(this.context, rootNavigator: true).pop(); // FullScreenLoadingCircularを閉じる
-    handle(
-        this.context,
+    handle<bool?, void>(
         r,
         (p0) => showOKDialog(this.context,
                 title: Text(const Messages().sign_up_name_register_complete_message_title),
                 body: Text(const Messages().sign_up_name_register_complete_message_body), onOK: () {
               Navigator.of(context).pushReplacementNamed("/main");
             }),
-        onError: () => showOKDialog(this.context,
+        (res, displayString) => showOKDialog(this.context,
             title: Text(const Messages().sign_up_name_register_failed_message_title),
             body: Text(
                 const Messages().sign_up_name_register_failed_message_body(r.displayMessage))));
