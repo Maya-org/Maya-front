@@ -55,7 +55,7 @@ class _DebugPageState extends State<DebugPage> {
         (p0) => {
               showOKDialog(context,
                   title: const Text("イベント一覧"),
-                  body: StyledTextWidget(Text((p0 as List<ReservableEvent>).toString())))
+                  body: StyledTextWidget.one(Text((p0 as List<ReservableEvent>).toString())))
             });
   }
 
@@ -71,7 +71,7 @@ class _DebugPageState extends State<DebugPage> {
         (p0) => {
               showOKDialog(context,
                   title: const Text("予約一覧"),
-                  body: StyledTextWidget(Text((p0 as List<Reservation>).toString())))
+                  body: StyledTextWidget.one(Text((p0 as List<Reservation>).toString())))
             });
   }
 
@@ -105,7 +105,7 @@ class _DebugPageState extends State<DebugPage> {
         (p0) => {
               showOKDialog(context,
                   title: const Text("権限確認"),
-                  body: StyledTextWidget(Text((p0 as List<String>).toString())))
+                  body: StyledTextWidget.one(Text((p0 as List<String>).toString())))
             });
   }
 

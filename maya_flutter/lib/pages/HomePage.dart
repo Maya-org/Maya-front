@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../component/EventsView.dart';
 import '../component/ReservationsView.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               ReservationsView(),
+              EventsView()
             ],
           ),
         ),

@@ -21,6 +21,6 @@ void handleVoid<T>(BuildContext context, APIResponse<T> response, void Function(
       onSuccess,
       (res, displayMessage) => {
             showOKDialog(context,
-                title: Text(displayMessage), body: StyledTextWidget(Text(res.body)))
+                title: Text(displayMessage), body: StyledTextWidget.one(Text(res.body)))
           });
 }

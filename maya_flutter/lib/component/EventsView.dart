@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/API.dart';
-import 'package:maya_flutter/api/APIResponse.dart';
-import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:maya_flutter/ui/card/EventCard.dart';
 
-import '../ui/card/ReservationCard.dart';
+import '../api/APIResponse.dart';
+import '../api/models/Models.dart';
+import '../ui/APIResponseHandler.dart';
 
-class ReservationsView extends StatefulWidget {
-  const ReservationsView({Key? key}) : super(key: key);
+class EventsView extends StatefulWidget {
+  const EventsView({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ReservationsViewState();
+  State<StatefulWidget> createState() => _EventsViewState();
 }
 
-class _ReservationsViewState extends State<ReservationsView> {
+class _EventsViewState extends State<EventsView> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text("予約一覧"),
-        FutureBuilder<APIResponse<List<Reservation>?>>(
-          future: _getReservations(),
+        const Text("イベント一覧"),
+        FutureBuilder<APIResponse<List<ReservableEvent>?>>(
+          future: _getEvents(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return handle<List<Reservation>, Widget>(snapshot.data!, (r) {
+              return handle<List<ReservableEvent>, Widget>(snapshot.data!, (r) {
                 return ListView.builder(
                   itemCount: r.length,
                   itemBuilder: (context, index) {
-                    return ReservationCard(reservation: r[index]);
+                    return EventCard(r[index]);
                   },
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -47,13 +47,13 @@ class _ReservationsViewState extends State<ReservationsView> {
   }
 }
 
-APIResponse<List<Reservation>?>? _cache;
+APIResponse<List<ReservableEvent>?>? _cache;
 
-Future<APIResponse<List<Reservation>?>> _getReservations() async {
+Future<APIResponse<List<ReservableEvent>?>> _getEvents() async {
   if (_cache != null) {
     return _cache!;
   }
-  APIResponse<List<Reservation>?> data = await getReserve();
+  APIResponse<List<ReservableEvent>?> data = await event();
   _cache = data;
   return data;
 }

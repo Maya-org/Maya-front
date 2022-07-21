@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 class StyledTextWidget extends StatelessWidget {
-  final Text text;
+  final List<Text> text;
+
+  StyledTextWidget.one(Text text, {Key? key}) : this(<Text>[text], key: key);
 
   const StyledTextWidget(this.text, {Key? key}) : super(key: key);
 
@@ -10,7 +12,9 @@ class StyledTextWidget extends StatelessWidget {
     return Wrap(children: [
       SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: text,
+        child: Column(
+          children: text,
+        ),
       ),
     ]);
   }
