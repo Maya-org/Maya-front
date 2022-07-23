@@ -12,17 +12,21 @@ class ReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UICard(
-      title: Text("${reservation.event.display_name}の予約"),
-      body: StyledTextWidget.one(
-        Text('開始日時: ${reservation.event.date_start.toDateTime().toString()}'),
+    return SizedBox(
+      width: 250,
+      child: UICard(
+        top: const Icon(Icons.event, color: Colors.blue),
+        title: Text("${reservation.event.display_name}の予約"),
+        body: StyledTextWidget.one(
+          Text('開始日時: ${reservation.event.date_start.toDateTime().toString()}'),
+        ),
+        onTap: () {
+          // TODO 遷移する
+          showOKDialog(context,
+              title: Text("予約#${reservation.reservation_id}"),
+              body: StyledTextWidget.one(Text(reservation.toString())));
+        },
       ),
-      onTap: () {
-        // TODO 遷移する
-        showOKDialog(context,
-            title: Text("予約#${reservation.reservation_id}"),
-            body: StyledTextWidget.one(Text(reservation.toString())));
-      },
     );
   }
 }

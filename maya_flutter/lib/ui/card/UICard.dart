@@ -4,16 +4,15 @@ class UICard extends StatelessWidget {
   final Widget title;
   final Widget? body;
   final void Function()? onTap;
+  final Widget? top;
+
   const UICard({
     Key? key,
     required this.title,
     this.body,
     this.onTap,
+    this.top,
   }) : super(key: key);
-
-  List<Widget> _list() {
-    return [title, body].whereType<Widget>().toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +21,14 @@ class UICard extends StatelessWidget {
       child: Card(
         elevation: 3,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: _list(),
+          children: [
+            if (top != null) Expanded(child: top!),
+            ListTile(
+              title: title,
+              subtitle: body,
+              contentPadding: const EdgeInsets.all(10),
+            ),
+          ],
         ),
       ),
     );

@@ -11,19 +11,22 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UICard(
-      title: Text(event.display_name),
-      body: StyledTextWidget([
-        Text("説明文:${event.description}"),
-        Text("開始日時:${event.date_start.toDateTime().toString()}"),
-        Text("予約済み人数:${event.taken_capacity}/${event.capacity}")
-      ]),
-      onTap: () {
-        // TODO 予約ページに遷移
-        showOKDialog(context,
-            title: Text("イベント#${event.event_id}"),
-            body: StyledTextWidget.one(Text(event.toString())));
-      },
+    return SizedBox(
+      width: 250,
+      child: UICard(
+        title: Text(event.display_name),
+        body: StyledTextWidget([
+          Text("説明文:${event.description}"),
+          Text("開始日時:${event.date_start.toDateTime().toString()}"),
+          Text("予約済み人数:${event.taken_capacity}/${event.capacity}")
+        ]),
+        onTap: () {
+          // TODO 予約ページに遷移
+          showOKDialog(context,
+              title: Text("イベント#${event.event_id}"),
+              body: StyledTextWidget.one(Text(event.toString())));
+        },
+      ),
     );
   }
 }

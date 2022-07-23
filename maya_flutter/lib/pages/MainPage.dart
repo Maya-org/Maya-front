@@ -26,20 +26,6 @@ class _MainPageState extends State<MainPage> {
           activeIcon: Icon(Icons.abc, color: Colors.blue),
           label: 'Debug',
         )),
-    Tuple2(
-        DebugPage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
-          label: 'Debug',
-        )),
-    Tuple2(
-        DebugPage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
-          label: 'Debug',
-        ))
   ];
   int _currentIndex = 0;
   final PageController _controller = PageController();

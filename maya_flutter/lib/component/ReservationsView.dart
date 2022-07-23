@@ -19,28 +19,33 @@ class _ReservationsViewState extends State<ReservationsView> {
     return Column(
       children: [
         const Text("予約一覧"),
-        FutureBuilder<APIResponse<List<Reservation>?>>(
-          future: _getReservations(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return handle<List<Reservation>, Widget>(snapshot.data!, (r) {
-                return ListView.builder(
-                  itemCount: r.length,
-                  itemBuilder: (context, index) {
-                    return ReservationCard(reservation: r[index]);
-                  },
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                );
-              }, (res, displayString) {
-                return const Text("error");
-              });
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            } else {
-              return const SizedBox(height: 50, width: 50, child: CircularProgressIndicator());
-            }
-          },
+        LimitedBox(
+          maxHeight: 200,
+          // TODO Rewrite with Provider
+          child: FutureBuilder<APIResponse<List<Reservation>?>>(
+            future: _getReservations(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return handle<List<Reservation>, Widget>(snapshot.data!, (r) {
+                  return ListView.builder(
+                    itemCount: r.length,
+                    itemBuilder: (context, index) {
+                      return ReservationCard(reservation: r[index]);
+                    },
+                    shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                  );
+                }, (res, displayString) {
+                  return const Text("error");
+                });
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return const SizedBox(height: 50, width: 50, child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
       ],
     );
