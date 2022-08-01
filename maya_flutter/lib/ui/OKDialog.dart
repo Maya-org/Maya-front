@@ -16,19 +16,21 @@ class OKDialog extends ContainerDialog {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: title,
-      content: Container(
-        child: body,
+    return LimitedBox(
+      child: AlertDialog(
+        title: title,
+        content: Container(
+          child: body,
+        ),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                if (toClose?? false) Navigator.pop(context);
+                onOK?.call();
+              },
+              child: Text(okText ?? "OK"))
+        ],
       ),
-      actions: [
-        ElevatedButton(
-            onPressed: () {
-              if (toClose?? false) Navigator.pop(context);
-              onOK?.call();
-            },
-            child: Text(okText ?? "OK"))
-      ],
     );
   }
 }

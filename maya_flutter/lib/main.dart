@@ -5,6 +5,7 @@ import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/Register.dart';
+import 'package:maya_flutter/pages/ReservationPage.dart';
 import 'package:maya_flutter/pages/SignUp.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/verifyer.dart';
@@ -34,6 +35,7 @@ class MayaApp extends StatelessWidget {
           "/debug": (context) => const DebugPage(),
           "/register/phoneVerifier": (context) => const PhoneVerifier(),
           "/register/nameRegister": (context) => const Register(),
+          "/reservation": (context) => const ReservationPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

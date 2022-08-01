@@ -17,11 +17,10 @@ class _EventsViewState extends State<EventsView> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text("イベント一覧"),
-        LimitedBox(
-          maxHeight: 200,
-          // TODO Rewrite with Provider
+        Expanded(
           child: FutureBuilder<APIResponse<List<ReservableEvent>?>>(
             future: _getEvents(),
             builder: (context, snapshot) {

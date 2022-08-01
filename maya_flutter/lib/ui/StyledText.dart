@@ -1,9 +1,14 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class StyledTextWidget extends StatelessWidget {
   final List<Text> text;
 
-  StyledTextWidget.one(Text text, {Key? key}) : this(<Text>[text], key: key);
+  StyledTextWidget.fromString(List<String> texts, {Key? key, bool? shrinkWrap})
+      : this(texts.map((text) => Text(text)).toList(), key: key);
+
+  StyledTextWidget.fromStringOne(String text, {Key? key, bool? shrinkWrap})
+      : this.fromString(<String>[text], key: key, shrinkWrap: shrinkWrap);
 
   const StyledTextWidget(this.text, {Key? key}) : super(key: key);
 
@@ -17,5 +22,9 @@ class StyledTextWidget extends StatelessWidget {
         ),
       ),
     ]);
+  }
+
+  static Markdown mdFromString(String text,bool shrink) {
+    return Markdown(data: text,shrinkWrap: shrink);
   }
 }

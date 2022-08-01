@@ -17,11 +17,10 @@ class _ReservationsViewState extends State<ReservationsView> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text("予約一覧"),
-        LimitedBox(
-          maxHeight: 200,
-          // TODO Rewrite with Provider
+        Expanded(
           child: FutureBuilder<APIResponse<List<Reservation>?>>(
             future: _getReservations(),
             builder: (context, snapshot) {

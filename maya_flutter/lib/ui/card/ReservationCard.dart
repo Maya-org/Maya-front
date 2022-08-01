@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/ui/StyledText.dart';
-import 'package:maya_flutter/ui/UI.dart';
 import 'package:maya_flutter/ui/card/UICard.dart';
 
 import '../../api/models/Models.dart';
@@ -17,14 +16,16 @@ class ReservationCard extends StatelessWidget {
       child: UICard(
         top: const Icon(Icons.event, color: Colors.blue),
         title: Text("${reservation.event.display_name}の予約"),
-        body: StyledTextWidget.one(
-          Text('開始日時: ${reservation.event.date_start.toDateTime().toString()}'),
+        body: StyledTextWidget.mdFromString(
+          '開始日時: ${reservation.event.date_start.toDateTime().toString()}',
+          true
         ),
         onTap: () {
           // TODO 遷移する
-          showOKDialog(context,
-              title: Text("予約#${reservation.reservation_id}"),
-              body: StyledTextWidget.one(Text(reservation.toString())));
+          Navigator.of(context).pushNamed('/reservation',arguments: reservation);
+          // showOKDialog(context,
+          //     title: Text("予約#${reservation.reservation_id}"),
+          //     body: StyledTextWidget.one(Text(reservation.toString())));
         },
       ),
     );
