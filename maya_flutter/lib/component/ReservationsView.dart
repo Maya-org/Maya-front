@@ -20,7 +20,7 @@ class _ReservationsViewState extends State<ReservationsView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text("予約一覧"),
-        Expanded(
+        Flexible(
           child: FutureBuilder<APIResponse<List<Reservation>?>>(
             future: _getReservations(),
             builder: (context, snapshot) {
@@ -41,7 +41,7 @@ class _ReservationsViewState extends State<ReservationsView> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                return const SizedBox(height: 50, width: 50, child: CircularProgressIndicator());
+                return const Center(child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
               }
             },
           ),

@@ -13,7 +13,9 @@ class ReservationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 250,
+      height: 0.0,
       child: UICard(
+        toExpandTop: true,
         top: const Icon(Icons.event, color: Colors.blue),
         title: Text("${reservation.event.display_name}の予約"),
         body: StyledTextWidget.mdFromString(

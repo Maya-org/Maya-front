@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:maya_flutter/ui/ContainerDialog.dart';
 
 class OKDialog extends ContainerDialog {
-  Function()? onOK;
-  String? okText;
-  bool? toClose;
+  final Function()? onOK;
+  final String? okText;
+  final bool? toClose;
 
   OKDialog(
       {Key? key, required Widget? body,

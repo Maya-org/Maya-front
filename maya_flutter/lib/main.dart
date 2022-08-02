@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
+import 'package:maya_flutter/pages/EventPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
@@ -36,6 +37,7 @@ class MayaApp extends StatelessWidget {
           "/register/phoneVerifier": (context) => const PhoneVerifier(),
           "/register/nameRegister": (context) => const Register(),
           "/reservation": (context) => const ReservationPage(),
+          "/event": (context) => const EventPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

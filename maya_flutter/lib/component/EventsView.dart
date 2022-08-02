@@ -20,7 +20,7 @@ class _EventsViewState extends State<EventsView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text("イベント一覧"),
-        Expanded(
+        Flexible(
           child: FutureBuilder<APIResponse<List<ReservableEvent>?>>(
             future: _getEvents(),
             builder: (context, snapshot) {
@@ -41,7 +41,7 @@ class _EventsViewState extends State<EventsView> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                return const SizedBox(height: 50, width: 50, child: CircularProgressIndicator());
+                return const Center(child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
               }
             },
           ),

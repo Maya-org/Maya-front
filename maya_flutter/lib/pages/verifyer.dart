@@ -26,7 +26,6 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
         backgroundColor: Theme.of(context).backgroundColor,
       ),
       body: Container(
-        key: const Key('recaptcha'),
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             TextField(

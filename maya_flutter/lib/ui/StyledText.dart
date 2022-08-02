@@ -25,6 +25,6 @@ class StyledTextWidget extends StatelessWidget {
   }
 
   static Markdown mdFromString(String text,bool shrink) {
-    return Markdown(data: text,shrinkWrap: shrink);
+    return Markdown(data: text,shrinkWrap: shrink,selectable: true);
   }
 }
