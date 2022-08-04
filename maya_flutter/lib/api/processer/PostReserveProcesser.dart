@@ -1,15 +1,15 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class PostReserveProcessor extends APIResponseProcesser<bool> {
+class PostReserveProcessor extends APIResponseProcesser<String> {
   const PostReserveProcessor();
 
   @override
   bool isKeyMatch(String key) => key == "post-reservation";
 
   @override
-  Tuple2<bool?,String> process(json) {
+  Tuple2<String?,String> process(json) {
     json as Map<String, dynamic>;
-    return const Tuple2(true, "予約に成功しました");
+    return Tuple2(json["reservation_id"] as String?, "予約に成功しました");
   }
 }

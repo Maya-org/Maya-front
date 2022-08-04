@@ -142,3 +142,15 @@ Map<String, dynamic> _$PathToJson(Path instance) => <String, dynamic>{
       'segments': instance.segments,
       '_converter': instance.converter,
     };
+
+ReserveRequest _$ReserveRequestFromJson(Map<String, dynamic> json) =>
+    ReserveRequest(
+      event_id: json['event_id'] as String,
+      group: Group.fromJson(json['group'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ReserveRequestToJson(ReserveRequest instance) =>
+    <String, dynamic>{
+      'event_id': instance.event_id,
+      'group': instance.group,
+    };

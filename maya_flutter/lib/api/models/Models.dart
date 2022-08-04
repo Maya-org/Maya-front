@@ -199,3 +199,20 @@ class Path {
 
   Map<String, dynamic> toJson() => _$PathToJson(this);
 }
+
+@JsonSerializable()
+class ReserveRequest {
+  String event_id;
+  Group group;
+
+  ReserveRequest({required this.event_id, required this.group});
+
+  factory ReserveRequest.fromJson(Map<String, dynamic> json) => _$ReserveRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'event_id': event_id, 'group': group.toJson(),
+  };
+
+  ReserveRequest.fromEvent(ReservableEvent event, Group group)
+      : this(event_id: event.event_id, group: group);
+}

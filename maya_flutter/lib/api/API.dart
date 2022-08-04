@@ -78,8 +78,8 @@ Future<APIResponse<List<Reservation>?>> getReserve() async {
   return await getProcessed("reserve", const GetReserveProcessor());
 }
 
-Future<APIResponse<bool?>> postReserve(Reservation reservation) async {
-  Map<String, dynamic> json = reservation.toJson();
+Future<APIResponse<String?>> postReserve(ReserveRequest request) async {
+  Map<String, dynamic> json = request.toJson();
 
   return await postProcessed("reserve", const PostReserveProcessor(), body: json);
 }

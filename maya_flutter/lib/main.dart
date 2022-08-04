@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
@@ -15,21 +16,24 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MayaApp());
+
+  runApp(MayaApp(isInitialAuthed: FirebaseAuth.instance.currentUser != null));
 }
 
 class MayaApp extends StatelessWidget {
-  const MayaApp({Key? key}) : super(key: key);
+  final bool isInitialAuthed;
+
+  const MayaApp({Key? key, required this.isInitialAuthed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserChangeNotifier>(
+    return ChangeNotifierProvider<UserChangeNotifier>(  // TODO 最初2回描画されちゃうけど仕方ない...か?
       create: (_) => UserChangeNotifier(),
       child: MaterialApp(
         title: const Messages().app_title,
         theme:
             ThemeData(primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
-        initialRoute: "/",
+        initialRoute: _initialRoute(),
         routes: {
           "/": (context) => SignUpPage(title: const Messages().page_title),
           "/main": (context) => const MainPage(),
@@ -42,5 +46,13 @@ class MayaApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
       ),
     );
+  }
+
+  String _initialRoute() {
+    if (isInitialAuthed) {
+      return '/main';
+    } else {
+      return '/';
+    }
   }
 }

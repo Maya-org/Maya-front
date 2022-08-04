@@ -19,7 +19,10 @@ class Ticket extends StatelessWidget {
       title: Text("${reservation.event.display_name}の予約"),
       body: StyledTextWidget.mdFromString(
           '''**開始日時: ${reservation.event.date_start.toDateTime().toString()}**
-        \\\n改行できないぽよ''', true),
+        \\\nイベント名: ${reservation.event.display_name}
+        \\\nイベントID: ${reservation.event.event_id}
+        \\\n予約ID:${reservation.reservation_id}
+        ''', true),
       top: () {
         if (user != null) {
           return TicketQRCode(user: user!, reservation: reservation);

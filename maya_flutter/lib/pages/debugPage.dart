@@ -75,22 +75,21 @@ class _DebugPageState extends State<DebugPage> {
             });
   }
 
-  Future<APIResponse<bool?>> _postReservation() async {
-    return await postReserve(Reservation(
-        reservation_id: "randomreservationid",
-        event: ReservableEvent(
+  Future<APIResponse<String?>> _postReservation() async {
+    return await postReserve(ReserveRequest.fromEvent(
+        ReservableEvent(
             event_id: "gSpLm6iBDEQKR5K1Etqj",
             display_name: "予約のテスト",
             date_start: TimeStamp.now(),
             taken_capacity: 0,
             reservations: []),
-        group_data: Group([Guest(GuestType.Parent)])));
+        Group([Guest(GuestType.Parent)])));
   }
 
   void _handlePostReservation(dynamic r) {
-    r as APIResponse<bool?>;
-    handleVoid<bool?>(context, r,
-        (p0) => {showOKDialog(context, title: const Text("予約確認"), body: const Text("予約しました"))});
+    r as APIResponse<String?>;
+    handleVoid<String?>(context, r,
+        (p0) => {showOKDialog(context, title: const Text("予約確認"), body: Text("予約しました\\\n予約ID: $p0"))});
   }
 
   Future<APIResponse<List<String>?>> _getPermissions() async {
