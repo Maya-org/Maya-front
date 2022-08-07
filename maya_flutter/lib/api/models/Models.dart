@@ -15,7 +15,24 @@ class Group {
 
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
+  factory Group.fromMap(Map<GuestType, int> map) {
+    List<Guest> guests = [];
+    for (GuestType type in GuestType.values) {
+      if (map[type] == null) {
+        continue;
+      }
+      for (int i = 0; i < map[type]!; i++) {
+        guests.add(Guest(type));
+      }
+    }
+    return Group(guests);
+  }
+
   Map<String, dynamic> toJson() => _$GroupToJson(this);
+
+  int getGuestCount(GuestType type) {
+    return all_guests.where((g) => g.type == type).length;
+  }
 }
 
 @JsonSerializable()
@@ -210,8 +227,9 @@ class ReserveRequest {
   factory ReserveRequest.fromJson(Map<String, dynamic> json) => _$ReserveRequestFromJson(json);
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'event_id': event_id, 'group': group.toJson(),
-  };
+        'event_id': event_id,
+        'group': group.toJson(),
+      };
 
   ReserveRequest.fromEvent(ReservableEvent event, Group group)
       : this(event_id: event.event_id, group: group);

@@ -6,11 +6,13 @@ import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/EventPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
-import 'package:maya_flutter/pages/Register.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
-import 'package:maya_flutter/pages/SignUp.dart';
+import 'package:maya_flutter/pages/ReservePage.dart';
+import 'package:maya_flutter/pages/ReservePostPage.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
-import 'package:maya_flutter/pages/verifyer.dart';
+import 'package:maya_flutter/pages/register/Register.dart';
+import 'package:maya_flutter/pages/register/SignUp.dart';
+import 'package:maya_flutter/pages/register/verifyer.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -41,6 +43,8 @@ class MayaApp extends StatelessWidget {
           "/register/phoneVerifier": (context) => const PhoneVerifier(),
           "/register/nameRegister": (context) => const Register(),
           "/reservation": (context) => const ReservationPage(),
+          "/reserve": (context) => const ReservePage(),
+          "/reserve/post": (context) => const ReservePostPage(),
           "/event": (context) => const EventPage(),
         },
         debugShowCheckedModeBanner: false,

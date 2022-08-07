@@ -22,6 +22,7 @@ class Ticket extends StatelessWidget {
         \\\nイベント名: ${reservation.event.display_name}
         \\\nイベントID: ${reservation.event.event_id}
         \\\n予約ID:${reservation.reservation_id}
+        \\\n予約人数:${reservation.group_data.all_guests.length}人
         ''', true),
       top: () {
         if (user != null) {

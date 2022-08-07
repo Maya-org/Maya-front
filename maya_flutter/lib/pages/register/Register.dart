@@ -4,8 +4,8 @@ import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
 import 'package:maya_flutter/ui/UI.dart';
 
-import '../api/API.dart';
-import '../api/models/Models.dart';
+import '../../api/API.dart';
+import '../../api/models/Models.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
