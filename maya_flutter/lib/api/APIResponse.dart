@@ -48,7 +48,7 @@ APIResponse<T> _processResponse<T>(Response res, APIResponseProcesser processer)
       } else {
         return APIResponse.success(result.item1 as T, result.item2);
       }
-    } catch (e)  {
+    } catch (e) {
       return APIResponse.error(null, res,
           "response type is ${key} and processer:${processer.runtimeType} but error: $e");
     }
@@ -59,12 +59,12 @@ APIResponse<T> _processResponse<T>(Response res, APIResponseProcesser processer)
 
 /// when got 401
 APIResponse<T?> _permissionDenied<T>(Response res) {
-  return APIResponse.error(null, res, "permission denied");
+  return APIResponse.error(null, res, "permission denied: ${res.body}");
 }
 
 /// when got 400
 APIResponse<T?> _internalError<T>(Response res) {
-  return APIResponse.error(null, res, "InternalError");
+  return APIResponse.error(null, res, "InternalError: ${res.body}");
 }
 
 /// when got other error

@@ -9,9 +9,9 @@ class ReservePostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Tuple3<ReserveRequest, ReservableEvent, bool> tuple3 =
-        ModalRoute.of(context)!.settings.arguments as Tuple3<ReserveRequest, ReservableEvent, bool>;
+    Tuple4<ReserveRequest, ReservableEvent, bool,String?> tuple4 =
+        ModalRoute.of(context)!.settings.arguments as Tuple4<ReserveRequest, ReservableEvent, bool,String?>;
     return ReservePostPageView(
-        reserveReq: tuple3.item1, event: tuple3.item2, isReserved: tuple3.item3);
+        reserveReq: tuple4.item1, event: tuple4.item2, isReserved: tuple4.item3,displayString: tuple4.item4);
   }
 }

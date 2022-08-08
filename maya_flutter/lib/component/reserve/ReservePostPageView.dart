@@ -5,9 +5,10 @@ class ReservePostPageView extends StatefulWidget {
   final ReserveRequest reserveReq;
   final ReservableEvent event;
   final bool isReserved;
+  final String? displayString;
 
   const ReservePostPageView(
-      {Key? key, required this.reserveReq, required this.isReserved, required this.event})
+      {Key? key, required this.reserveReq, required this.isReserved, required this.event, this.displayString})
       : super(key: key);
 
   @override
@@ -27,8 +28,8 @@ class _ReservePostPageViewState extends State<ReservePostPageView> {
     );
   }
 
-  String _genBody(){
-    if(widget.isReserved){
+  String _genBody() {
+    if (widget.isReserved) {
       return """${widget.event.display_name}の予約が完了しました
 開始時刻: ${widget.event.date_start.toDateTime().toString()}
 人数:
@@ -37,8 +38,10 @@ class _ReservePostPageViewState extends State<ReservePostPageView> {
 保護者:${widget.reserveReq.group.getGuestCount(GuestType.Parent)}人
 生徒:${widget.reserveReq.group.getGuestCount(GuestType.Student)}人
 """;
-    }else{
-      return """予約に失敗しました""";
+    } else {
+      return """予約に失敗しました
+エラー内容:
+${widget.displayString}""";
     }
   }
 }

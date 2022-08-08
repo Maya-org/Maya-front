@@ -52,11 +52,11 @@ class _ReserveProcessingPageViewState extends State<ReserveProcessingPageView> {
     r as APIResponse<String?>;
     handle<String, void>(r, (str) {
       Navigator.of(context).pushNamedAndRemoveUntil("/reserve/post", ModalRoute.withName("/main"),
-          arguments: Tuple3<ReserveRequest, ReservableEvent, bool>(req, event, true));
+          arguments: Tuple4<ReserveRequest, ReservableEvent, bool,String?>(req, event, true,null));
     }, (response, displayString) {
       // Failed to reserve
       Navigator.of(context).pushNamedAndRemoveUntil("/reserve/post", ModalRoute.withName("/main"),
-          arguments: Tuple3<ReserveRequest, ReservableEvent, bool>(req, event, false));
+          arguments: Tuple4<ReserveRequest, ReservableEvent, bool,String?>(req, event, false,displayString));
     });
   }
 }
