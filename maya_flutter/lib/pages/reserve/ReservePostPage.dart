@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/component/reserve/ReservePostPageView.dart';
 import 'package:tuple/tuple.dart';
 
-import '../api/models/Models.dart';
-import '../component/ReservePostPageView.dart';
+import '../../api/models/Models.dart';
 
 class ReservePostPage extends StatelessWidget {
   const ReservePostPage({Key? key}) : super(key: key);

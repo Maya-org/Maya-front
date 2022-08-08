@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../api/models/Models.dart';
-import '../component/ReservePageView.dart';
+import '../../api/models/Models.dart';
+import '../../component/reserve/ReservePageView.dart';
 
 class ReservePage extends StatelessWidget {
   const ReservePage({Key? key}) : super(key: key);

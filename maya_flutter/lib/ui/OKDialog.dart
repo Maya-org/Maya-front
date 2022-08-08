@@ -7,7 +7,8 @@ class OKDialog extends ContainerDialog {
   final bool? toClose;
 
   OKDialog(
-      {Key? key, required Widget? body,
+      {Key? key,
+      required Widget? body,
       required Widget? title,
       required this.onOK,
       this.okText,
@@ -22,7 +23,9 @@ class OKDialog extends ContainerDialog {
       actions: [
         ElevatedButton(
             onPressed: () {
-              if (toClose?? false) Navigator.pop(context);
+              if (toClose ?? false) {
+                Navigator.pop(context);
+              }
               onOK?.call();
             },
             child: Text(okText ?? "OK"))

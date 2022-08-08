@@ -23,11 +23,7 @@ class ReservationCard extends StatelessWidget {
           true
         ),
         onTap: () {
-          // TODO 遷移する
           Navigator.of(context).pushNamed('/reservation',arguments: reservation);
-          // showOKDialog(context,
-          //     title: Text("予約#${reservation.reservation_id}"),
-          //     body: StyledTextWidget.one(Text(reservation.toString())));
         },
       ),
     );

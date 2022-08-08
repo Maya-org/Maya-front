@@ -7,12 +7,13 @@ import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/EventPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
-import 'package:maya_flutter/pages/ReservePage.dart';
-import 'package:maya_flutter/pages/ReservePostPage.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/register/Register.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
 import 'package:maya_flutter/pages/register/verifyer.dart';
+import 'package:maya_flutter/pages/reserve/ReservePage.dart';
+import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
+import 'package:maya_flutter/pages/reserve/ReserveProcessingPage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -45,6 +46,7 @@ class MayaApp extends StatelessWidget {
           "/reservation": (context) => const ReservationPage(),
           "/reserve": (context) => const ReservePage(),
           "/reserve/post": (context) => const ReservePostPage(),
+          "/reserve/processing": (context) => const ReserveProcessingPage(),
           "/event": (context) => const EventPage(),
         },
         debugShowCheckedModeBanner: false,

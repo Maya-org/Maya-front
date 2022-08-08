@@ -11,7 +11,6 @@ class ReservationView extends StatelessWidget {
 
   const ReservationView(this.reservation, {Key? key}) : super(key: key);
 
-  // TODO QRコード表示
   @override
   Widget build(BuildContext context) {
     User? user = Provider.of<UserChangeNotifier>(context, listen: true).user;

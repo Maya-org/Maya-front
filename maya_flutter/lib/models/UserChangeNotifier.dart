@@ -5,7 +5,8 @@ class UserChangeNotifier extends ChangeNotifier {
   User? _user;
 
   UserChangeNotifier() {
-    FirebaseAuth.instance.userChanges().listen((User? user) {
+    // TODO authStateChangesで監視してるが、多分いつかこれを変えるときが来る
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
       _user = user;
       notifyListeners();
     });

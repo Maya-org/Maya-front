@@ -4,10 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:tuple/tuple.dart';
 
-import '../api/API.dart';
-import '../api/APIResponse.dart';
-import '../ui/APIResponseHandler.dart';
-import '../ui/UI.dart';
+import '../../api/API.dart';
+import '../../api/APIResponse.dart';
+import '../../ui/UI.dart';
 
 class ReservePageView extends StatefulWidget {
   final ReservableEvent event;
@@ -97,24 +96,13 @@ class _ReservePageViewState extends State<ReservePageView> {
           GuestType.Student: student,
         }));
 
-    _postReservation(req).then((dynamic r) {
-      _handlePostReservation(r, req, event);
-    });
+    Future<APIResponse<String?>> future = _postReservation(req);
+    Navigator.of(context).pushReplacementNamed("/reserve/processing",
+        arguments: Tuple3<Future<APIResponse<String?>>, ReserveRequest, ReservableEvent>(
+            future, req, event));
   }
 
-  Future<APIResponse<String?>> _postReservation(ReserveRequest req) async {
-    return await postReserve(req);
-  }
-
-  void _handlePostReservation(dynamic r, ReserveRequest req, ReservableEvent event) {
-    r as APIResponse<String?>;
-    handle<String, void>(r, (str) {
-      Navigator.of(context).pushNamed("/reserve/post",
-          arguments: Tuple3<ReserveRequest, ReservableEvent, bool>(req, event, true));
-    }, (response, displayString) {
-      // Failed to reserve
-      Navigator.of(context).pushNamed("/reserve/post",
-          arguments: Tuple3<ReserveRequest, ReservableEvent, bool>(req, event, false));
-    });
+  Future<APIResponse<String?>> _postReservation(ReserveRequest req) {
+    return postReserve(req);
   }
 }

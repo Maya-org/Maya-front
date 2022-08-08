@@ -22,7 +22,7 @@ class EventCard extends StatelessWidget {
           "予約済み人数:${event.taken_capacity}/${event.capacity}"
         ]),
         onTap: () {
-          Navigator.pushNamed(context, "/event", arguments: event);
+          Navigator.of(context).pushNamed("/event", arguments: event);
         },
       ),
     );
