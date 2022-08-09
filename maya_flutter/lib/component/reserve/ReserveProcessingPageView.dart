@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
 import '../../ui/APIResponseHandler.dart';
-import '../ReservationsView.dart';
 
 class ReserveProcessingPageView extends StatefulWidget {
   final Future<APIResponse<String?>> future;
@@ -53,7 +54,7 @@ class _ReserveProcessingPageViewState extends State<ReserveProcessingPageView> {
     r as APIResponse<String?>;
     handle<String, void>(r, (str) {
       // Success
-      updateReservations(); // 予約データを更新
+      Provider.of<ReservationChangeNotifier>(context, listen: false).update(); // 予約データを更新
       Navigator.of(context).pushNamedAndRemoveUntil("/reserve/post", ModalRoute.withName("/main"),
           arguments:
               Tuple4<ReserveRequest, ReservableEvent, bool, String?>(req, event, true, null));

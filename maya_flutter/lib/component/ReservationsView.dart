@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maya_flutter/api/API.dart';
-import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
+import 'package:provider/provider.dart';
 
 import '../ui/card/ReservationCard.dart';
 
@@ -20,50 +19,26 @@ class _ReservationsViewState extends State<ReservationsView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text("予約一覧"),
-        ElevatedButton(onPressed: (){setState((){});}, child: const Text("強制更新(Debug)")),
-        Flexible(
-          child: FutureBuilder<APIResponse<List<Reservation>?>>(
-            future: _getReservations(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return handle<List<Reservation>, Widget>(snapshot.data!, (r) {
-                  return ListView.builder(
-                    itemCount: r.length,
-                    itemBuilder: (context, index) {
-                      return ReservationCard(reservation: r[index]);
-                    },
-                    shrinkWrap: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                  );
-                }, (res, displayString) {
-                  return const Text("error");
-                });
-              } else if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                return const Center(child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
-              }
-            },
-          ),
-        ),
+        Flexible(child: Consumer<ReservationChangeNotifier>(
+          builder: (context, model, _) {
+            List<Reservation>? reservations = model.reservation;
+            if (reservations == null) {
+              return const Center(
+                  child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
+            } else {
+              return ListView.builder(
+                itemCount: reservations.length,
+                itemBuilder: (context, index) {
+                  return ReservationCard(reservation: reservations[index]);
+                },
+                shrinkWrap: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              );
+            }
+          },
+        )),
       ],
     );
   }
-}
-
-APIResponse<List<Reservation>?>? _cache;
-
-Future<APIResponse<List<Reservation>?>> _getReservations() async {
-  if (_cache != null) {
-    return _cache!;
-  }
-  APIResponse<List<Reservation>?> data = await getReserve();
-  _cache = data;
-  return data;
-}
-
-Future<void> updateReservations() async {
-  _cache = null;
-  await _getReservations();
 }

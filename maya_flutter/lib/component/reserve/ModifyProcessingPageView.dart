@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
-import '../ReservationsView.dart';
+import '../../models/ReservationChangeNotifier.dart';
 
 class ModifyProcessingPageView extends StatefulWidget {
   final Future<APIResponse<bool?>> future;
@@ -50,7 +51,7 @@ class _ModifyProcessingPageViewState extends State<ModifyProcessingPageView> {
     r as APIResponse<bool?>;
     handle<bool, void>(r, (str) {
       // 変更に成功
-      updateReservations(); // 予約データを更新
+      Provider.of<ReservationChangeNotifier>(context, listen: false).update(); // 予約データを更新
       Navigator.of(context).pushNamedAndRemoveUntil("/modify/post", ModalRoute.withName("/main"),
           arguments: Tuple4<Reservation, Group, bool, String?>(
               widget.reservation, widget.toUpdate, true, null));

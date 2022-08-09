@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/ui/card/EventCard.dart';
+import 'package:provider/provider.dart';
 
-import '../api/APIResponse.dart';
 import '../api/models/Models.dart';
-import '../ui/APIResponseHandler.dart';
+import '../models/EventChangeNotifier.dart';
 
 class EventsView extends StatefulWidget {
   const EventsView({Key? key}) : super(key: key);
@@ -21,27 +20,22 @@ class _EventsViewState extends State<EventsView> {
       children: [
         const Text("イベント一覧"),
         Flexible(
-          child: FutureBuilder<APIResponse<List<ReservableEvent>?>>(
-            future: _getEvents(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return handle<List<ReservableEvent>, Widget>(snapshot.data!, (r) {
-                  return ListView.builder(
-                    itemCount: r.length,
-                    itemBuilder: (context, index) {
-                      return EventCard(r[index]);
-                    },
-                    shrinkWrap: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                  );
-                }, (res, displayString) {
-                  return const Text("error");
-                });
-              } else if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
+          child: Consumer<EventChangeNotifier>(
+            builder: (context, model, _) {
+              List<ReservableEvent>? events = model.events;
+              if (events == null) {
+                return const Center(
+                    child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
               } else {
-                return const Center(child: SizedBox(height: 50, width: 50, child: CircularProgressIndicator()));
+                return ListView.builder(
+                  itemCount: events.length,
+                  itemBuilder: (context, index) {
+                    return EventCard(events[index]);
+                  },
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                );
               }
             },
           ),
@@ -49,15 +43,4 @@ class _EventsViewState extends State<EventsView> {
       ],
     );
   }
-}
-
-APIResponse<List<ReservableEvent>?>? _cache;
-
-Future<APIResponse<List<ReservableEvent>?>> _getEvents() async {
-  if (_cache != null) {
-    return _cache!;
-  }
-  APIResponse<List<ReservableEvent>?> data = await event();
-  _cache = data;
-  return data;
 }
