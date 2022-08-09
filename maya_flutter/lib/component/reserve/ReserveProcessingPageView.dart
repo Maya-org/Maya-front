@@ -4,6 +4,7 @@ import 'package:tuple/tuple.dart';
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
 import '../../ui/APIResponseHandler.dart';
+import '../ReservationsView.dart';
 
 class ReserveProcessingPageView extends StatefulWidget {
   final Future<APIResponse<String?>> future;
@@ -51,12 +52,16 @@ class _ReserveProcessingPageViewState extends State<ReserveProcessingPageView> {
   void _handlePostReservation(dynamic r, ReserveRequest req, ReservableEvent event) {
     r as APIResponse<String?>;
     handle<String, void>(r, (str) {
+      // Success
+      updateReservations(); // 予約データを更新
       Navigator.of(context).pushNamedAndRemoveUntil("/reserve/post", ModalRoute.withName("/main"),
-          arguments: Tuple4<ReserveRequest, ReservableEvent, bool,String?>(req, event, true,null));
+          arguments:
+              Tuple4<ReserveRequest, ReservableEvent, bool, String?>(req, event, true, null));
     }, (response, displayString) {
       // Failed to reserve
       Navigator.of(context).pushNamedAndRemoveUntil("/reserve/post", ModalRoute.withName("/main"),
-          arguments: Tuple4<ReserveRequest, ReservableEvent, bool,String?>(req, event, false,displayString));
+          arguments: Tuple4<ReserveRequest, ReservableEvent, bool, String?>(
+              req, event, false, displayString));
     });
   }
 }

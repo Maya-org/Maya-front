@@ -20,6 +20,7 @@ class _ReservationsViewState extends State<ReservationsView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text("予約一覧"),
+        ElevatedButton(onPressed: (){setState((){});}, child: const Text("強制更新(Debug)")),
         Flexible(
           child: FutureBuilder<APIResponse<List<Reservation>?>>(
             future: _getReservations(),
@@ -60,4 +61,9 @@ Future<APIResponse<List<Reservation>?>> _getReservations() async {
   APIResponse<List<Reservation>?> data = await getReserve();
   _cache = data;
   return data;
+}
+
+Future<void> updateReservations() async {
+  _cache = null;
+  await _getReservations();
 }

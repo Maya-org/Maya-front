@@ -7,6 +7,7 @@ import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
+import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
@@ -86,4 +87,12 @@ Future<APIResponse<String?>> postReserve(ReserveRequest request) async {
 
 Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
+}
+
+Future<APIResponse<bool?>> modifyReserve(Reservation reservation, Group toUpdate) async {
+  Map<String, dynamic> json = {
+    "reservation_id": reservation.reservation_id,
+    "group": toUpdate.toJson(),
+  };
+  return await postProcessed("modify", const ModifyProcessor(), body: json);
 }

@@ -11,6 +11,9 @@ import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/register/Register.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
 import 'package:maya_flutter/pages/register/verifyer.dart';
+import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
+import 'package:maya_flutter/pages/reserve/ModifyPostPage.dart';
+import 'package:maya_flutter/pages/reserve/ModifyProcessingPage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
 import 'package:maya_flutter/pages/reserve/ReserveProcessingPage.dart';
@@ -30,7 +33,8 @@ class MayaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserChangeNotifier>(  // TODO 最初2回描画されちゃうけど仕方ない...か?
+    return ChangeNotifierProvider<UserChangeNotifier>(
+      // TODO 最初2回描画されちゃうけど仕方ない...か?
       create: (_) => UserChangeNotifier(),
       child: MaterialApp(
         title: const Messages().app_title,
@@ -48,6 +52,9 @@ class MayaApp extends StatelessWidget {
           "/reserve/post": (context) => const ReservePostPage(),
           "/reserve/processing": (context) => const ReserveProcessingPage(),
           "/event": (context) => const EventPage(),
+          "/modify": (context) => const ModifyPage(),
+          "/modify/processing": (context) => const ModifyProcessingPage(),
+          "/modify/post": (context) => const ModifyPostPage(),
         },
         debugShowCheckedModeBanner: false,
       ),
