@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
+import 'package:maya_flutter/api/processer/CancelProcesser.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
@@ -12,8 +13,9 @@ import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
 import 'package:maya_flutter/api/processer/UserProcesser.dart';
+import 'package:tuple/tuple.dart';
 
-const end_point = "https://us-central1-maya-e0346.cloudfunctions.net/";
+const endPoint = "https://asia-northeast1-maya-e0346.cloudfunctions.net/";
 
 dynamic safeJsonDecode(Response res) {
   try {
@@ -24,7 +26,7 @@ dynamic safeJsonDecode(Response res) {
 }
 
 Uri fullURL(String path) {
-  Uri uri = Uri.parse(end_point + path);
+  Uri uri = Uri.parse(endPoint + path);
   return uri;
 }
 
@@ -45,9 +47,9 @@ Future<Response> get(String path) async {
   return await http.get(url, headers: await headers());
 }
 
-Future<APIResponse<T?>> getProcessed<T>(String path, APIResponseProcesser<T> processer) async {
+Future<APIResponse<T?>> getProcessed<T>(String path, APIResponseProcessor<T> processor) async {
   Response res = await get(path);
-  return processResponse(res, processer);
+  return processResponse(res, processor);
 }
 
 Future<Response> post(String path, {Map<String, dynamic>? body}) async {
@@ -55,10 +57,10 @@ Future<Response> post(String path, {Map<String, dynamic>? body}) async {
   return await http.post(url, body: jsonEncode(body), headers: await headers());
 }
 
-Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcesser<T> processer,
+Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcessor<T> processor,
     {Map<String, dynamic>? body}) async {
   Response res = await post(path, body: body);
-  return processResponse(res, processer);
+  return processResponse(res, processor);
 }
 
 Future<APIResponse<bool?>> register(MayaUser user) async {
@@ -95,4 +97,22 @@ Future<APIResponse<bool?>> modifyReserve(Reservation reservation, Group toUpdate
     "group": toUpdate.toJson(),
   };
   return await postProcessed("modify", const ModifyProcessor(), body: json);
+}
+
+Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
+  Map<String, dynamic> json = {
+    "reservation_id": reservation.reservation_id,
+    "group": Group.fromMap({}).toJson(),
+  };
+
+  return postProcessed("modify", const CancelProcessor(), body: json);
+}
+
+/// For Debugging purposes
+Future<Tuple2<Duration, R>> measureTime<R>(Future<R> Function() block) async {
+  Stopwatch stopwatch = Stopwatch();
+  stopwatch.start();
+  R r = await block();
+  stopwatch.stop();
+  return Tuple2(stopwatch.elapsed, r);
 }

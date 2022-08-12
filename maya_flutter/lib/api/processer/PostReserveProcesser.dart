@@ -1,7 +1,7 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class PostReserveProcessor extends APIResponseProcesser<String> {
+class PostReserveProcessor extends APIResponseProcessor<String> {
   const PostReserveProcessor();
 
   @override

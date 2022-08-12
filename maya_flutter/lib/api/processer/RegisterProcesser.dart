@@ -1,7 +1,7 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class RegisterProcessor extends APIResponseProcesser<bool> {
+class RegisterProcessor extends APIResponseProcessor<bool> {
   const RegisterProcessor();
 
   @override

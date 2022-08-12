@@ -3,7 +3,7 @@ import 'package:tuple/tuple.dart';
 
 import '../APIResponse.dart';
 
-class UserProcessor extends APIResponseProcesser<MayaUser> {
+class UserProcessor extends APIResponseProcessor<MayaUser> {
   const UserProcessor();
 
   @override

@@ -1,7 +1,7 @@
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:tuple/tuple.dart';
 
-class ModifyProcessor extends APIResponseProcesser<bool> {
+class ModifyProcessor extends APIResponseProcessor<bool> {
   const ModifyProcessor();
   @override
   bool isKeyMatch(String key) => key == "modify";

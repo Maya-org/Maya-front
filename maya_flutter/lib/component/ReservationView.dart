@@ -39,7 +39,13 @@ class _ReservationViewState extends State<ReservationView> {
                         onPressed: () {
                           _navigateToModifyPage();
                         },
-                        child: const Text("予約内容を変更する"))
+                        child: const Text("予約内容を変更する")),
+                    ElevatedButton(
+                        onPressed: () {
+                          _navigateToCancelPage();
+                        },
+                        style: ElevatedButton.styleFrom(primary: Colors.red),
+                        child: const Text("予約をキャンセルする"))
                   ])),
                 ],
               ));
@@ -48,5 +54,9 @@ class _ReservationViewState extends State<ReservationView> {
 
   void _navigateToModifyPage() {
     Navigator.of(context).pushNamed("/modify", arguments: widget.reservation);
+  }
+
+  void _navigateToCancelPage() {
+    Navigator.of(context).pushNamed("/cancel", arguments: widget.reservation);
   }
 }

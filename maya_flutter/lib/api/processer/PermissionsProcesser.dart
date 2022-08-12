@@ -2,7 +2,7 @@ import 'package:tuple/tuple.dart';
 
 import '../APIResponse.dart';
 
-class PermissionsProcessor extends APIResponseProcesser<List<String>> {
+class PermissionsProcessor extends APIResponseProcessor<List<String>> {
   const PermissionsProcessor();
 
   @override

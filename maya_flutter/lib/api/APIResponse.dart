@@ -14,18 +14,18 @@ class APIResponse<T> with _$APIResponse {
   const factory APIResponse.success(T body, String displayMessage) = APIResponseSuccess;
 }
 
-abstract class APIResponseProcesser<T> {
-  const APIResponseProcesser();
+abstract class APIResponseProcessor<T> {
+  const APIResponseProcessor();
 
   bool isKeyMatch(String key);
 
   Tuple2<T?, String> process(dynamic json);
 }
 
-APIResponse<T?> processResponse<T>(Response res, APIResponseProcesser<T> processer) {
+APIResponse<T?> processResponse<T>(Response res, APIResponseProcessor<T> processor) {
   switch (res.statusCode) {
     case 200:
-      return _processResponse(res, processer);
+      return _processResponse(res, processor);
     case 401:
       return _permissionDenied(res);
     case 400:
@@ -35,14 +35,14 @@ APIResponse<T?> processResponse<T>(Response res, APIResponseProcesser<T> process
   }
 }
 
-APIResponse<T> _processResponse<T>(Response res, APIResponseProcesser processer) {
+APIResponse<T> _processResponse<T>(Response res, APIResponseProcessor processor) {
   dynamic json = safeJsonDecode(res);
   String? key = json["type"];
   if (key == null) {
     return APIResponse.error(null, res, "response type is null");
-  } else if (processer.isKeyMatch(key)) {
+  } else if (processor.isKeyMatch(key)) {
     try {
-      Tuple2<T?, String> result = processer.process(json) as Tuple2<T?, String>;
+      Tuple2<T?, String> result = processor.process(json) as Tuple2<T?, String>;
       if (result.item1 == null) {
         return APIResponse.error(null, res, result.item2);
       } else {
@@ -50,11 +50,11 @@ APIResponse<T> _processResponse<T>(Response res, APIResponseProcesser processer)
       }
     } catch (e) {
       return APIResponse.error(null, res,
-          "response type is ${key} and processer:${processer.runtimeType} but error: $e");
+          "response type is ${key} and processor:${processor.runtimeType} but error: $e");
     }
   }
   return APIResponse.error(
-      null, res, "response type is not match to processer[${processer.runtimeType}]");
+      null, res, "response type is not match to processor[${processor.runtimeType}]");
 }
 
 /// when got 401

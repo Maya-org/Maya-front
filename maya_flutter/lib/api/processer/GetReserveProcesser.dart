@@ -3,7 +3,7 @@ import 'package:tuple/tuple.dart';
 
 import '../APIResponse.dart';
 
-class GetReserveProcessor extends APIResponseProcesser<List<Reservation>>{
+class GetReserveProcessor extends APIResponseProcessor<List<Reservation>>{
   const GetReserveProcessor();
 
   @override

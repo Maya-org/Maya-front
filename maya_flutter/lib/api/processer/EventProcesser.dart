@@ -2,7 +2,7 @@ import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:tuple/tuple.dart';
 
-class EventProcessor extends APIResponseProcesser<List<ReservableEvent>> {
+class EventProcessor extends APIResponseProcessor<List<ReservableEvent>> {
   const EventProcessor();
 
   @override

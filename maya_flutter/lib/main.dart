@@ -13,6 +13,7 @@ import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/register/Register.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
 import 'package:maya_flutter/pages/register/verifyer.dart';
+import 'package:maya_flutter/pages/reserve/CancelPage.dart';
 import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
 import 'package:maya_flutter/pages/reserve/ModifyPostPage.dart';
 import 'package:maya_flutter/pages/reserve/ModifyProcessingPage.dart';
@@ -61,6 +62,7 @@ class MayaApp extends StatelessWidget {
               "/modify": (context) => const ModifyPage(),
               "/modify/processing": (context) => const ModifyProcessingPage(),
               "/modify/post": (context) => const ModifyPostPage(),
+              "/cancel": (context) => const CancelPage(),
             },
             debugShowCheckedModeBanner: false,
           ),
