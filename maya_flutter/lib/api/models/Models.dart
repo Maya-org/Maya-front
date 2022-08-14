@@ -33,6 +33,11 @@ class Group {
   int getGuestCount(GuestType type) {
     return all_guests.where((g) => g.type == type).length;
   }
+
+  @override
+  String toString() {
+    return '{all_guests: [${all_guests.map((e) => e.type).join(', ')}]}';
+  }
 }
 
 @JsonSerializable()
@@ -73,9 +78,9 @@ class ReservableEvent {
   TimeStamp? available_at;
   int? capacity;
   int taken_capacity;
-  List<Reference> reservations;
-  Reference?
+  ReservableEvent?
       required_reservation; // Reference to a reservation that is required to attend this event.
+  List<TicketType> reservable_ticket_type;
 
   ReservableEvent(
       {required this.event_id,
@@ -86,8 +91,8 @@ class ReservableEvent {
       this.available_at,
       this.capacity,
       required this.taken_capacity,
-      required this.reservations,
-      this.required_reservation});
+      this.required_reservation,
+      required this.reservable_ticket_type});
 
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
@@ -95,7 +100,7 @@ class ReservableEvent {
 
   @override
   String toString() {
-    return "{イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation}";
+    return "{イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation,予約可能:$reservable_ticket_type}";
   }
 }
 
@@ -109,8 +114,13 @@ class Reservation {
   }
 
   Group group_data;
+  TicketType reserved_ticket_type;
 
-  Reservation({required this.reservation_id, required this.event, required this.group_data});
+  Reservation(
+      {required this.reservation_id,
+      required this.event,
+      required this.group_data,
+      required this.reserved_ticket_type});
 
   factory Reservation.fromJson(Map<String, dynamic> json) => _$ReservationFromJson(json);
 
@@ -118,7 +128,7 @@ class Reservation {
 
   @override
   String toString() {
-    return "{予約:$reservation_id,イベント:$event,参加人数:${member_all()}}";
+    return "{予約:$reservation_id,イベント:$event,参加人数:${member_all()},チケット:$reserved_ticket_type}";
   }
 }
 
@@ -221,16 +231,46 @@ class Path {
 class ReserveRequest {
   String event_id;
   Group group;
+  String ticket_type_id;
 
-  ReserveRequest({required this.event_id, required this.group});
+  ReserveRequest({required this.event_id, required this.group, required this.ticket_type_id});
 
   factory ReserveRequest.fromJson(Map<String, dynamic> json) => _$ReserveRequestFromJson(json);
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'event_id': event_id,
         'group': group.toJson(),
+        'ticket_type_id': ticket_type_id,
       };
 
   ReserveRequest.fromEvent(ReservableEvent event, Group group)
-      : this(event_id: event.event_id, group: group);
+      : this(
+            event_id: event.event_id,
+            group: group,
+            ticket_type_id: event.reservable_ticket_type[0].ticket_type_id);
+}
+
+@JsonSerializable()
+class TicketType {
+  String ticket_type_id;
+  List<Group> reservable_group;
+  String display_ticket_name;
+  String? display_ticket_description;
+  bool require_two_factor;
+
+  TicketType(
+      {required this.ticket_type_id,
+      required this.reservable_group,
+      required this.display_ticket_name,
+      this.display_ticket_description,
+      required this.require_two_factor});
+
+  factory TicketType.fromJson(Map<String, dynamic> json) => _$TicketTypeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TicketTypeToJson(this);
+
+  @override
+  String toString() {
+    return "{チケットタイプ:$ticket_type_id,グループ:[${reservable_group.map((g) => g.toString()).join(',')}],表示名:$display_ticket_name,説明:$display_ticket_description,2FA:$require_two_factor}";
+  }
 }

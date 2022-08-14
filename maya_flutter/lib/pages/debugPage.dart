@@ -82,14 +82,23 @@ class _DebugPageState extends State<DebugPage> {
             display_name: "予約のテスト",
             date_start: TimeStamp.now(),
             taken_capacity: 0,
-            reservations: []),
+            reservable_ticket_type: [
+              TicketType(
+                  ticket_type_id: "wNWrIbctPltGTgZyE7lH",
+                  display_ticket_name: "チケットのテスト",
+                  reservable_group: [],
+                  require_two_factor: false)
+            ]),
         Group([Guest(GuestType.Parent)])));
   }
 
   void _handlePostReservation(dynamic r) {
     r as APIResponse<String?>;
-    handleVoid<String?>(context, r,
-        (p0) => {showOKDialog(context, title: const Text("予約確認"), body: Text("予約しました\\\n予約ID: $p0"))});
+    handleVoid<String?>(
+        context,
+        r,
+        (p0) =>
+            {showOKDialog(context, title: const Text("予約確認"), body: Text("予約しました\\\n予約ID: $p0"))});
   }
 
   Future<APIResponse<List<String>?>> _getPermissions() async {

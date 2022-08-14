@@ -48,7 +48,9 @@ APIResponse<T> _processResponse<T>(Response res, APIResponseProcessor processor)
       } else {
         return APIResponse.success(result.item1 as T, result.item2);
       }
-    } catch (e) {
+    } catch (e,stackTrace) {
+      print('response body: ${res.body}');
+      print('stack trace: ${stackTrace}');
       return APIResponse.error(null, res,
           "response type is ${key} and processor:${processor.runtimeType} but error: $e");
     }

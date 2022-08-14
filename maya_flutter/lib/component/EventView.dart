@@ -36,6 +36,7 @@ class _EventViewState extends State<EventView> {
                   \\\n開始日時:${event.date_start.toDateTime().toString()}
                   \\\n予約済み人数:${event.taken_capacity}/${event.capacity},
                   \\\nイベントID:${event.event_id}
+                  \\\nチケットタイプ:${event.reservable_ticket_type.map((ticket) => ticket.toString()).join(", ")}
                   """, true),
               ),
               Row(

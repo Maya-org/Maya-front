@@ -51,7 +51,7 @@ class _CancelProcessingPageViewState extends State<CancelProcessingPageView> {
           cancelledReservation: widget.reservation,
           displayMessage: null,
         );
-      }),ModalRoute.withName("/main"));
+      }), ModalRoute.withName("/main"));
     }, (response, displayString) {
       // 変更に失敗
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
