@@ -26,34 +26,37 @@ class _EventViewState extends State<EventView> {
         scrollDirection: Axis.vertical,
         child: Container(
             padding: const EdgeInsets.all(10),
-            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              UICard(
-                toExpandTop: false,
-                top: Image.network(
-                    "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"),
-                title: Text(event.display_name),
-                body: StyledTextWidget.mdFromString("""説明文:${event.description}
-                  \\\n開始日時:${event.date_start.toDateTime().toString()}
-                  \\\n予約済み人数:${event.taken_capacity}/${event.capacity},
-                  \\\nイベントID:${event.event_id}
-                  \\\nチケットタイプ:${event.reservable_ticket_type.map((ticket) => ticket.toString()).join(", ")}
-                  """, true),
-              ),
-              Row(
-                children: [
-                  Expanded(child: Text("開始日時${event.date_start.toDateTime().toString()}")),
-                  Expanded(child: Text("終了日時${event.date_end?.toDateTime().toString()}")),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _reserveEvent(event);
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 5.0)),
-                child: const Text("予約する"),
-              )
-            ])),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                UICard(
+                  toExpandTop: false,
+                  top: Image.network(
+                      "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"),
+                  title: Text(event.display_name),
+                  body: StyledTextWidget.mdFromString("""説明文:${event.description}
+                    \\\n開始日時:${event.date_start.toDateTime().toString()}
+                    \\\n予約済み人数:${event.taken_capacity}/${event.capacity},
+                    \\\nイベントID:${event.event_id}
+                    \\\nチケットタイプ:${event.reservable_ticket_type.map((ticket) => ticket.toString()).join(", ")}
+                    """, true),
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Text("開始日時${event.date_start.toDateTime().toString()}")),
+                    Expanded(child: Text("終了日時${event.date_end?.toDateTime().toString()}")),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _reserveEvent(event);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 5.0)),
+                  child: const Text("予約する"),
+                )
+              ]),
+            )),
       ),
     );
   }

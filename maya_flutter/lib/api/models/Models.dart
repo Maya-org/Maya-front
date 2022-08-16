@@ -258,7 +258,7 @@ class ReserveRequest {
         'event_id': event_id,
         'group': group.toJson(),
         'ticket_type_id': ticket_type_id,
-        if(two_factor_key != null) 'two_factor_key': two_factor_key,
+        if (two_factor_key != null) 'two_factor_key': two_factor_key,
       };
 
   ReserveRequest.fromEvent(ReservableEvent event, Group group, {String? two_factor_key})
@@ -291,5 +291,35 @@ class TicketType {
   @override
   String toString() {
     return "{チケットタイプ:$ticket_type_id,グループ:[${reservable_group.map((g) => g.toString()).join(',')}],表示名:$display_ticket_name,説明:$display_ticket_description,2FA:$require_two_factor}";
+  }
+}
+
+enum Operation {
+  @JsonValue('Enter')
+  Enter("入場","enter"),
+  @JsonValue('Exit')
+  Exit("出場","exit");
+
+  final String displayName;
+  final String operationName;
+
+  const Operation(this.displayName,this.operationName);
+}
+
+@JsonSerializable()
+class Room {
+  String room_id;
+  int capacity;
+  String display_name;
+
+  Room({required this.room_id, required this.capacity, required this.display_name});
+
+  factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RoomToJson(this);
+
+  @override
+  String toString() {
+    return "{ルームID:$room_id,定員:$capacity,表示名:$display_name}";
   }
 }

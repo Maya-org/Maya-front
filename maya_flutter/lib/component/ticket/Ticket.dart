@@ -6,28 +6,33 @@ import 'package:maya_flutter/ui/card/UICard.dart';
 import '../../api/models/Models.dart';
 import 'TicketQRCode.dart';
 
-class Ticket extends StatelessWidget {
+class Ticket extends StatefulWidget {
   final Reservation reservation;
   final User? user;
 
   const Ticket({super.key, required this.reservation, required this.user});
 
   @override
+  State<Ticket> createState() => _TicketState();
+}
+
+class _TicketState extends State<Ticket> {
+  @override
   Widget build(BuildContext context) {
     return UICard(
       margin: const EdgeInsets.all(10),
-      title: Text("${reservation.event.display_name}の予約"),
+      title: Text("${widget.reservation.event.display_name}の予約"),
       body: StyledTextWidget.mdFromString(
-          '''**開始日時: ${reservation.event.date_start.toDateTime().toString()}**
-        \\\nイベント名: ${reservation.event.display_name}
-        \\\nイベントID: ${reservation.event.event_id}
-        \\\n予約ID:${reservation.reservation_id}
-        \\\n予約人数:${reservation.group_data.all_guests.length}人
-        \\\nチケットタイプ:${reservation.reserved_ticket_type.display_ticket_name}
+          '''**開始日時: ${widget.reservation.event.date_start.toDateTime().toString()}**
+        \\\nイベント名: ${widget.reservation.event.display_name}
+        \\\nイベントID: ${widget.reservation.event.event_id}
+        \\\n予約ID:${widget.reservation.reservation_id}
+        \\\n予約人数:${widget.reservation.group_data.all_guests.length}人
+        \\\nチケットタイプ:${widget.reservation.reserved_ticket_type.display_ticket_name}
         ''', true),
       top: () {
-        if (user != null) {
-          return TicketQRCode(user: user!, reservation: reservation);
+        if (widget.user != null) {
+          return TicketQRCode(user: widget.user!, reservation: widget.reservation);
         } else {
           return Container();
         }

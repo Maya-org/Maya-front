@@ -151,6 +151,7 @@ ReserveRequest _$ReserveRequestFromJson(Map<String, dynamic> json) =>
       event_id: json['event_id'] as String,
       group: Group.fromJson(json['group'] as Map<String, dynamic>),
       ticket_type_id: json['ticket_type_id'] as String,
+      two_factor_key: json['two_factor_key'] as String?,
     );
 
 Map<String, dynamic> _$ReserveRequestToJson(ReserveRequest instance) =>
@@ -158,6 +159,7 @@ Map<String, dynamic> _$ReserveRequestToJson(ReserveRequest instance) =>
       'event_id': instance.event_id,
       'group': instance.group,
       'ticket_type_id': instance.ticket_type_id,
+      'two_factor_key': instance.two_factor_key,
     };
 
 TicketType _$TicketTypeFromJson(Map<String, dynamic> json) => TicketType(
@@ -177,4 +179,16 @@ Map<String, dynamic> _$TicketTypeToJson(TicketType instance) =>
       'display_ticket_name': instance.display_ticket_name,
       'display_ticket_description': instance.display_ticket_description,
       'require_two_factor': instance.require_two_factor,
+    };
+
+Room _$RoomFromJson(Map<String, dynamic> json) => Room(
+      room_id: json['room_id'] as String,
+      capacity: json['capacity'] as int,
+      display_name: json['display_name'] as String,
+    );
+
+Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
+      'room_id': instance.room_id,
+      'capacity': instance.capacity,
+      'display_name': instance.display_name,
     };

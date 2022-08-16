@@ -28,26 +28,28 @@ class _ReservationViewState extends State<ReservationView> {
           return ConstrainedBox(
               constraints: BoxConstraints.tightFor(
                   width: constraints.maxWidth, height: constraints.maxHeight),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Ticket(user: user, reservation: widget.reservation),
-                  Expanded(
-                      child: Column(children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          _navigateToModifyPage();
-                        },
-                        child: const Text("予約内容を変更する")),
-                    ElevatedButton(
-                        onPressed: () {
-                          _navigateToCancelPage();
-                        },
-                        style: ElevatedButton.styleFrom(primary: Colors.red),
-                        child: const Text("予約をキャンセルする"))
-                  ])),
-                ],
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Ticket(user: user, reservation: widget.reservation),
+                    Column(children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            _navigateToModifyPage();
+                          },
+                          child: const Text("予約内容を変更する")),
+                      ElevatedButton(
+                          onPressed: () {
+                            _navigateToCancelPage();
+                          },
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                          child: const Text("予約をキャンセルする"))
+                    ]),
+                  ],
+                ),
               ));
         }));
   }

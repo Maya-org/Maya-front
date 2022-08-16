@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/pages/CheckPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:tuple/tuple.dart';
@@ -25,6 +26,13 @@ class _MainPageState extends State<MainPage> {
           icon: Icon(Icons.abc),
           activeIcon: Icon(Icons.abc, color: Colors.blue),
           label: 'Debug',
+        )),
+    Tuple2(
+        CheckPage(),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.abc),
+          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          label: 'Check',
         )),
   ];
   int _currentIndex = 0;

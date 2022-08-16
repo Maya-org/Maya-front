@@ -6,12 +6,14 @@ import 'package:http/http.dart';
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/api/processer/CancelProcesser.dart';
+import 'package:maya_flutter/api/processer/CheckProcessor.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
+import 'package:maya_flutter/api/processer/RoomsProcessor.dart';
 import 'package:maya_flutter/api/processer/UserProcesser.dart';
 import 'package:tuple/tuple.dart';
 
@@ -91,13 +93,14 @@ Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
 }
 
-Future<APIResponse<bool?>> modifyReserve(Reservation reservation, TicketType ticketType,
-    Group toUpdate, {String? twoFactorKey}) async {
+Future<APIResponse<bool?>> modifyReserve(
+    Reservation reservation, TicketType ticketType, Group toUpdate,
+    {String? twoFactorKey}) async {
   Map<String, dynamic> json = {
     "reservation_id": reservation.reservation_id,
     "toUpdate_ticket_type_id": ticketType.ticket_type_id,
     "toUpdate": toUpdate.toJson(),
-    if(twoFactorKey != null) "two_factor_key": twoFactorKey
+    if (twoFactorKey != null) "two_factor_key": twoFactorKey
   };
   return await postProcessed("modify", const ModifyProcessor(), body: json);
 }
@@ -108,6 +111,21 @@ Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
   };
 
   return postProcessed("modify", const CancelProcessor(), body: json);
+}
+
+Future<APIResponse<bool?>> check(
+    Operation operation, String token, Room room, String reservationID) {
+  Map<String, dynamic> json = {
+    "operation": operation.operationName,
+    "auth_token": token,
+    "room_id": room.room_id,
+    "reservation_id": reservationID,
+  };
+  return postProcessed("check", const CheckProcessor(), body: json);
+}
+
+Future<APIResponse<List<Room>?>> rooms(){
+  return getProcessed("rooms", const RoomsProcessor());
 }
 
 /// For Debugging purposes
