@@ -114,10 +114,10 @@ Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
 }
 
 Future<APIResponse<bool?>> check(
-    Operation operation, String token, Room room, String reservationID) {
+    Operation operation, String uid, Room room, String reservationID) {
   Map<String, dynamic> json = {
     "operation": operation.operationName,
-    "auth_token": token,
+    "auth_uid": uid,
     "room_id": room.room_id,
     "reservation_id": reservationID,
   };

@@ -52,7 +52,6 @@ class _TicketQRCodeState extends State<TicketQRCode> {
 }
 
 Future<String> generateQRCodeData(User user, Reservation reservation) async {
-  String token = await user.getIdToken(true);
-  print('showing qr code:$token#${reservation.reservation_id}');
-  return "$token#${reservation.reservation_id}";
+  print('showing qr code:${user.uid}#${reservation.reservation_id}');
+  return "${user.uid}#${reservation.reservation_id}";
 }
