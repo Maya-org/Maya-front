@@ -91,12 +91,13 @@ Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
 }
 
-Future<APIResponse<bool?>> modifyReserve(
-    Reservation reservation, TicketType ticketType, Group toUpdate) async {
+Future<APIResponse<bool?>> modifyReserve(Reservation reservation, TicketType ticketType,
+    Group toUpdate, {String? twoFactorKey}) async {
   Map<String, dynamic> json = {
     "reservation_id": reservation.reservation_id,
     "toUpdate_ticket_type_id": ticketType.ticket_type_id,
-    "toUpdate": toUpdate.toJson()
+    "toUpdate": toUpdate.toJson(),
+    if(twoFactorKey != null) "two_factor_key": twoFactorKey
   };
   return await postProcessed("modify", const ModifyProcessor(), body: json);
 }

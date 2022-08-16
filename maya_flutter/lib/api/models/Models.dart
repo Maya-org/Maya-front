@@ -244,8 +244,13 @@ class ReserveRequest {
   String event_id;
   Group group;
   String ticket_type_id;
+  String? two_factor_key;
 
-  ReserveRequest({required this.event_id, required this.group, required this.ticket_type_id});
+  ReserveRequest(
+      {required this.event_id,
+      required this.group,
+      required this.ticket_type_id,
+      this.two_factor_key});
 
   factory ReserveRequest.fromJson(Map<String, dynamic> json) => _$ReserveRequestFromJson(json);
 
@@ -253,13 +258,15 @@ class ReserveRequest {
         'event_id': event_id,
         'group': group.toJson(),
         'ticket_type_id': ticket_type_id,
+        if(two_factor_key != null) 'two_factor_key': two_factor_key,
       };
 
-  ReserveRequest.fromEvent(ReservableEvent event, Group group)
+  ReserveRequest.fromEvent(ReservableEvent event, Group group, {String? two_factor_key})
       : this(
             event_id: event.event_id,
             group: group,
-            ticket_type_id: event.reservable_ticket_type[0].ticket_type_id);
+            ticket_type_id: event.reservable_ticket_type[0].ticket_type_id,
+            two_factor_key: two_factor_key);
 }
 
 @JsonSerializable()

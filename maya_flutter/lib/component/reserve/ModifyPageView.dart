@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/API.dart';
 import 'package:maya_flutter/component/reserve/TicketTypeSelector.dart';
+import 'package:maya_flutter/pages/reserve/ModifyProcessingPage.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
+import '../../pages/reserve/TwoFactorPage.dart';
 
 class ModifyPageView extends StatefulWidget {
   final Reservation reservation;
@@ -32,9 +34,31 @@ class _ModifyPageViewState extends State<ModifyPageView> {
   }
 
   void _modify(BuildContext context, TicketType type, Group toUpdate) {
-    Future<APIResponse<bool?>> future = modifyReserve(widget.reservation, type, toUpdate);
-    Navigator.of(context).pushReplacementNamed("/modify/processing",
-        arguments: Tuple3<Future<APIResponse<bool?>>, Reservation, Group>(
-            future, widget.reservation, toUpdate));
+    if (type.require_two_factor) {
+      // Require 2FA
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+        return TwoFactorPage(
+          event: widget.reservation.event,
+          toUpdate: toUpdate,
+          type: type,
+          builder: (String code) {
+            return MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return const ModifyProcessingPage();
+                },
+                settings: RouteSettings(
+                    arguments: Tuple3<Future<APIResponse<bool?>>, Reservation, Group>(
+                        modifyReserve(widget.reservation, type, toUpdate, twoFactorKey: code),
+                        widget.reservation,
+                        toUpdate)));
+          },
+        );
+      }));
+    } else {
+      Future<APIResponse<bool?>> future = modifyReserve(widget.reservation, type, toUpdate);
+      Navigator.of(context).pushReplacementNamed("/modify/processing",
+          arguments: Tuple3<Future<APIResponse<bool?>>, Reservation, Group>(
+              future, widget.reservation, toUpdate));
+    }
   }
 }
