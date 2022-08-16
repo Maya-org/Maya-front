@@ -91,10 +91,12 @@ Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
 }
 
-Future<APIResponse<bool?>> modifyReserve(Reservation reservation, Group toUpdate) async {
+Future<APIResponse<bool?>> modifyReserve(
+    Reservation reservation, TicketType ticketType, Group toUpdate) async {
   Map<String, dynamic> json = {
     "reservation_id": reservation.reservation_id,
-    "group": toUpdate.toJson(),
+    "toUpdate_ticket_type_id": ticketType.ticket_type_id,
+    "toUpdate": toUpdate.toJson()
   };
   return await postProcessed("modify", const ModifyProcessor(), body: json);
 }
@@ -102,7 +104,6 @@ Future<APIResponse<bool?>> modifyReserve(Reservation reservation, Group toUpdate
 Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
   Map<String, dynamic> json = {
     "reservation_id": reservation.reservation_id,
-    "group": Group.fromMap({}).toJson(),
   };
 
   return postProcessed("modify", const CancelProcessor(), body: json);

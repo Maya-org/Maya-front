@@ -38,6 +38,17 @@ class Group {
   String toString() {
     return '{all_guests: [${all_guests.map((e) => e.type).join(', ')}]}';
   }
+
+  String prettyPrint() {
+    String s = "";
+    for (GuestType type in GuestType.values) {
+      if (getGuestCount(type) == 0) {
+        continue;
+      }
+      s += "${type.pretty} ${getGuestCount(type)}人";
+    }
+    return s;
+  }
 }
 
 @JsonSerializable()
@@ -53,19 +64,20 @@ class Guest {
 
 enum GuestType {
   @JsonValue("Adult")
-  Adult("Adult"),
+  Adult("Adult", "大人"),
   @JsonValue("Child")
-  Child("Child"),
+  Child("Child", "子供"),
   @JsonValue("Parent")
-  Parent("Parent"),
+  Parent("Parent", "保護者"),
   @JsonValue("Student")
-  Student("Student"),
+  Student("Student", "内部生"),
   @JsonValue("Staff")
-  Staff("Staff");
+  Staff("Staff", "スタッフ");
 
   final String value;
+  final String pretty;
 
-  const GuestType(this.value);
+  const GuestType(this.value, this.pretty);
 }
 
 @JsonSerializable()

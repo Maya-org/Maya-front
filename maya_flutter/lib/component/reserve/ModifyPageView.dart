@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/API.dart';
-import 'package:maya_flutter/component/reserve/HeadCountPage.dart';
+import 'package:maya_flutter/component/reserve/TicketTypeSelector.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../api/APIResponse.dart';
@@ -22,29 +22,19 @@ class _ModifyPageViewState extends State<ModifyPageView> {
       appBar: AppBar(
         title: Text("${widget.reservation.event.display_name}の予約変更画面"),
       ),
-      body: HeadCountPage(
-          title: "イベント:${widget.reservation.event.display_name}の予約変更ページ",
-          onSubmit: (BuildContext ctx, int adult, int child, int parent, int student) {
-            _modify(ctx, adult, child, parent, student);
-          },
-          init_adult: widget.reservation.group_data.getGuestCount(GuestType.Adult).toString(),
-          init_child: widget.reservation.group_data.getGuestCount(GuestType.Child).toString(),
-          init_parent: widget.reservation.group_data.getGuestCount(GuestType.Parent).toString(),
-          init_student: widget.reservation.group_data.getGuestCount(GuestType.Student).toString()),
+      body: TicketTypeSelector(
+        ticketTypes: widget.reservation.event.reservable_ticket_type,
+        onSelect: (BuildContext ctx, TicketType type, Group toUpdate) {
+          _modify(ctx, type, toUpdate);
+        },
+      ),
     );
   }
 
-  void _modify(BuildContext context, int adult, int child, int parent, int student) {
-    Group group = Group.fromMap({
-      GuestType.Adult: adult,
-      GuestType.Child: child,
-      GuestType.Parent: parent,
-      GuestType.Student: student,
-    });
-    Future<APIResponse<bool?>> future = modifyReserve(widget.reservation, group);
-
+  void _modify(BuildContext context, TicketType type, Group toUpdate) {
+    Future<APIResponse<bool?>> future = modifyReserve(widget.reservation, type, toUpdate);
     Navigator.of(context).pushReplacementNamed("/modify/processing",
         arguments: Tuple3<Future<APIResponse<bool?>>, Reservation, Group>(
-            future, widget.reservation, group));
+            future, widget.reservation, toUpdate));
   }
 }
