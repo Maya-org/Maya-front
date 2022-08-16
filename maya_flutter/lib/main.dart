@@ -1,72 +1,81 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
 import 'package:maya_flutter/messages.i18n.dart';
+import 'package:maya_flutter/models/EventChangeNotifier.dart';
+import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
+import 'package:maya_flutter/models/UserChangeNotifier.dart';
+import 'package:maya_flutter/pages/EventPage.dart';
+import 'package:maya_flutter/pages/MainPage.dart';
+import 'package:maya_flutter/pages/ReservationPage.dart';
+import 'package:maya_flutter/pages/debugPage.dart';
+import 'package:maya_flutter/pages/register/Register.dart';
+import 'package:maya_flutter/pages/register/SignUp.dart';
+import 'package:maya_flutter/pages/register/verifyer.dart';
+import 'package:maya_flutter/pages/reserve/CancelPage.dart';
+import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
+import 'package:maya_flutter/pages/reserve/ModifyPostPage.dart';
+import 'package:maya_flutter/pages/reserve/ModifyProcessingPage.dart';
+import 'package:maya_flutter/pages/reserve/ReservePage.dart';
+import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
+import 'package:maya_flutter/pages/reserve/ReserveProcessingPage.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MayaApp());
+
+  runApp(MayaApp(isInitialAuthed: FirebaseAuth.instance.currentUser != null));
 }
 
 class MayaApp extends StatelessWidget {
-  const MayaApp({Key? key}) : super(key: key);
+  final bool isInitialAuthed;
+
+  const MayaApp({Key? key, required this.isInitialAuthed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: const Messages().app_title,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: TitlePage(title: const Messages().page_title),
-    );
-  }
-}
-
-class TitlePage extends StatefulWidget {
-  const TitlePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<TitlePage> createState() => _TitlePageState();
-}
-
-class _TitlePageState extends State<TitlePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return ChangeNotifierProvider<UserChangeNotifier>(
+      // TODO 最初2回描画されちゃうけど仕方ない...か?
+      create: (_) => UserChangeNotifier(),
+      child: ChangeNotifierProvider<EventChangeNotifier>(
+        create: (_) => EventChangeNotifier(),
+        child: ChangeNotifierProvider<ReservationChangeNotifier>(
+          create: (_) => ReservationChangeNotifier(),
+          child: MaterialApp(
+            title: const Messages().app_title,
+            theme: ThemeData(
+                primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
+            initialRoute: _initialRoute(),
+            routes: {
+              "/": (context) => SignUpPage(title: const Messages().page_title),
+              "/main": (context) => const MainPage(),
+              "/debug": (context) => const DebugPage(),
+              "/register/phoneVerifier": (context) => const PhoneVerifier(),
+              "/register/nameRegister": (context) => const Register(),
+              "/reservation": (context) => const ReservationPage(),
+              "/reserve": (context) => const ReservePage(),
+              "/reserve/post": (context) => const ReservePostPage(),
+              "/reserve/processing": (context) => const ReserveProcessingPage(),
+              "/event": (context) => const EventPage(),
+              "/modify": (context) => const ModifyPage(),
+              "/modify/processing": (context) => const ModifyProcessingPage(),
+              "/modify/post": (context) => const ModifyPostPage(),
+              "/cancel": (context) => const CancelPage(),
+            },
+            debugShowCheckedModeBanner: false,
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
+  }
+
+  String _initialRoute() {
+    if (isInitialAuthed) {
+      return '/main';
+    } else {
+      return '/';
+    }
   }
 }

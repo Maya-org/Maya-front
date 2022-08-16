@@ -36,11 +36,25 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_core: ^1.18.0
+  firebase_auth:
+  flutter_firebase_recaptcha: ^1.0.2
+  universal_platform: ^1.0.0+1
+  pinput: ^2.2.11
+  http: ^0.13.4
+  json_annotation: ^4.5.0
+  provider: ^6.0.3
+  freezed_annotation: ^2.0.3
+  tuple: ^2.0.0
+  qr_flutter: ^4.0.0
+  flutter_markdown: ^0.6.10+3
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.2.0
   build_runner: any
+  freezed: ^2.0.3+1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
