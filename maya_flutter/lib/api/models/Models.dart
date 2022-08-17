@@ -96,6 +96,7 @@ class ReservableEvent {
   required_reservation; // Reference to a reservation that is required to attend this event.
   List<TicketType> reservable_ticket_type;
   bool require_two_factor;
+  int? maximum_reservations_per_user;
 
   ReservableEvent({required this.event_id,
     required this.display_name,

@@ -21,6 +21,7 @@ class _ReservePageViewState extends State<ReservePageView> {
   @override
   Widget build(BuildContext context) {
     return AllTicketTypeSelector(
+        maximum_reservations_per_user: widget.event.maximum_reservations_per_user,
         ticketTypes: widget.event.reservable_ticket_type,
         onSubmit: (BuildContext context, List<TicketType> tickets) {
           _reserveEvent(context, tickets);
@@ -39,9 +40,9 @@ class _ReservePageViewState extends State<ReservePageView> {
           });
         });
       }));
-    }else{
-      ReserveRequest request = ReserveRequest(
-          event_id: widget.event.event_id, tickets: ticketTypes);
+    } else {
+      ReserveRequest request =
+          ReserveRequest(event_id: widget.event.event_id, tickets: ticketTypes);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
         return ReserveProcessingPageView(
             future: postReserve(request), req: request, event: widget.event);

@@ -39,6 +39,7 @@ class _EventViewState extends State<EventView> {
                     \\\n予約済み人数:${event.taken_capacity}/${event.capacity},
                     \\\nイベントID:${event.event_id}
                     \\\nチケットタイプ:${event.reservable_ticket_type.map((ticket) => ticket.toString()).join(", ")}
+                    \\\n最大予約数:${event.maximum_reservations_per_user ?? -1}人
                     """, true),
                 ),
                 Row(

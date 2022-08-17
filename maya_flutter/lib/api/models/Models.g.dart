@@ -55,7 +55,8 @@ ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
           .map((e) => TicketType.fromJson(e as Map<String, dynamic>))
           .toList(),
       require_two_factor: json['require_two_factor'] as bool,
-    );
+    )..maximum_reservations_per_user =
+        json['maximum_reservations_per_user'] as int?;
 
 Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
     <String, dynamic>{
@@ -70,6 +71,7 @@ Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
       'required_reservation': instance.required_reservation,
       'reservable_ticket_type': instance.reservable_ticket_type,
       'require_two_factor': instance.require_two_factor,
+      'maximum_reservations_per_user': instance.maximum_reservations_per_user,
     };
 
 Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(

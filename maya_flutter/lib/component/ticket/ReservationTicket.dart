@@ -33,7 +33,9 @@ class _ReservationTicketState extends State<ReservationTicket> {
       top: () {
         if (widget.user != null) {
           return Column(
-            children: widget.reservation.tickets.map((e) => TicketQRCode(user: widget.user!, ticket: e)).toList(),
+            children: widget.reservation.tickets
+                .map((e) => TicketQRCode(user: widget.user!, ticket: e))
+                .toList(),
           );
         } else {
           return Container();

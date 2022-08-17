@@ -23,10 +23,12 @@ class _ModifyPageViewState extends State<ModifyPageView> {
         title: Text("${widget.reservation.event.display_name}の予約変更画面"),
       ),
       body: AllTicketTypeSelector(
+        maximum_reservations_per_user: widget.reservation.event.maximum_reservations_per_user,
         ticketTypes: widget.reservation.event.reservable_ticket_type,
         onSubmit: (BuildContext context, List<TicketType> tickets) {
           _modifyReservation(context, tickets);
         },
+        selected: widget.reservation.tickets.map((e) => e.ticket_type).toList(),
       ),
     );
   }
