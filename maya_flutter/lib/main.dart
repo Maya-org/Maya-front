@@ -10,17 +10,13 @@ import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/EventPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
-import 'package:maya_flutter/pages/debugPage.dart';
 import 'package:maya_flutter/pages/register/Register.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
 import 'package:maya_flutter/pages/register/verifyer.dart';
 import 'package:maya_flutter/pages/reserve/CancelPage.dart';
 import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
-import 'package:maya_flutter/pages/reserve/ModifyPostPage.dart';
-import 'package:maya_flutter/pages/reserve/ModifyProcessingPage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
-import 'package:maya_flutter/pages/reserve/ReserveProcessingPage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -54,17 +50,13 @@ class MayaApp extends StatelessWidget {
               routes: {
                 "/": (context) => SignUpPage(title: const Messages().page_title),
                 "/main": (context) => const MainPage(),
-                "/debug": (context) => const DebugPage(),
                 "/register/phoneVerifier": (context) => const PhoneVerifier(),
                 "/register/nameRegister": (context) => const Register(),
                 "/reservation": (context) => const ReservationPage(),
                 "/reserve": (context) => const ReservePage(),
                 "/reserve/post": (context) => const ReservePostPage(),
-                "/reserve/processing": (context) => const ReserveProcessingPage(),
                 "/event": (context) => const EventPage(),
                 "/modify": (context) => const ModifyPage(),
-                "/modify/processing": (context) => const ModifyProcessingPage(),
-                "/modify/post": (context) => const ModifyPostPage(),
                 "/cancel": (context) => const CancelPage(),
               },
               debugShowCheckedModeBanner: false,

@@ -6,12 +6,9 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../api/models/Models.dart';
 
 class TwoFactorPage extends StatefulWidget {
-  final ReservableEvent event;
-  final Group toUpdate;
-  final TicketType type;
   final MaterialPageRoute Function(String code) builder;
 
-  const TwoFactorPage({Key? key, required this.event, required this.toUpdate, required this.type, required this.builder}) : super(key: key);
+  const TwoFactorPage({Key? key, required this.builder}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _TwoFactorPageState();

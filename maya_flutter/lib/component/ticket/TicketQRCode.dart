@@ -6,9 +6,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketQRCode extends StatefulWidget {
   final User user;
-  final Reservation reservation;
+  final Ticket ticket;
 
-  const TicketQRCode({super.key, required this.user, required this.reservation});
+  const TicketQRCode({super.key, required this.user, required this.ticket});
 
   @override
   State<TicketQRCode> createState() => _TicketQRCodeState();
@@ -20,7 +20,7 @@ class _TicketQRCodeState extends State<TicketQRCode> {
   @override
   void initState() {
     super.initState();
-    generateQRCodeData(widget.user, widget.reservation).then((value) {
+    generateQRCodeData(widget.user, widget.ticket).then((value) {
       setState(() {
         _qrCodeString = value;
       });
@@ -44,14 +44,14 @@ class _TicketQRCodeState extends State<TicketQRCode> {
   }
 
   Future<void> updateQR() async {
-    String str = await generateQRCodeData(widget.user, widget.reservation);
+    String str = await generateQRCodeData(widget.user, widget.ticket);
     setState((){
       _qrCodeString = str;
     });
   }
 }
 
-Future<String> generateQRCodeData(User user, Reservation reservation) async {
-  print('showing qr code:${user.uid}#${reservation.reservation_id}');
-  return "${user.uid}#${reservation.reservation_id}";
+Future<String> generateQRCodeData(User user, Ticket ticket) async {
+  print('showing qr code:${user.uid}#${ticket.ticket_id}');
+  return "${user.uid}#${ticket.ticket_id}";
 }

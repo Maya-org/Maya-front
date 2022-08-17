@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/component/ticket/Ticket.dart';
+import 'package:maya_flutter/component/ticket/ReservationTicket.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserChangeNotifier.dart';
@@ -34,7 +34,7 @@ class _ReservationViewState extends State<ReservationView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Ticket(user: user, reservation: widget.reservation),
+                    ReservationTicket(user: user, reservation: widget.reservation),
                     Column(children: [
                       ElevatedButton(
                           onPressed: () {
