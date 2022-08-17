@@ -5,8 +5,8 @@ import '../../api/models/Models.dart';
 
 class AllTicketTypeSelector extends StatefulWidget {
   final List<TicketType> ticketTypes;
-  List<TicketType> selected = [];
-  final void Function(BuildContext context,List<TicketType> tickets) onSubmit;
+  Map<int, TicketType> selected = {};
+  final void Function(BuildContext context, List<TicketType> tickets) onSubmit;
 
   AllTicketTypeSelector({Key? key, required this.ticketTypes, required this.onSubmit})
       : super(key: key);
@@ -26,8 +26,8 @@ class _AllTicketTypeSelectorState extends State<AllTicketTypeSelector> {
   List<Widget> _children() {
     List<Widget> children = _tickets.toList();
     children.add(ElevatedButton(onPressed: _addTicket, child: const Text("Add Ticket")));
-    children.add(ElevatedButton(onPressed: _submit, child: const Text("Submit")));
-    return _tickets;
+    children.add(ElevatedButton(onPressed: widget.selected.isEmpty ? null : _submit, child: const Text("Submit")));
+    return children;
   }
 
   void _addTicket() {
@@ -41,10 +41,13 @@ class _AllTicketTypeSelectorState extends State<AllTicketTypeSelector> {
           });
         },
       ));
+
+      widget.selected[index] = widget.ticketTypes[0]; // Initialize to 0
     });
   }
 
-  void _submit(){
-    widget.onSubmit(context,widget.ticketTypes);
+  void _submit() {
+    print('Ticket Types: ${widget.selected.values}');
+    widget.onSubmit(context, widget.selected.values.toList());
   }
 }

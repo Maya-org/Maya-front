@@ -107,7 +107,7 @@ Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
     "reservation_id": reservation.reservation_id,
   };
 
-  return postProcessed("modify", const CancelProcessor(), body: json);
+  return postProcessed("cancel", const CancelProcessor(), body: json);
 }
 
 Future<APIResponse<bool?>> check(
