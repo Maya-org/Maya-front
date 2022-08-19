@@ -69,24 +69,20 @@ class _CheckPageState extends State<CheckPage> {
                   });
                 },
               ),
-              ElevatedButton(
-                  onPressed: _operation == Operation.Enter
-                      ? null
-                      : () {
-                          setState(() {
-                            _operation = Operation.Enter;
-                          });
-                        },
-                  child: Text(Operation.Enter.displayName)),
-              ElevatedButton(
-                  onPressed: _operation == Operation.Exit
-                      ? null
-                      : () {
-                          setState(() {
-                            _operation = Operation.Exit;
-                          });
-                        },
-                  child: Text(Operation.Exit.displayName)),
+              DropdownButton<Operation>(
+                items:Operation.values.map((e) {
+                  return DropdownMenuItem<Operation>(
+                    value: e,
+                    child: Text(e.operationDisplayName),
+                  );
+                }).toList(),
+                value:_operation,
+                onChanged: (Operation? op) {
+                  setState(() {
+                    _operation = op!;
+                  });
+                },
+              )
             ],
           ),
         ),

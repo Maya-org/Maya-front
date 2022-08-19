@@ -290,20 +290,22 @@ class TicketType {
 
 enum Operation {
   @JsonValue('Enter')
-  Enter("入場", "enter"),
+  Enter("入場", "enter","へ入場処理"),
   @JsonValue('Exit')
-  Exit("出場", "exit");
+  Exit("出場", "exit","へ退場処理");
 
   final String displayName;
   final String operationName;
+  // Checkページでの表示名
+  final String operationDisplayName;
 
-  const Operation(this.displayName, this.operationName);
+  const Operation(this.displayName, this.operationName,this.operationDisplayName);
 }
 
 @JsonSerializable()
 class Room {
   String room_id;
-  int capacity;
+  int? capacity;
   String display_name;
 
   Room({required this.room_id, required this.capacity, required this.display_name});

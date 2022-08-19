@@ -167,7 +167,7 @@ Map<String, dynamic> _$TicketTypeToJson(TicketType instance) =>
 
 Room _$RoomFromJson(Map<String, dynamic> json) => Room(
       room_id: json['room_id'] as String,
-      capacity: json['capacity'] as int,
+      capacity: json['capacity'] as int?,
       display_name: json['display_name'] as String,
     );
 

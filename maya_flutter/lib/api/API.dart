@@ -116,7 +116,7 @@ Future<APIResponse<bool?>> check(
     "operation": operation.operationName,
     "auth_uid": uid,
     "room_id": room.room_id,
-    "reservation_id": ticketID,
+    "ticket_id": ticketID,
   };
   return postProcessed("check", const CheckProcessor(), body: json);
 }
