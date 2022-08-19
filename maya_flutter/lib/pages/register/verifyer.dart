@@ -53,10 +53,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                       if (UniversalPlatform.isWeb) {
                         ConfirmationResult res = await FirebaseAuth.instance.signInWithPhoneNumber(
                             localPhoneNumber,
-                            RecaptchaVerifier(
-                              size: RecaptchaVerifierSize.compact,
-                              theme: RecaptchaVerifierTheme.dark,
-                            ));
+                        );
 
                         Navigator.of(this.context, rootNavigator: true).pop();
 

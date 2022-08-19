@@ -22,7 +22,6 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   runApp(MayaApp(isInitialAuthed: FirebaseAuth.instance.currentUser != null));
 }
 
