@@ -122,7 +122,7 @@ Future<APIResponse<bool?>> check(
 }
 
 Future<APIResponse<List<Room>?>> rooms(){
-  return getProcessed("rooms", const RoomsProcessor());
+  return getProcessed("room", const RoomsProcessor());
 }
 
 /// For Debugging purposes
