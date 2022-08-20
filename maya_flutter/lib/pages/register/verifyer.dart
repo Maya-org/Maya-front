@@ -71,8 +71,8 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                             verificationCompleted: (PhoneAuthCredential credential) async {
                               await FirebaseAuth.instance.signInWithCredential(credential);
                               Navigator.of(this.context, rootNavigator: true).pop();
-                              Navigator.of(this.context)
-                                  .pushReplacementNamed("/register/nameRegister");
+                              Navigator.of(context).popUntil((_)=>false);
+                              Navigator.of(this.context).pushReplacementNamed("/main");
                             },
                             verificationFailed: (FirebaseAuthException ex) {
                               // Handle error here.
@@ -159,7 +159,8 @@ class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog>
               widget.function(value).then((credential) {
                 // 正常にログインできたら
                 Navigator.of(context).pop();  // フルスクリーンローディングを閉じる
-                Navigator.of(context).pushReplacementNamed("/register/nameRegister");
+                Navigator.of(context).popUntil((_)=>false);
+                Navigator.of(context).pushReplacementNamed("/main");
               });
             },
             child: const Text("認証"))
