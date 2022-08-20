@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maya_flutter/pages/CheckPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
+import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
 import 'package:tuple/tuple.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage> {
           label: 'Home',
         )),
     Tuple2(
-        CheckPage(),
+        CheckSelectPage(),
         BottomNavigationBarItem(
           icon: Icon(Icons.abc),
           activeIcon: Icon(Icons.abc, color: Colors.blue),

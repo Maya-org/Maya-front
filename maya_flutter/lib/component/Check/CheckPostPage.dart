@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/pages/check/CheckPage.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
 
 import '../../api/APIResponse.dart';
+import '../../api/models/Models.dart';
+import '../../pages/MainPage.dart';
 
 class CheckPostPage extends StatefulWidget {
   final APIResponse<bool?> response;
+  final Room room;
+  final Operation operation;
 
-  const CheckPostPage({Key? key, required this.response}) : super(key: key);
+  const CheckPostPage(
+      {Key? key, required this.response, required this.room, required this.operation})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CheckPostPageState();
@@ -25,7 +32,11 @@ class _CheckPostPageState extends State<CheckPostPage> {
             Text(_bodyString()),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/main');
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (context) => MainPage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        CheckPage(selectedRoom: widget.room, operation: widget.operation)));
               },
               child: const Text('戻る'),
             ),
