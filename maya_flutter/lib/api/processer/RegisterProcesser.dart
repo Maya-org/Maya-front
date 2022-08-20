@@ -10,6 +10,7 @@ class RegisterProcessor extends APIResponseProcessor<bool> {
   @override
   Tuple2<bool?,String> process(json) {
     json as Map<String, dynamic>;
-    return const Tuple2(true, "登録に成功しました");
+    bool alreadyRegistered = json["alreadyRegistered"];
+    return Tuple2(alreadyRegistered, "登録に成功しました");
   }
 }

@@ -30,6 +30,7 @@ void showOKDialog(BuildContext context,
 
 void showFullScreenLoadingCircular(BuildContext context) {
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (context) {
       return FullScreenLoadingCircular();

@@ -66,7 +66,7 @@ Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcessor<T> pr
 }
 
 Future<APIResponse<bool?>> register(MayaUser user) async {
-  Map<String, String> map = {"firstName": user.firstName, "lastName": user.lastName};
+  Map<String, String> map = {"first_name": user.firstName, "last_name": user.lastName};
 
   return await postProcessed("register", const RegisterProcessor(), body: map);
 }

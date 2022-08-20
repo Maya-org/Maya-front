@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maya_flutter/messages.i18n.dart';
-import 'package:maya_flutter/ui/ContainerDialog.dart';
 import 'package:maya_flutter/ui/UI.dart';
-import 'package:pinput/pinput.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class PhoneVerifier extends StatefulWidget {
@@ -43,7 +41,6 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                     hintText: const Messages().phone_auth_code_hint)),
             const SizedBox(height: 10),
             ElevatedButton(
-              child: Text(const Messages().phone_auth_code_button),
               onPressed: _phoneNumber.isEmpty
                   ? null
                   : () async {
@@ -51,24 +48,24 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
 
                       String localPhoneNumber = '+81 ${_phoneNumber.substring(1)}';
                       if (UniversalPlatform.isWeb) {
+                        // webではsignInWithPhoneNumberを使う
                         ConfirmationResult res = await FirebaseAuth.instance.signInWithPhoneNumber(
-                            localPhoneNumber,
+                          localPhoneNumber,
                         );
 
-                        Navigator.of(this.context, rootNavigator: true).pop();
+                        Navigator.of(this.context, rootNavigator: true).pop();  // フルスクリーンローディングを閉じる
 
                         showDialog(
                             context: context,
                             builder: (context) {
                               return PhoneVerifyCodeInputDialog(
                                 function: (code) async {
-                                  return (await res.confirm(code))
-                                      .credential!; // TODO credential is optional
-                                  // TODO Webだと通らない
+                                  await res.confirm(code);
                                 },
                               );
                             });
                       } else {
+                        // NativeではverifyPhoneNumberを使う
                         await FirebaseAuth.instance.verifyPhoneNumber(
                             phoneNumber: localPhoneNumber,
                             verificationCompleted: (PhoneAuthCredential credential) async {
@@ -102,11 +99,15 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                               Navigator.of(context, rootNavigator: true).pop();
                               showDialog(
                                   context: context,
+                                  barrierDismissible: false,
                                   builder: (context) {
                                     return PhoneVerifyCodeInputDialog(
-                                      function: (code) {
-                                        return Future.value(PhoneAuthProvider.credential(
-                                            verificationId: verificationId, smsCode: code));
+                                      function: (code) async {
+                                        PhoneAuthCredential credential =
+                                            PhoneAuthProvider.credential(
+                                                verificationId: verificationId, smsCode: code);
+                                        await FirebaseAuth.instance
+                                            .signInWithCredential(credential);
                                       },
                                     );
                                   });
@@ -118,6 +119,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
                             );
                       }
                     },
+              child: Text(const Messages().phone_auth_code_button),
             )
           ]),
         ),
@@ -127,7 +129,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
 }
 
 class PhoneVerifyCodeInputDialog extends StatefulWidget {
-  Future<AuthCredential> Function(String) function;
+  Future<void> Function(String code) function;
 
   PhoneVerifyCodeInputDialog({Key? key, required this.function}) : super(key: key);
 
@@ -136,43 +138,32 @@ class PhoneVerifyCodeInputDialog extends StatefulWidget {
 }
 
 class _PhoneVerifyCodeInputDialogState extends State<PhoneVerifyCodeInputDialog> {
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return ContainerDialog(
+    return AlertDialog(
       title: Text(const Messages().phone_auth_input_code_title),
-      body: Pinput(
-          length: 6,
-          pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-          onCompleted: (String value) async {
-            // Login
-            AuthCredential credential = await widget.function(value);
-            try {
-              await FirebaseAuth.instance.signInWithCredential(credential);
-
-              // 正常にログインできた
-              Navigator.of(this.context).pushReplacementNamed("/register/nameRegister");
-            } on FirebaseAuthException catch (e) {
-              late String bodyString;
-              switch (e.code) {
-                case "invalid-verification-code":
-                  // 打ち込まれたコードが間違っている
-                  bodyString = const Messages().phone_auth_input_wrong_number;
-                  break;
-                default:
-                  // その他のエラー
-                  bodyString = "${const Messages().phone_auth_error_title}\nエラーコード: ${e.code}";
-                  break;
-              }
-
-              showOKDialog(this.context,
-                  title: Text(const Messages().phone_auth_error_title),
-                  body: Center(
-                    child: Text(bodyString),
-                  ), onOK: () {
-                Navigator.of(this.context).pop();
-              }, okText: const Messages().phone_auth_error_return);
-            }
-          }),
+      content: TextFormField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        // 電話番号の正規表現
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]{1,6}$'))],
+      ),
+      actions: [
+        ElevatedButton(
+            onPressed: () async {
+              String value = _controller.value.text;
+              // Login
+              showFullScreenLoadingCircular(context);
+              widget.function(value).then((credential) {
+                // 正常にログインできたら
+                Navigator.of(context).pop();  // フルスクリーンローディングを閉じる
+                Navigator.of(context).pushReplacementNamed("/register/nameRegister");
+              });
+            },
+            child: const Text("認証"))
+      ],
     );
   }
 }

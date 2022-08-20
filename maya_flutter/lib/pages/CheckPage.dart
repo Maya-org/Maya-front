@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:maya_flutter/component/Check/CheckProcessingPage.dart';
 import 'package:maya_flutter/component/QRReader.dart';
 import 'package:maya_flutter/models/RoomsProvider.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tuple/tuple.dart';
 
 import '../api/API.dart';
@@ -95,7 +95,7 @@ class _CheckPageState extends State<CheckPage> {
   }
 
   Tuple2<String, String>? _readFromBarcode(Barcode barcode) {
-    String? data = barcode.code;
+    String? data = barcode.rawValue;
     if (data == null) {
       return null;
     }
