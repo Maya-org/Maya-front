@@ -39,7 +39,17 @@
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>
     <!-- qr_code_scanner -->
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <!-- file saver -->
+    <script>
+        async function saveAsImage(blob,name) {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = name;
+            a.target = "_blank";
+            a.click();
+        }
+    </script>
 </head>
 <body>
 <script>

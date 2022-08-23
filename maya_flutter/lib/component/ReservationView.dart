@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/component/ticket/Ticket.dart';
+import 'package:maya_flutter/component/ticket/ReservationTicket.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserChangeNotifier.dart';
+import '../ui/StyledText.dart';
 
 class ReservationView extends StatefulWidget {
   final Reservation reservation;
@@ -28,13 +29,20 @@ class _ReservationViewState extends State<ReservationView> {
           return ConstrainedBox(
               constraints: BoxConstraints.tightFor(
                   width: constraints.maxWidth, height: constraints.maxHeight),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Ticket(user: user, reservation: widget.reservation),
-                  Expanded(
-                      child: Column(children: [
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    StyledTextWidget.mdFromString(
+                        '''**開始日時: ${widget.reservation.event.date_start.toDateTime().toString()}**
+        \\\nイベント名: ${widget.reservation.event.display_name}
+        \\\nイベントID: ${widget.reservation.event.event_id}
+        \\\n予約ID:${widget.reservation.reservation_id}
+        \\\n予約人数:${widget.reservation.headCount()}人
+        \\\nチケットタイプ:[${widget.reservation.tickets.map((e) => e.ticket_type.display_ticket_name).join(",")}]
+        ''', true),
                     ElevatedButton(
                         onPressed: () {
                           _navigateToModifyPage();
@@ -45,9 +53,10 @@ class _ReservationViewState extends State<ReservationView> {
                           _navigateToCancelPage();
                         },
                         style: ElevatedButton.styleFrom(primary: Colors.red),
-                        child: const Text("予約をキャンセルする"))
-                  ])),
-                ],
+                        child: const Text("予約をキャンセルする")),
+                    ReservationTicket(user: user, tickets: widget.reservation.tickets)
+                  ],
+                ),
               ));
         }));
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/pages/DocumentPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
-import 'package:maya_flutter/pages/debugPage.dart';
+import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
 import 'package:tuple/tuple.dart';
+
+import 'HeatMapPage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -20,11 +23,25 @@ class _MainPageState extends State<MainPage> {
           label: 'Home',
         )),
     Tuple2(
-        DebugPage(),
+        CheckSelectPage(),
         BottomNavigationBarItem(
           icon: Icon(Icons.abc),
           activeIcon: Icon(Icons.abc, color: Colors.blue),
-          label: 'Debug',
+          label: 'Check',
+        )),
+    Tuple2(
+        HeatMapPage(),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.abc),
+          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          label: 'HeatMap',
+        )),
+    Tuple2(
+        DocumentPage(),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.abc),
+          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          label: 'Document',
         )),
   ];
   int _currentIndex = 0;

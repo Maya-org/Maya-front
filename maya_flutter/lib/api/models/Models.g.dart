@@ -54,7 +54,9 @@ ReservableEvent _$ReservableEventFromJson(Map<String, dynamic> json) =>
       reservable_ticket_type: (json['reservable_ticket_type'] as List<dynamic>)
           .map((e) => TicketType.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+      require_two_factor: json['require_two_factor'] as bool,
+    )..maximum_reservations_per_user =
+        json['maximum_reservations_per_user'] as int?;
 
 Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
     <String, dynamic>{
@@ -68,22 +70,23 @@ Map<String, dynamic> _$ReservableEventToJson(ReservableEvent instance) =>
       'taken_capacity': instance.taken_capacity,
       'required_reservation': instance.required_reservation,
       'reservable_ticket_type': instance.reservable_ticket_type,
+      'require_two_factor': instance.require_two_factor,
+      'maximum_reservations_per_user': instance.maximum_reservations_per_user,
     };
 
 Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
       reservation_id: json['reservation_id'] as String,
       event: ReservableEvent.fromJson(json['event'] as Map<String, dynamic>),
-      group_data: Group.fromJson(json['group_data'] as Map<String, dynamic>),
-      reserved_ticket_type: TicketType.fromJson(
-          json['reserved_ticket_type'] as Map<String, dynamic>),
+      tickets: (json['tickets'] as List<dynamic>)
+          .map((e) => Ticket.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
     <String, dynamic>{
       'reservation_id': instance.reservation_id,
       'event': instance.event,
-      'group_data': instance.group_data,
-      'reserved_ticket_type': instance.reserved_ticket_type,
+      'tickets': instance.tickets,
     };
 
 MayaUser _$MayaUserFromJson(Map<String, dynamic> json) => MayaUser(
@@ -146,28 +149,12 @@ Map<String, dynamic> _$PathToJson(Path instance) => <String, dynamic>{
       '_converter': instance.converter,
     };
 
-ReserveRequest _$ReserveRequestFromJson(Map<String, dynamic> json) =>
-    ReserveRequest(
-      event_id: json['event_id'] as String,
-      group: Group.fromJson(json['group'] as Map<String, dynamic>),
-      ticket_type_id: json['ticket_type_id'] as String,
-    );
-
-Map<String, dynamic> _$ReserveRequestToJson(ReserveRequest instance) =>
-    <String, dynamic>{
-      'event_id': instance.event_id,
-      'group': instance.group,
-      'ticket_type_id': instance.ticket_type_id,
-    };
-
 TicketType _$TicketTypeFromJson(Map<String, dynamic> json) => TicketType(
       ticket_type_id: json['ticket_type_id'] as String,
-      reservable_group: (json['reservable_group'] as List<dynamic>)
-          .map((e) => Group.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      reservable_group:
+          Group.fromJson(json['reservable_group'] as Map<String, dynamic>),
       display_ticket_name: json['display_ticket_name'] as String,
       display_ticket_description: json['display_ticket_description'] as String?,
-      require_two_factor: json['require_two_factor'] as bool,
     );
 
 Map<String, dynamic> _$TicketTypeToJson(TicketType instance) =>
@@ -176,5 +163,29 @@ Map<String, dynamic> _$TicketTypeToJson(TicketType instance) =>
       'reservable_group': instance.reservable_group,
       'display_ticket_name': instance.display_ticket_name,
       'display_ticket_description': instance.display_ticket_description,
-      'require_two_factor': instance.require_two_factor,
+    };
+
+Room _$RoomFromJson(Map<String, dynamic> json) => Room(
+      room_id: json['room_id'] as String,
+      capacity: json['capacity'] as int?,
+      display_name: json['display_name'] as String,
+    );
+
+Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
+      'room_id': instance.room_id,
+      'capacity': instance.capacity,
+      'display_name': instance.display_name,
+    };
+
+Ticket _$TicketFromJson(Map<String, dynamic> json) => Ticket(
+      ticket_id: json['ticket_id'] as String,
+      ticket_type:
+          TicketType.fromJson(json['ticket_type'] as Map<String, dynamic>),
+      event: ReservableEvent.fromJson(json['event'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$TicketToJson(Ticket instance) => <String, dynamic>{
+      'ticket_id': instance.ticket_id,
+      'ticket_type': instance.ticket_type,
+      'event': instance.event,
     };

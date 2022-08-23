@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../api/models/Models.dart';
+import '../ReservationPersonCount.dart';
 
 class ModifyPostPageView extends StatefulWidget {
   final bool isReserved;
   final Reservation beforeReservation;
-  final Group toUpdate;
+  final List<TicketType> toUpdate;
   final String? displayString;
 
   const ModifyPostPageView(
@@ -29,25 +30,20 @@ class _ModifyPostPageViewState extends State<ModifyPostPageView> {
         title: const Text("予約変更完了"),
       ),
       body: Center(
-        child: Text(_genBody()),
+        child: _genBody(),
       ),
     );
   }
 
-  String _genBody() {
+  Widget _genBody() {
     if (widget.isReserved) {
-      return """${widget.beforeReservation.event.display_name}の予約変更が完了しました
-開始時刻: ${widget.beforeReservation.event.date_start.toDateTime().toString()}
-人数:
-大人:${widget.toUpdate.getGuestCount(GuestType.Adult)}人
-子供:${widget.toUpdate.getGuestCount(GuestType.Child)}人
-保護者:${widget.toUpdate.getGuestCount(GuestType.Parent)}人
-生徒:${widget.toUpdate.getGuestCount(GuestType.Student)}人
-""";
+      return ReservationPersonCount.fromReservation(
+        widget.toUpdate,
+      );
     } else {
-      return """予約変更に失敗しました
+      return Text("""予約変更に失敗しました
 エラー内容:
-${widget.displayString}""";
+${widget.displayString}""");
     }
   }
 }

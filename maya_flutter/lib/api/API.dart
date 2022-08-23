@@ -6,12 +6,14 @@ import 'package:http/http.dart';
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/api/processer/CancelProcesser.dart';
+import 'package:maya_flutter/api/processer/CheckProcessor.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
+import 'package:maya_flutter/api/processer/RoomsProcessor.dart';
 import 'package:maya_flutter/api/processer/UserProcesser.dart';
 import 'package:tuple/tuple.dart';
 
@@ -64,7 +66,7 @@ Future<APIResponse<T?>> postProcessed<T>(String path, APIResponseProcessor<T> pr
 }
 
 Future<APIResponse<bool?>> register(MayaUser user) async {
-  Map<String, String> map = {"firstName": user.firstName, "lastName": user.lastName};
+  Map<String, String> map = {"first_name": user.firstName, "last_name": user.lastName};
 
   return await postProcessed("register", const RegisterProcessor(), body: map);
 }
@@ -91,13 +93,11 @@ Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
 }
 
-Future<APIResponse<bool?>> modifyReserve(Reservation reservation, TicketType ticketType,
-    Group toUpdate, {String? twoFactorKey}) async {
+Future<APIResponse<bool?>> modifyReserve(List<TicketType> toUpdate,Reservation modifyReservation, {String? twoFactorKey}) async {
   Map<String, dynamic> json = {
-    "reservation_id": reservation.reservation_id,
-    "toUpdate_ticket_type_id": ticketType.ticket_type_id,
-    "toUpdate": toUpdate.toJson(),
-    if(twoFactorKey != null) "two_factor_key": twoFactorKey
+    "tickets": toUpdate.map((e) => e.toJson()).toList(),
+    "reservation_id": modifyReservation.reservation_id,
+    if (twoFactorKey != null) "two_factor_key": twoFactorKey
   };
   return await postProcessed("modify", const ModifyProcessor(), body: json);
 }
@@ -107,7 +107,22 @@ Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
     "reservation_id": reservation.reservation_id,
   };
 
-  return postProcessed("modify", const CancelProcessor(), body: json);
+  return postProcessed("cancel", const CancelProcessor(), body: json);
+}
+
+Future<APIResponse<bool?>> check(
+    Operation operation, String uid, Room room, String ticketID) {
+  Map<String, dynamic> json = {
+    "operation": operation.operationName,
+    "auth_uid": uid,
+    "room_id": room.room_id,
+    "ticket_id": ticketID,
+  };
+  return postProcessed("check", const CheckProcessor(), body: json);
+}
+
+Future<APIResponse<List<Room>?>> rooms(){
+  return getProcessed("room", const RoomsProcessor());
 }
 
 /// For Debugging purposes
