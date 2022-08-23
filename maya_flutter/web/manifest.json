@@ -8,6 +8,7 @@
     "description": "The Maya Front App built with Flutter",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "permissions": ["storage-access"],
     "icons": [
         {
             "src": "icons/Icon-192.png",

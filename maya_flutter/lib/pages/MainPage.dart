@@ -4,6 +4,8 @@ import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
 import 'package:tuple/tuple.dart';
 
+import 'HeatMapPage.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -26,6 +28,13 @@ class _MainPageState extends State<MainPage> {
           icon: Icon(Icons.abc),
           activeIcon: Icon(Icons.abc, color: Colors.blue),
           label: 'Check',
+        )),
+    Tuple2(
+        HeatMapPage(),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.abc),
+          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          label: 'HeatMap',
         )),
     Tuple2(
         DocumentPage(),

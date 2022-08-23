@@ -37,16 +37,18 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.6.4
   firebase_core: ^1.21.0
+  firebase_database: ^9.1.2
   universal_platform: ^1.0.0+1
   http: ^0.13.4
   json_annotation: ^4.5.0
-  provider: ^6.0.3
   freezed_annotation: ^2.0.3
   tuple: ^2.0.0
+  provider: ^6.0.3
   qr_flutter: ^4.0.0
   mobile_scanner: ^2.0.0
   flutter_markdown: ^0.6.10+3
   url_launcher: ^6.1.5
+  file_saver: ^0.1.1
 
 dev_dependencies:
   flutter_test:

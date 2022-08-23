@@ -35,8 +35,8 @@ class _TicketQRCodeState extends State<TicketQRCode> {
     );
   }
 
-  Widget _child(){
-    if(_qrCodeString != null) {
+  Widget _child() {
+    if (_qrCodeString != null) {
       return QrImage(data: _qrCodeString!, version: QrVersions.auto);
     } else {
       return Container();
@@ -45,13 +45,12 @@ class _TicketQRCodeState extends State<TicketQRCode> {
 
   Future<void> updateQR() async {
     String str = await generateQRCodeData(widget.user, widget.ticket);
-    setState((){
+    setState(() {
       _qrCodeString = str;
     });
   }
 }
 
 Future<String> generateQRCodeData(User user, Ticket ticket) async {
-  print('showing qr code:${user.uid}#${ticket.ticket_id}');
   return "${user.uid}#${ticket.ticket_id}";
 }
