@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-import 'dart:js' as js;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -7,7 +5,6 @@ import 'package:file_saver/file_saver.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../../api/models/Models.dart';
 import 'TicketQRCode.dart';
@@ -57,20 +54,9 @@ class _TicketElementState extends State<TicketElement> {
         return;
       }
       Uint8List pngBytes = byteData.buffer.asUint8List();
-      if (UniversalPlatform.isWeb) {
-        js.context.callMethod(
-          "saveAsImage",
-          [
-            html.Blob([pngBytes]),
-            'QR.png',
-          ],
-        );
-        print('Saved on Web');
-      } else {
-        String path =
-            await FileSaver.instance.saveFile("QR", pngBytes, "png", mimeType: MimeType.PNG);
-        print('Saved :"$path"');
-      }
+      String path =
+          await FileSaver.instance.saveFile("QR", pngBytes, "png", mimeType: MimeType.PNG);
+      print('Saved :"$path"');
     } catch (e) {
       return;
     }

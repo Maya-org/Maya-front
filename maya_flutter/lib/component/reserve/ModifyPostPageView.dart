@@ -37,8 +37,8 @@ class _ModifyPostPageViewState extends State<ModifyPostPageView> {
 
   Widget _genBody() {
     if (widget.isReserved) {
-      return ReservationPersonCount(
-        ticketTypes: widget.toUpdate,
+      return ReservationPersonCount.fromReservation(
+        widget.toUpdate,
       );
     } else {
       return Text("""予約変更に失敗しました

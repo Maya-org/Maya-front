@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,5 +47,20 @@ class StyledTextWidget extends StatelessWidget {
         }
       },
     );
+  }
+
+  static Widget mdFromAsset(String src){
+    return FutureBuilder(
+        future: rootBundle.loadString(src),
+        builder: (ctx, snapShot) {
+          if (snapShot.hasData) {
+            return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: StyledTextWidget.mdFromString(snapShot.data! as String, true,
+                    selectable: false));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 }

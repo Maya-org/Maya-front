@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/api/models/Models.dart';
+import 'package:maya_flutter/pages/MainPage.dart';
+import 'package:maya_flutter/ui/StyledText.dart';
 
 import '../ReservationPersonCount.dart';
 
@@ -24,20 +26,44 @@ class ReservePostPageView extends StatefulWidget {
 class _ReservePostPageViewState extends State<ReservePostPageView> {
   @override
   Widget build(BuildContext context) {
+    if (widget.isReserved) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('予約完了画面'),
+        ),
+        body: Column(
+          children: [
+            ReservationPersonCount.fromReservation(
+              widget.reserveReq.tickets,
+            ),
+            StyledTextWidget.mdFromAsset("assets/onReserve.md"),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (ctx) => const MainPage()));
+              },
+              child: const Text('戻る'),
+            )
+          ],
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("予約完了"),
       ),
       body: Center(
-        child: _genBody(),
+        child: Text("""予約に失敗しました
+エラー内容:
+${widget.displayString}"""),
       ),
     );
   }
 
   Widget _genBody() {
     if (widget.isReserved) {
-      return ReservationPersonCount(
-        ticketTypes: widget.reserveReq.tickets,
+      return ReservationPersonCount.fromReservation(
+        widget.reserveReq.tickets,
       );
     } else {
       return Text("""予約に失敗しました
