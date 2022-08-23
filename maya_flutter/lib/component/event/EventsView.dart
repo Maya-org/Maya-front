@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:maya_flutter/ui/card/EventCard.dart';
 import 'package:provider/provider.dart';
 
-import '../api/models/Models.dart';
-import '../models/EventChangeNotifier.dart';
+import '../../api/models/Models.dart';
+import '../../models/EventChangeNotifier.dart';
 
 class EventsView extends StatefulWidget {
   const EventsView({Key? key}) : super(key: key);

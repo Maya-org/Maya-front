@@ -31,9 +31,7 @@ class Group {
   Map<String, dynamic> toJson() => _$GroupToJson(this);
 
   int getGuestCount(GuestType type) {
-    return all_guests
-        .where((g) => g.type == type)
-        .length;
+    return all_guests.where((g) => g.type == type).length;
   }
 
   @override
@@ -93,23 +91,23 @@ class ReservableEvent {
   int? capacity;
   int taken_capacity;
   ReservableEvent?
-  required_reservation; // Reference to a reservation that is required to attend this event.
+      required_reservation; // Reference to a reservation that is required to attend this event.
   List<TicketType> reservable_ticket_type;
   bool require_two_factor;
   int? maximum_reservations_per_user;
 
-  ReservableEvent({required this.event_id,
-    required this.display_name,
-    this.description,
-    required this.date_start,
-    this.date_end,
-    this.available_at,
-    this.capacity,
-    required this.taken_capacity,
-    this.required_reservation,
-    required this.reservable_ticket_type,
-    required this.require_two_factor
-  });
+  ReservableEvent(
+      {required this.event_id,
+      required this.display_name,
+      this.description,
+      required this.date_start,
+      this.date_end,
+      this.available_at,
+      this.capacity,
+      required this.taken_capacity,
+      this.required_reservation,
+      required this.reservable_ticket_type,
+      required this.require_two_factor});
 
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
@@ -127,16 +125,15 @@ class Reservation {
   ReservableEvent event;
   List<Ticket> tickets;
 
-  int headCount(){
+  int headCount() {
     int count = 0;
-    for (var element in tickets) { count += element.ticket_type.reservable_group.headcount(); }
+    for (var element in tickets) {
+      count += element.ticket_type.reservable_group.headcount();
+    }
     return count;
   }
 
-
-  Reservation({required this.reservation_id,
-    required this.event,
-    required this.tickets});
+  Reservation({required this.reservation_id, required this.event, required this.tickets});
 
   factory Reservation.fromJson(Map<String, dynamic> json) => _$ReservationFromJson(json);
 
@@ -178,13 +175,15 @@ class TimeStamp {
     return DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
   }
 
+  @override
+  String toString() {
+    DateTime time = toDateTime();
+    return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分";
+  }
+
   static now() {
-    return TimeStamp(DateTime
-        .now()
-        .millisecondsSinceEpoch ~/ 1000,
-        DateTime
-            .now()
-            .millisecondsSinceEpoch % 1000);
+    return TimeStamp(DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        DateTime.now().millisecondsSinceEpoch % 1000);
   }
 }
 
@@ -252,13 +251,9 @@ class ReserveRequest {
   String? two_factor_key;
   List<TicketType> tickets;
 
+  ReserveRequest({required this.event_id, this.two_factor_key, required this.tickets});
 
-  ReserveRequest({required this.event_id,
-    this.two_factor_key,
-    required this.tickets});
-
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{
+  Map<String, dynamic> toJson() => <String, dynamic>{
         'event_id': event_id,
         'tickets': tickets,
         if (two_factor_key != null) 'two_factor_key': two_factor_key,
@@ -272,7 +267,8 @@ class TicketType {
   String display_ticket_name;
   String? display_ticket_description;
 
-  TicketType({required this.ticket_type_id,
+  TicketType({
+    required this.ticket_type_id,
     required this.reservable_group,
     required this.display_ticket_name,
     this.display_ticket_description,
@@ -290,16 +286,17 @@ class TicketType {
 
 enum Operation {
   @JsonValue('Enter')
-  Enter("入場", "enter","へ入場処理"),
+  Enter("入場", "enter", "へ入場処理"),
   @JsonValue('Exit')
-  Exit("出場", "exit","へ退場処理");
+  Exit("出場", "exit", "へ退場処理");
 
   final String displayName;
   final String operationName;
+
   // Checkページでの表示名
   final String operationDisplayName;
 
-  const Operation(this.displayName, this.operationName,this.operationDisplayName);
+  const Operation(this.displayName, this.operationName, this.operationDisplayName);
 }
 
 @JsonSerializable()
@@ -326,8 +323,7 @@ class Ticket {
   TicketType ticket_type;
   ReservableEvent event;
 
-  Ticket(
-      {required this.ticket_id, required this.ticket_type, required this.event});
+  Ticket({required this.ticket_id, required this.ticket_type, required this.event});
 
   factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
 

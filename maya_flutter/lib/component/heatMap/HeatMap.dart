@@ -18,12 +18,9 @@ class HeatMap extends StatefulWidget {
 class _HeatMapState extends State<HeatMap> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HeatMapChangeNotifier(),
-      builder: (ctx, w) => CustomPaint(
-        painter: _HeatMapPainter(
-            Provider.of<HeatMapChangeNotifier>(ctx).data, Provider.of<RoomsProvider>(ctx).list),
-      ),
+    return CustomPaint(
+      painter: _HeatMapPainter(
+          Provider.of<HeatMapChangeNotifier>(context).data, Provider.of<RoomsProvider>(context).list),
     );
   }
 }
@@ -36,7 +33,6 @@ class _HeatMapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('paint');
     double scale = calculateScale(size);
     rooms.map((e) => getRoomById(e.item1)).whereType<Room>().forEach((room) {
       drawRoom(canvas, room, getColorForRoom(room), scale);

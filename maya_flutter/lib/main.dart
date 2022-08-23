@@ -18,6 +18,7 @@ import 'package:maya_flutter/pages/reserve/ReservePage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
 import 'package:provider/provider.dart';
 
+import 'models/HeatMapChangeNotifier.dart';
 import 'models/PermissionsChangeNotifier.dart';
 
 void main() async {
@@ -34,33 +35,36 @@ class MayaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => PermissionsChangeNotifier(),
-      child: ChangeNotifierProvider<RoomsProvider>(
-        create: (_) => RoomsProvider(),
-        child: ChangeNotifierProvider<UserChangeNotifier>(
-          // TODO 最初2回描画されちゃうけど仕方ない...か?
-          create: (_) => UserChangeNotifier(),
-          child: ChangeNotifierProvider<EventChangeNotifier>(
-            create: (_) => EventChangeNotifier(),
-            child: ChangeNotifierProvider<ReservationChangeNotifier>(
-              create: (_) => ReservationChangeNotifier(),
-              child: MaterialApp(
-                title: const Messages().app_title,
-                theme: ThemeData(
-                    primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
-                initialRoute: _initialRoute(),
-                routes: {
-                  "/": (context) => SignUpPage(title: const Messages().page_title),
-                  "/main": (context) => const MainPage(),
-                  "/register/phoneVerifier": (context) => const PhoneVerifier(),
-                  "/reservation": (context) => const ReservationPage(),
-                  "/reserve": (context) => const ReservePage(),
-                  "/reserve/post": (context) => const ReservePostPage(),
-                  "/event": (context) => const EventPage(),
-                  "/modify": (context) => const ModifyPage(),
-                  "/cancel": (context) => const CancelPage(),
-                },
-                debugShowCheckedModeBanner: false,
+      create:(_) => HeatMapChangeNotifier(),
+      child: ChangeNotifierProvider(
+        create: (_) => PermissionsChangeNotifier(),
+        child: ChangeNotifierProvider<RoomsProvider>(
+          create: (_) => RoomsProvider(),
+          child: ChangeNotifierProvider<UserChangeNotifier>(
+            // TODO 最初2回描画されちゃうけど仕方ない...か?
+            create: (_) => UserChangeNotifier(),
+            child: ChangeNotifierProvider<EventChangeNotifier>(
+              create: (_) => EventChangeNotifier(),
+              child: ChangeNotifierProvider<ReservationChangeNotifier>(
+                create: (_) => ReservationChangeNotifier(),
+                child: MaterialApp(
+                  title: const Messages().app_title,
+                  theme: ThemeData(
+                      primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
+                  initialRoute: _initialRoute(),
+                  routes: {
+                    "/": (context) => SignUpPage(title: const Messages().page_title),
+                    "/main": (context) => const MainPage(),
+                    "/register/phoneVerifier": (context) => const PhoneVerifier(),
+                    "/reservation": (context) => const ReservationPage(),
+                    "/reserve": (context) => const ReservePage(),
+                    "/reserve/post": (context) => const ReservePostPage(),
+                    "/event": (context) => const EventPage(),
+                    "/modify": (context) => const ModifyPage(),
+                    "/cancel": (context) => const CancelPage(),
+                  },
+                  debugShowCheckedModeBanner: false,
+                ),
               ),
             ),
           ),
