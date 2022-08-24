@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/firebase_options.dart';
@@ -17,20 +16,25 @@ import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePostPage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/HeatMapChangeNotifier.dart';
 import 'models/PermissionsChangeNotifier.dart';
 
+const String prefAuthedKey = "maya-logged-in";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MayaApp(isInitialAuthed: FirebaseAuth.instance.currentUser != null));
+  final prefs = await SharedPreferences.getInstance();
+  bool isAuthed = prefs.getBool(prefAuthedKey) ?? false;
+  runApp(MayaApp(isInitialAuthed: isAuthed,prefs: prefs));
 }
 
 class MayaApp extends StatelessWidget {
   final bool isInitialAuthed;
+  final SharedPreferences prefs;
 
-  const MayaApp({Key? key, required this.isInitialAuthed}) : super(key: key);
+  const MayaApp({Key? key, required this.isInitialAuthed, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class MayaApp extends StatelessWidget {
           create: (_) => RoomsProvider(),
           child: ChangeNotifierProvider<UserChangeNotifier>(
             // TODO 最初2回描画されちゃうけど仕方ない...か?
-            create: (_) => UserChangeNotifier(),
+            create: (_) => UserChangeNotifier(prefs: prefs),
             child: ChangeNotifierProvider<EventChangeNotifier>(
               create: (_) => EventChangeNotifier(),
               child: ChangeNotifierProvider<ReservationChangeNotifier>(
