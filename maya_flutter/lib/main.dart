@@ -27,7 +27,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final prefs = await SharedPreferences.getInstance();
   bool isAuthed = prefs.getBool(prefAuthedKey) ?? false;
-  runApp(MayaApp(isInitialAuthed: isAuthed,prefs: prefs));
+  runApp(MayaApp(isInitialAuthed: isAuthed, prefs: prefs));
 }
 
 class MayaApp extends StatelessWidget {
@@ -38,43 +38,33 @@ class MayaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create:(_) => HeatMapChangeNotifier(),
-      child: ChangeNotifierProvider(
-        create: (_) => PermissionsChangeNotifier(),
-        child: ChangeNotifierProvider<RoomsProvider>(
-          create: (_) => RoomsProvider(),
-          child: ChangeNotifierProvider<UserChangeNotifier>(
-            // TODO 最初2回描画されちゃうけど仕方ない...か?
-            create: (_) => UserChangeNotifier(prefs: prefs),
-            child: ChangeNotifierProvider<EventChangeNotifier>(
-              create: (_) => EventChangeNotifier(),
-              child: ChangeNotifierProvider<ReservationChangeNotifier>(
-                create: (_) => ReservationChangeNotifier(),
-                child: MaterialApp(
-                  title: const Messages().app_title,
-                  theme: ThemeData(
-                      primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
-                  initialRoute: _initialRoute(),
-                  routes: {
-                    "/": (context) => SignUpPage(title: const Messages().page_title),
-                    "/main": (context) => const MainPage(),
-                    "/register/phoneVerifier": (context) => const PhoneVerifier(),
-                    "/reservation": (context) => const ReservationPage(),
-                    "/reserve": (context) => const ReservePage(),
-                    "/reserve/post": (context) => const ReservePostPage(),
-                    "/event": (context) => const EventPage(),
-                    "/modify": (context) => const ModifyPage(),
-                    "/cancel": (context) => const CancelPage(),
-                  },
-                  debugShowCheckedModeBanner: false,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => HeatMapChangeNotifier()),
+          ChangeNotifierProvider(create: (_) => PermissionsChangeNotifier()),
+          ChangeNotifierProvider(create: (_) => RoomsProvider()),
+          ChangeNotifierProvider(create: (_) => UserChangeNotifier(prefs: prefs)),
+          ChangeNotifierProvider(create: (_) => EventChangeNotifier()),
+          ChangeNotifierProvider(create: (_) => ReservationChangeNotifier()),
+        ],
+        child: MaterialApp(
+          title: const Messages().app_title,
+          theme:
+              ThemeData(primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
+          initialRoute: _initialRoute(),
+          routes: {
+            "/": (context) => SignUpPage(title: const Messages().page_title),
+            "/main": (context) => const MainPage(),
+            "/register/phoneVerifier": (context) => const PhoneVerifier(),
+            "/reservation": (context) => const ReservationPage(),
+            "/reserve": (context) => const ReservePage(),
+            "/reserve/post": (context) => const ReservePostPage(),
+            "/event": (context) => const EventPage(),
+            "/modify": (context) => const ModifyPage(),
+            "/cancel": (context) => const CancelPage(),
+          },
+          debugShowCheckedModeBanner: false,
+        ));
   }
 
   String _initialRoute() {

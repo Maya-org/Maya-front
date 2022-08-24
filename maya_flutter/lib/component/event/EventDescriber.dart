@@ -42,6 +42,14 @@ class EventDescriber extends StatelessWidget {
           const SizedBox(height: 10),
           const Text("このイベントの予約には別紙に記載されている「申し込み用QRコード」が必要です",style: TextStyle(color: Colors.redAccent),),
         ],
+        if(event.required_reservation != null) ...[
+          const SizedBox(height: 10),
+          Text("このイベントの予約には「${event.required_reservation!.display_name}」の予約が必要です。",style: const TextStyle(color: Colors.redAccent),),
+        ],
+        if(event.available_at != null && event.available_at!.toDateTime().isAfter(DateTime.now())) ...[
+          const SizedBox(height: 10),
+          Text("このイベントは${event.available_at!.toString()}までは予約できません。",style: const TextStyle(color: Colors.redAccent),),
+        ],
       ],
     );
   }
