@@ -13,10 +13,8 @@ class UserChangeNotifier extends ChangeNotifier {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       _user = user;
       if(user != null && user.phoneNumber != null){
-        print('marked as verified');
         prefs.setBool(prefAuthedKey, true);
       }else{
-        print('marked as not verified');
         prefs.setBool(prefAuthedKey, false);
       }
       notifyListeners();
