@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
+import '../../ui/DefaultAppBar.dart';
 import 'CheckPostPage.dart';
 
 class CheckProcessingPage extends StatefulWidget{
@@ -18,9 +19,7 @@ class _CheckProcessingPageState extends State<CheckProcessingPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('チェックイン/チェックアウト処理中'),
-      ),
+      appBar: defaultAppBar('チェックイン/チェックアウト処理中'),
       body: const Center(
         child: Text('チェックイン/チェックアウト処理中'),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/API.dart';
 
 import '../../api/models/Models.dart';
+import '../../ui/DefaultAppBar.dart';
 import 'CancelProcessingPageView.dart';
 
 class CancelPageView extends StatefulWidget {
@@ -18,9 +19,7 @@ class _CancelPageViewState extends State<CancelPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約キャンセル画面"),
-      ),
+      appBar: defaultAppBar("予約キャンセル画面"),
       body: Center(
         child: Column(
           children: [

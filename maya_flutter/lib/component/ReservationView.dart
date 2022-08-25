@@ -5,6 +5,7 @@ import 'package:maya_flutter/component/ticket/ReservationTicket.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserChangeNotifier.dart';
+import '../ui/DefaultAppBar.dart';
 import '../ui/StyledText.dart';
 
 class ReservationView extends StatefulWidget {
@@ -22,9 +23,7 @@ class _ReservationViewState extends State<ReservationView> {
     User? user = Provider.of<UserChangeNotifier>(context, listen: true).user;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("${widget.reservation.event.display_name}の予約"),
-        ),
+        appBar: defaultAppBar("${widget.reservation.event.display_name}の予約"),
         body: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
           return ConstrainedBox(
               constraints: BoxConstraints.tightFor(

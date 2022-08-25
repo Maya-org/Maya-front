@@ -5,6 +5,7 @@ import 'package:maya_flutter/component/ticket/AllTicketTypeSelector.dart';
 
 import '../../api/models/Models.dart';
 import '../../pages/reserve/TwoFactorPage.dart';
+import '../../ui/DefaultAppBar.dart';
 
 class ModifyPageView extends StatefulWidget {
   final Reservation reservation;
@@ -19,9 +20,7 @@ class _ModifyPageViewState extends State<ModifyPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("${widget.reservation.event.display_name}の予約変更画面"),
-      ),
+      appBar: defaultAppBar("${widget.reservation.event.display_name}の予約変更画面"),
       body: AllTicketTypeSelector(
         maximum_reservations_per_user: widget.reservation.event.maximum_reservations_per_user,
         ticketTypes: widget.reservation.event.reservable_ticket_type,

@@ -3,6 +3,7 @@ import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/ui/StyledText.dart';
 
+import '../../ui/DefaultAppBar.dart';
 import '../ReservationPersonCount.dart';
 
 class ReservePostPageView extends StatefulWidget {
@@ -28,9 +29,7 @@ class _ReservePostPageViewState extends State<ReservePostPageView> {
   Widget build(BuildContext context) {
     if (widget.isReserved) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('予約完了画面'),
-        ),
+        appBar: defaultAppBar('予約完了画面'),
         body: Column(
           children: [
             ReservationPersonCount.fromReservation(
@@ -49,9 +48,7 @@ class _ReservePostPageViewState extends State<ReservePostPageView> {
       );
     }
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約完了"),
-      ),
+      appBar: defaultAppBar("予約完了"),
       body: Center(
         child: Text("""予約に失敗しました
 エラー内容:

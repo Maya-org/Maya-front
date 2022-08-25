@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 import 'package:maya_flutter/ui/card/UICard.dart';
 import 'package:provider/provider.dart';
 
@@ -41,9 +42,7 @@ class _EventViewState extends State<EventView> {
   Widget build(BuildContext context) {
     ReservableEvent event = widget.event;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(event.display_name),
-      ),
+      appBar: defaultAppBar(event.display_name),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(

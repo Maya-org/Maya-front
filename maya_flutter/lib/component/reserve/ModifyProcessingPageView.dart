@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/component/reserve/ModifyPostPageView.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/APIResponse.dart';
@@ -26,9 +27,7 @@ class _ModifyProcessingPageViewState extends State<ModifyProcessingPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約変更処理中"),
-      ),
+      appBar: defaultAppBar("予約変更処理中"),
       body: Center(
         child: Column(
           children: const [

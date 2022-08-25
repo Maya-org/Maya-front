@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../api/models/Models.dart';
+import '../../ui/DefaultAppBar.dart';
 import '../ReservationPersonCount.dart';
 
 class ModifyPostPageView extends StatefulWidget {
@@ -26,9 +27,7 @@ class _ModifyPostPageViewState extends State<ModifyPostPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約変更完了"),
-      ),
+      appBar: defaultAppBar("予約変更完了"),
       body: Center(
         child: _genBody(),
       ),

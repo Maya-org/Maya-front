@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maya_flutter/messages.i18n.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 import 'package:maya_flutter/ui/UI.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -19,10 +20,7 @@ class _PhoneVerifierState extends State<PhoneVerifier> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(const Messages().phone_auth_title),
-        backgroundColor: Theme.of(context).backgroundColor,
-      ),
+      appBar: defaultAppBar(const Messages().phone_auth_title),
       body: Container(
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[

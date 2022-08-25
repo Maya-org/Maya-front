@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/pages/check/CheckPage.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
@@ -23,9 +24,7 @@ class _CheckPostPageState extends State<CheckPostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('チェックイン/チェックアウト結果'),
-      ),
+      appBar: defaultAppBar('チェックイン/チェックアウト結果'),
       body: Center(
         child: Column(
           children: [

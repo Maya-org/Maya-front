@@ -6,6 +6,7 @@ import 'package:tuple/tuple.dart';
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
 import '../../ui/APIResponseHandler.dart';
+import '../../ui/DefaultAppBar.dart';
 
 class ReserveProcessingPageView extends StatefulWidget {
   final Future<APIResponse<String?>> future;
@@ -24,9 +25,7 @@ class _ReserveProcessingPageViewState extends State<ReserveProcessingPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約処理中"),
-      ),
+      appBar: defaultAppBar("予約処理中"),
       body: Center(
         child: Column(
           children: const [

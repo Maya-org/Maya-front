@@ -3,10 +3,11 @@ import 'package:maya_flutter/models/PermissionsChangeNotifier.dart';
 import 'package:maya_flutter/pages/DocumentPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
+import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import 'HeatMapPage.dart';
+import 'crowded/CrowdedPage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -86,15 +87,15 @@ class Pages {
       Tuple2(
           CheckSelectPage(),
           BottomNavigationBarItem(
-            icon: Icon(Icons.check),
-            activeIcon: Icon(Icons.check, color: Colors.blue),
+            icon: Icon(Icons.qr_code_scanner),
+            activeIcon: Icon(Icons.qr_code_scanner, color: Colors.blue),
             label: '入退場処理',
           )),
       ["Entrance"]);
 
   static const heatMapPage = Tuple2(
       Tuple2(
-          HeatMapPage(),
+          CrowdedPage(),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
             activeIcon: Icon(Icons.map, color: Colors.blue),
@@ -124,12 +125,5 @@ class Pages {
   static bool _isPermitted(List<String> required, List<String> permissions) {
     if (required.isEmpty) return true;
     return required.every((element) => permissions.contains(element));
-  }
-}
-
-extension ListUtil<E> on List<E> {
-  E? getOrNull(int index) {
-    if (index < 0 || index >= length) return null;
-    return elementAt(index);
   }
 }

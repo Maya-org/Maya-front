@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/models/Models.dart';
 import '../../ui/APIResponseHandler.dart';
+import '../../ui/DefaultAppBar.dart';
 import 'CancelPostPageView.dart';
 
 class CancelProcessingPageView extends StatefulWidget {
@@ -23,9 +24,7 @@ class _CancelProcessingPageViewState extends State<CancelProcessingPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約キャンセル処理中"),
-      ),
+      appBar: defaultAppBar("予約キャンセル処理中"),
       body: Text("${widget.reservation.event.display_name}の予約をキャンセルしています"),
     );
   }
