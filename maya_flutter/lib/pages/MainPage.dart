@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/models/PermissionsChangeNotifier.dart';
 import 'package:maya_flutter/pages/DocumentPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import 'HeatMapPage.dart';
@@ -14,41 +16,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  static const List<Tuple2<Widget, BottomNavigationBarItem>> _pages = [
-    Tuple2(
-        HomePage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          activeIcon: Icon(Icons.home, color: Colors.blue),
-          label: 'Home',
-        )),
-    Tuple2(
-        CheckSelectPage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.check),
-          activeIcon: Icon(Icons.check, color: Colors.blue),
-          label: 'Check',
-        )),
-    Tuple2(
-        HeatMapPage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map),
-          activeIcon: Icon(Icons.map, color: Colors.blue),
-          label: 'HeatMap',
-        )),
-    Tuple2(
-        DocumentPage(),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.article),
-          activeIcon: Icon(Icons.article, color: Colors.blue),
-          label: 'Document',
-        )),
-  ];
   int _currentIndex = 0;
   final PageController _controller = PageController();
+  List<Tuple2<Widget, BottomNavigationBarItem>> _pages = [];
 
   @override
   Widget build(BuildContext context) {
+    _updatePages(Provider.of<PermissionsChangeNotifier>(context, listen: true).permissions);
+
     return Scaffold(
       body: SafeArea(
         child: PageView.builder(
@@ -76,10 +51,85 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  void _moveTo(int page) {
+  void _updatePages(List<String> permissions) {
+    Tuple2<Widget, BottomNavigationBarItem>? currentPage = _pages.getOrNull(_currentIndex);
+    List<Tuple2<Widget, BottomNavigationBarItem>> generated = Pages.generate(permissions);
+    int newIndex = 0;
+    if (currentPage != null) {
+      newIndex = generated.indexOf(currentPage);
+    }
+
     setState(() {
-      _currentIndex = page;
+      _pages = generated;
+      _currentIndex = newIndex;
     });
-    _controller.animateToPage(page, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+  }
+
+  void _moveTo(int page) {
+    _controller.animateToPage(page,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
+}
+
+class Pages {
+  static const reservePage = Tuple2(
+      Tuple2(
+          HomePage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            activeIcon: Icon(Icons.book, color: Colors.blue),
+            label: '予約',
+          )),
+      <String>[]);
+
+  static const checkPage = Tuple2(
+      Tuple2(
+          CheckSelectPage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check),
+            activeIcon: Icon(Icons.check, color: Colors.blue),
+            label: '入退場処理',
+          )),
+      ["Entrance"]);
+
+  static const heatMapPage = Tuple2(
+      Tuple2(
+          HeatMapPage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            activeIcon: Icon(Icons.map, color: Colors.blue),
+            label: '混雑状況',
+          )),
+      <String>[]);
+
+  static const documentPage = Tuple2(
+      Tuple2(
+          DocumentPage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.article),
+            activeIcon: Icon(Icons.article, color: Colors.blue),
+            label: '説明',
+          )),
+      <String>[]);
+
+  static const pages = [reservePage, checkPage, heatMapPage, documentPage];
+
+  static List<Tuple2<Widget, BottomNavigationBarItem>> generate(List<String> permissions) {
+    return pages
+        .where((element) => _isPermitted(element.item2, permissions))
+        .map((element) => element.item1)
+        .toList();
+  }
+
+  static bool _isPermitted(List<String> required, List<String> permissions) {
+    if (required.isEmpty) return true;
+    return required.every((element) => permissions.contains(element));
+  }
+}
+
+extension ListUtil<E> on List<E> {
+  E? getOrNull(int index) {
+    if (index < 0 || index >= length) return null;
+    return elementAt(index);
   }
 }
