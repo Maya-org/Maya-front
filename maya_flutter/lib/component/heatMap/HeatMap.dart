@@ -22,10 +22,18 @@ class _HeatMapState extends State<HeatMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: defaultAppBar('混雑ヒートマップ'),
-      body: SizedBox.expand(
-        child: CustomPaint(
-          painter: _HeatMapPainter(Provider.of<HeatMapChangeNotifier>(context).data,
-              Provider.of<RoomsProvider>(context).list),
+      body: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: (constraints.maxWidth / widthScale.toDouble()) * heightScale.toDouble(),
+              child: CustomPaint(
+                painter: _HeatMapPainter(Provider.of<HeatMapChangeNotifier>(context).data,
+                    Provider.of<RoomsProvider>(context).list),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -89,6 +97,8 @@ class _HeatMapPainter extends CustomPainter {
 
 // 横幅の基準値(この幅が画面幅に合うように拡大される)
 const widthScale = 500;
+// 縦幅(横幅に応じて拡大される)
+const heightScale = 1500;
 // Tuple<Room ID,Drawing Path>
 final List<Tuple2<String, ui.Path>> rooms = [Tuple2("testroom", genSquare(0, 0, 100, 100)),Tuple2("test2room", genSquare(0, 0, 100, 100))];
 final Map<Range, Color> colors = {
