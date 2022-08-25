@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/models/Models.dart';
-import 'package:maya_flutter/ui/StyledText.dart';
 import 'package:maya_flutter/ui/card/UICard.dart';
+
+import '../../component/event/EventDescriber.dart';
 
 class EventCard extends StatelessWidget {
   final ReservableEvent event;
@@ -16,11 +17,7 @@ class EventCard extends StatelessWidget {
       child: UICard(
         toExpandTop: true,
         title: Text(event.display_name),
-        body: StyledTextWidget.fromString([
-          "説明文:${event.description}",
-          "開始日時:${event.date_start.toDateTime().toString()}",
-          "予約済み人数:${event.taken_capacity}/${event.capacity}"
-        ]),
+        body: EventDescriber(event: event),
         onTap: () {
           Navigator.of(context).pushNamed("/event", arguments: event);
         },

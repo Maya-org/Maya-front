@@ -18,29 +18,29 @@ class _MainPageState extends State<MainPage> {
     Tuple2(
         HomePage(),
         BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          icon: Icon(Icons.home),
+          activeIcon: Icon(Icons.home, color: Colors.blue),
           label: 'Home',
         )),
     Tuple2(
         CheckSelectPage(),
         BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          icon: Icon(Icons.check),
+          activeIcon: Icon(Icons.check, color: Colors.blue),
           label: 'Check',
         )),
     Tuple2(
         HeatMapPage(),
         BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          icon: Icon(Icons.map),
+          activeIcon: Icon(Icons.map, color: Colors.blue),
           label: 'HeatMap',
         )),
     Tuple2(
         DocumentPage(),
         BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          activeIcon: Icon(Icons.abc, color: Colors.blue),
+          icon: Icon(Icons.article),
+          activeIcon: Icon(Icons.article, color: Colors.blue),
           label: 'Document',
         )),
   ];
