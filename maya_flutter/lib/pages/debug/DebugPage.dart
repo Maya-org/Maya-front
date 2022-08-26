@@ -6,7 +6,6 @@ import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../ui/DefaultAppBar.dart';
-import 'LookUpPage.dart';
 
 class DebugPage extends StatefulWidget {
   const DebugPage({Key? key}) : super(key: key);
@@ -36,24 +35,23 @@ class _DebugPageState extends State<DebugPage> {
                   'Reservation:[${reservation.reservation?.map((reservation) => reservation.reservation_id).join(",") ?? "No Reservation"}]');
             },
           ),
-          ElevatedButton(onPressed: () {
-            Provider.of<ReservationChangeNotifier>(context, listen: false).update();
-          }, child: const Text("Refresh Reservation")),
+          ElevatedButton(
+              onPressed: () {
+                Provider.of<ReservationChangeNotifier>(context, listen: false).update();
+              },
+              child: const Text("Refresh Reservation")),
           const SizedBox(height: 16),
           Consumer<EventChangeNotifier>(
             builder: (context, event, child) {
-              return Text('Event:[${event.events?.map((event) => "${event.display_name}(${event.event_id})").join(",") ?? "No Event"}]');
+              return Text(
+                  'Event:[${event.events?.map((event) => "${event.display_name}(${event.event_id})").join(",") ?? "No Event"}]');
             },
           ),
-          ElevatedButton(onPressed: (){
-            Provider.of<EventChangeNotifier>(context, listen: false).updateEvents();
-          }, child: const Text("Refresh Event")),
-          const SizedBox(height: 16),
-          ElevatedButton(onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-              return const LookUpPage();
-            }));
-          }, child: const Text("LookUp"))
+          ElevatedButton(
+              onPressed: () {
+                Provider.of<EventChangeNotifier>(context, listen: false).updateEvents();
+              },
+              child: const Text("Refresh Event"))
         ],
       ),
     );

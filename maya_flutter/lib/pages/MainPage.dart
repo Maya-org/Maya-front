@@ -6,6 +6,7 @@ import 'package:maya_flutter/pages/DocumentPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
 import 'package:maya_flutter/pages/debug/DebugPage.dart';
+import 'package:maya_flutter/pages/debug/LookUpPage.dart';
 import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -136,7 +137,17 @@ class Pages {
           )),
       <String>[]);
 
-  static const pages = [reservePage, checkPage, heatMapPage, documentPage];
+  static const lookUpPage = Tuple2(
+      Tuple2(
+          LookUpNavigatePage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            activeIcon: Icon(Icons.search, color: Colors.blue),
+            label: '情報照会',
+          )),
+      <String>["Debug"]);
+
+  static const pages = [reservePage, checkPage,lookUpPage, heatMapPage, documentPage];
 
   static List<Tuple2<Widget, BottomNavigationBarItem>> generate(List<String> permissions) {
     return pages
