@@ -4,13 +4,15 @@ import 'package:maya_flutter/api/models/Models.dart';
 
 class EventDescriber extends StatelessWidget {
   final ReservableEvent event;
-  const EventDescriber({Key? key, required this.event}) : super(key: key);
+  final bool? toDescribeMore;
+
+  const EventDescriber({Key? key, required this.event, this.toDescribeMore}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(child:Text(event.display_name)),
+        Center(child: Text(event.display_name)),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -32,23 +34,34 @@ class EventDescriber extends StatelessWidget {
             ),
           ],
         ),
-        if(event.description != null) ...[
+        if (event.description != null) ...[
           const SizedBox(height: 10),
           const Text("イベント概要"),
           const SizedBox(height: 10),
           Text(event.description!),
         ],
-        if(event.require_two_factor) ...[
+        if (event.require_two_factor && (toDescribeMore ?? true)) ...[
           const SizedBox(height: 10),
-          const Text("このイベントの予約には別紙に記載されている「申し込み用QRコード」が必要です",style: TextStyle(color: Colors.redAccent),),
+          const Text(
+            "このイベントの予約には別紙に記載されている「申し込み用QRコード」が必要です",
+            style: TextStyle(color: Colors.redAccent),
+          ),
         ],
-        if(event.required_reservation != null) ...[
+        if (event.required_reservation != null && (toDescribeMore ?? true)) ...[
           const SizedBox(height: 10),
-          Text("このイベントの予約には「${event.required_reservation!.display_name}」の予約が必要です。",style: const TextStyle(color: Colors.redAccent),),
+          Text(
+            "このイベントの予約には「${event.required_reservation!.display_name}」の予約が必要です。",
+            style: const TextStyle(color: Colors.redAccent),
+          ),
         ],
-        if(event.available_at != null && event.available_at!.toDateTime().isAfter(DateTime.now())) ...[
+        if (event.available_at != null &&
+            event.available_at!.toDateTime().isAfter(DateTime.now()) &&
+            (toDescribeMore ?? true)) ...[
           const SizedBox(height: 10),
-          Text("このイベントは${event.available_at!.toString()}までは予約できません。",style: const TextStyle(color: Colors.redAccent),),
+          Text(
+            "このイベントは${event.available_at!.toString()}までは予約できません。",
+            style: const TextStyle(color: Colors.redAccent),
+          ),
         ],
       ],
     );
