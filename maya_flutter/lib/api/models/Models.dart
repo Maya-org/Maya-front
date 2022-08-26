@@ -183,6 +183,11 @@ class TimeStamp {
     return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分";
   }
 
+  String toStringWithSec(){
+    DateTime time = toDateTime();
+    return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分${time.second}秒";
+  }
+
   static now() {
     return TimeStamp(DateTime.now().millisecondsSinceEpoch ~/ 1000,
         DateTime.now().millisecondsSinceEpoch % 1000);
