@@ -7,6 +7,7 @@ import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
 import 'package:maya_flutter/models/RoomsProvider.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
 import 'package:maya_flutter/pages/EventPage.dart';
+import 'package:maya_flutter/pages/LoadingPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
@@ -51,9 +52,10 @@ class MayaApp extends StatelessWidget {
           title: const Messages().app_title,
           theme:
               ThemeData(primarySwatch: Colors.blue, textTheme: Theme.of(context).textTheme.apply()),
-          initialRoute: _initialRoute(),
+          home: isInitialAuthed ? const LoadingPage() : SignUpPage(title: const Messages().page_title),
           routes: {
-            "/": (context) => SignUpPage(title: const Messages().page_title),
+            "/signup": (context) => SignUpPage(title: const Messages().page_title),
+            "/loading":(context) => const LoadingPage(),
             "/main": (context) => const MainPage(),
             "/register/phoneVerifier": (context) => const PhoneVerifier(),
             "/reservation": (context) => const ReservationPage(),
@@ -69,7 +71,7 @@ class MayaApp extends StatelessWidget {
 
   String _initialRoute() {
     if (isInitialAuthed) {
-      return '/main';
+      return '/loading';
     } else {
       return '/';
     }

@@ -25,8 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     User? user = Provider.of<UserChangeNotifier>(context, listen: true).user;
     if (user != null) {
-      // TODO Firebaseにいるユーザーがすべて名前登録を終えている構造にする
-      Future.microtask(() => Navigator.pushReplacementNamed(context, "/main"));
+      Future.microtask(() => Navigator.pushReplacementNamed(context, "/loading"));
     }
 
     return Scaffold(
