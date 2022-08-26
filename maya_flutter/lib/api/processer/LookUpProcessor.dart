@@ -10,7 +10,6 @@ class LookUpProcessor extends APIResponseProcessor<LookUpData> {
   @override
   Tuple2<LookUpData?, String> process(json) {
     try {
-      print('LookUpProcessor.process: $json');
       LookUpData? data = LookUpData.fromJson(json);
       return Tuple2(data, "");
     } catch (e) {

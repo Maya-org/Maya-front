@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/component/Check/CheckProcessingPage.dart';
 import 'package:maya_flutter/component/QRReader.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:tuple/tuple.dart';
 
@@ -21,30 +22,33 @@ class CheckPage extends StatefulWidget {
 class _CheckPageState extends State<CheckPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: QRReader(
-            validator: (Barcode barcode) {
-              return readFromBarcode(barcode) != null;
-            },
-            builder: (Barcode barcode) {
-              Tuple2<String, String> data = readFromBarcode(barcode)!;
-              return MaterialPageRoute(builder: (BuildContext context) {
-                return CheckProcessingPage(
-                    future: check(
-                      widget.operation,
-                      data.item1,
-                      widget.selectedRoom,
-                      data.item2,
-                    ),
-                    room: widget.selectedRoom,
-                    operation: widget.operation);
-              });
-            },
-          ),
-        )
-      ],
+    return Scaffold(
+      appBar: defaultAppBar("${widget.selectedRoom.display_name}${widget.operation.operationDisplayName}"),
+      body: Column(
+        children: [
+          Expanded(
+            child: QRReader(
+              validator: (Barcode barcode) {
+                return readFromBarcode(barcode) != null;
+              },
+              builder: (Barcode barcode) {
+                Tuple2<String, String> data = readFromBarcode(barcode)!;
+                return MaterialPageRoute(builder: (BuildContext context) {
+                  return CheckProcessingPage(
+                      future: check(
+                        widget.operation,
+                        data.item1,
+                        widget.selectedRoom,
+                        data.item2,
+                      ),
+                      room: widget.selectedRoom,
+                      operation: widget.operation);
+                });
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }

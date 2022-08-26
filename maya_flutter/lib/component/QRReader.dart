@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../ui/DefaultAppBar.dart';
-
 class QRReader extends StatefulWidget {
   final Route<dynamic> Function(Barcode)? builder;
   final bool Function(Barcode) validator;
@@ -21,9 +19,7 @@ class _QRReaderState extends State<QRReader> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: defaultAppBar('QRコード読み取り画面'),
-      body: MobileScanner(
+    return MobileScanner(
         allowDuplicates: false,
         controller: _controller,
         onDetect: (Barcode barcode, MobileScannerArguments? args) {
@@ -35,7 +31,6 @@ class _QRReaderState extends State<QRReader> {
             }
           }
         },
-      ),
     );
   }
 

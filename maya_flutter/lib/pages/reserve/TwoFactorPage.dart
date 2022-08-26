@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/component/QRReader.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../ui/DefaultAppBar.dart';
+
 class TwoFactorPage extends StatefulWidget {
   final MaterialPageRoute Function(String code) builder;
 
@@ -15,10 +17,13 @@ class TwoFactorPage extends StatefulWidget {
 class _TwoFactorPageState extends State<TwoFactorPage> {
   @override
   Widget build(BuildContext context) {
-    return QRReader(builder: (Barcode barcode) {
-      return widget.builder(barcode.rawValue!);
-    }, validator: (Barcode barcode) {
-      return barcode.rawValue != null;
-    });
+    return Scaffold(
+      appBar: defaultAppBar("QRコード読み取り"),
+      body: QRReader(builder: (Barcode barcode) {
+        return widget.builder(barcode.rawValue!);
+      }, validator: (Barcode barcode) {
+        return barcode.rawValue != null;
+      }),
+    );
   }
 }
