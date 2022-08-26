@@ -26,10 +26,10 @@ class _CheckPageState extends State<CheckPage> {
         Expanded(
           child: QRReader(
             validator: (Barcode barcode) {
-              return _readFromBarcode(barcode) != null;
+              return readFromBarcode(barcode) != null;
             },
             builder: (Barcode barcode) {
-              Tuple2<String, String> data = _readFromBarcode(barcode)!;
+              Tuple2<String, String> data = readFromBarcode(barcode)!;
               return MaterialPageRoute(builder: (BuildContext context) {
                 return CheckProcessingPage(
                     future: check(
@@ -47,13 +47,16 @@ class _CheckPageState extends State<CheckPage> {
       ],
     );
   }
+}
 
-  Tuple2<String, String>? _readFromBarcode(Barcode barcode) {
-    String? data = barcode.rawValue;
-    if (data == null) {
-      return null;
-    }
-    List<String> split = data.split("#");
-    return Tuple2(split[0], split[1]);
+Tuple2<String, String>? readFromBarcode(Barcode barcode) {
+  String? data = barcode.rawValue;
+  if (data == null) {
+    return null;
   }
+  List<String> split = data.split("#");
+  if (split.length != 2) {
+    return null;
+  }
+  return Tuple2(split[0], split[1]);
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -328,4 +330,48 @@ class Ticket {
   factory Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
 
   Map<String, dynamic> toJson() => _$TicketToJson(this);
+}
+
+@JsonSerializable()
+class LookUpData {
+  List<RawTrackData?> tracks;
+  String? reserveId;
+  Reservation? reservation;
+
+  LookUpData({required this.tracks, this.reserveId, this.reservation});
+
+  factory LookUpData.fromJson(Map<String, dynamic> json) => _$LookUpDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LookUpDataToJson(this);
+
+  @override
+  String toString() {
+    var encoder = const JsonEncoder.withIndent("     ");
+    return encoder.convert(toJson());
+  }
+}
+
+@JsonSerializable()
+class RawTrackData {
+  TrackData data;
+  TimeStamp time;
+
+  RawTrackData({required this.data, required this.time});
+
+  factory RawTrackData.fromJson(Map<String, dynamic> json) => _$RawTrackDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RawTrackDataToJson(this);
+}
+
+@JsonSerializable()
+class TrackData {
+  Operation operation;
+  Room? fromRoom;
+  Room toRoom;
+
+  TrackData({required this.operation, this.fromRoom, required this.toRoom});
+
+  factory TrackData.fromJson(Map<String, dynamic> json) => _$TrackDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TrackDataToJson(this);
 }

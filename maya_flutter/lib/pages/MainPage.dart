@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/models/PermissionsChangeNotifier.dart';
 import 'package:maya_flutter/pages/DocumentPage.dart';
 import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
+import 'package:maya_flutter/pages/debug/DebugPage.dart';
 import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -69,6 +72,26 @@ class _MainPageState extends State<MainPage> {
   void _moveTo(int page) {
     _controller.animateToPage(page,
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+
+    _handleDebugPage(page);
+  }
+
+  Timer? _resetDebugTapTimer;
+  int _debugPageTapCount = 0;
+
+  void _handleDebugPage(int page) {
+    if (page == _pages.indexOf(Pages.documentPage.item1)) {
+      _debugPageTapCount++;
+      if (_debugPageTapCount == 4) {
+        _debugPageTapCount = 0;
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const DebugPage()));
+      }
+
+      _resetDebugTapTimer?.cancel();
+      _resetDebugTapTimer = Timer(const Duration(milliseconds: 300), () {
+        _debugPageTapCount = 0;
+      });
+    }
   }
 }
 
