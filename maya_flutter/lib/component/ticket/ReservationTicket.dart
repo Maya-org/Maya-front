@@ -22,7 +22,7 @@ class ReservationTicket extends StatefulWidget {
 
 class _ReservationTicketState extends State<ReservationTicket> {
   final PageController _pageController = PageController(initialPage: 0);
-  static const int scrollDuration = 900;
+  static const int scrollDuration = 300;
 
   @override
   Widget build(BuildContext context) {

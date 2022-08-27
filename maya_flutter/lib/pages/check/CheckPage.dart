@@ -258,16 +258,17 @@ class _ScannedEntryState extends State<ScannedEntry> {
   }
 
   void _checkStateUpdate() {
+    if (_status == CheckStatus.completed || _status == CheckStatus.failed) {
+      return;
+    }
     if (widget.entries.all((entry) => entry.status == CheckStatus.completed)) {
       setState(() {
         _status = CheckStatus.completed;
       });
     } else if (widget.entries.any((element) => element.status == CheckStatus.failed)) {
-      if (_status != CheckStatus.failed) {
-        setState(() {
-          _status = CheckStatus.failed;
-        });
-      }
+      setState(() {
+        _status = CheckStatus.failed;
+      });
     }
   }
 
@@ -281,6 +282,7 @@ class _ScannedEntryState extends State<ScannedEntry> {
   }
 
   CheckEntry _getLatestTime() {
-    return widget.entries.maxByCompare((p0, p1) => p0.time.toDateTime().compareTo(p1.time.toDateTime()));
+    return widget.entries
+        .maxByCompare((p0, p1) => p0.time.toDateTime().compareTo(p1.time.toDateTime()));
   }
 }
