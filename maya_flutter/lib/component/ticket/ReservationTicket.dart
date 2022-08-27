@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/models/Models.dart';
 import '../PageControllerVisualizer.dart';
+import '../ReservationView.dart';
 import 'TicketElement.dart';
 
 class ReservationTicket extends StatefulWidget {
@@ -20,9 +22,18 @@ class ReservationTicket extends StatefulWidget {
 
 class _ReservationTicketState extends State<ReservationTicket> {
   final PageController _pageController = PageController(initialPage: 0);
+  static const int scrollDuration = 900;
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<TicketScroller>(context, listen: false).addListener(() async {
+      // Animate To the Last Page
+      for(int i = 0; i < widget.tickets.length; i++) {
+        await Future.delayed(const Duration(milliseconds: scrollDuration));
+        _pageController.jumpToPage(i);
+      }
+    });
+
     return SizedBox(
       width: double.infinity,
       child: Column(children: [

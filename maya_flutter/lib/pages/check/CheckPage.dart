@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:maya_flutter/component/QRReader.dart';
 import 'package:maya_flutter/ui/DefaultAppBar.dart';
+import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:tuple/tuple.dart';
 
@@ -21,7 +24,9 @@ class CheckPage extends StatefulWidget {
 }
 
 class _CheckPageState extends State<CheckPage> {
-  final List<CheckEntry> _results = [];
+  final List<Widget> _results = [];
+  Timer? _timer;
+  int _scannedCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +41,28 @@ class _CheckPageState extends State<CheckPage> {
           onValidData: (Barcode barcode) {
             Tuple2<String, String> data = readFromBarcode(barcode)!;
             setState(() {
-              _results.add(CheckEntry.now(
-                  widget.operation,
-                  widget.selectedRoom,
-                  check(
-                    widget.operation,
-                    data.item1,
-                    widget.selectedRoom,
-                    data.item2,
-                  )));
+              _results.add(CheckResultItem(
+                  checkResult: CheckEntry.now(
+                      widget.operation,
+                      widget.selectedRoom,
+                      check(
+                        widget.operation,
+                        data.item1,
+                        widget.selectedRoom,
+                        data.item2,
+                      ))));
+
+              _scannedCount++;
+              _timer?.cancel();
+              _timer = Timer(const Duration(seconds: 1), () {
+                // 一連の読み取りが終了
+                List<CheckEntry> entries = _collect();
+                _clearCollected();
+                setState(() {
+                  _results.add(ScannedEntry(entries: entries));
+                  _scannedCount = 0;
+                });
+              });
             });
           },
         );
@@ -74,6 +92,23 @@ class _CheckPageState extends State<CheckPage> {
       }),
     );
   }
+
+  List<CheckEntry> _collect() {
+    return _results
+        .map((result) {
+          if (result is CheckResultItem) {
+            return result.checkResult;
+          }
+          return null;
+        })
+        .toList()
+        .filterNotNull()
+        .toList();
+  }
+
+  void _clearCollected() {
+    _results.removeWhere((element) => element is CheckResultItem);
+  }
 }
 
 Tuple2<String, String>? readFromBarcode(Barcode barcode) {
@@ -89,7 +124,7 @@ Tuple2<String, String>? readFromBarcode(Barcode barcode) {
 }
 
 class CheckResultWidget extends StatefulWidget {
-  final List<CheckEntry> checkResults;
+  final List<Widget> checkResults;
 
   const CheckResultWidget({Key? key, required this.checkResults}) : super(key: key);
 
@@ -100,15 +135,13 @@ class CheckResultWidget extends StatefulWidget {
 class _CheckResultWidgetState extends State<CheckResultWidget> {
   @override
   Widget build(BuildContext context) {
-    SingleChildScrollView w = SingleChildScrollView(
-        child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return CheckResultItem(checkResult: widget.checkResults[index]);
-            },
-            itemCount: widget.checkResults.length,
-            shrinkWrap: true,
-            reverse: true));
-    return w;
+    return ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return widget.checkResults[index];
+        },
+        itemCount: widget.checkResults.length,
+        shrinkWrap: true,
+        reverse: true);
   }
 }
 
@@ -122,13 +155,23 @@ class CheckResultItem extends StatefulWidget {
 }
 
 class _CheckResultItemState extends State<CheckResultItem> {
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     widget.checkResult.listen((status) {
-      setState(() {
-        // redraw
-      });
+      if (!_isDisposed) {
+        setState(() {
+          // redraw
+        });
+      }
     });
   }
 
@@ -190,4 +233,54 @@ enum CheckStatus {
   final Icon icon;
 
   const CheckStatus(this.icon);
+}
+
+class ScannedEntry extends StatefulWidget {
+  final List<CheckEntry> entries;
+
+  const ScannedEntry({Key? key, required this.entries}) : super(key: key);
+
+  @override
+  State<ScannedEntry> createState() => _ScannedEntryState();
+}
+
+class _ScannedEntryState extends State<ScannedEntry> {
+  CheckStatus _status = CheckStatus.pending;
+
+  @override
+  void initState() {
+    super.initState();
+    for (var entry in widget.entries) {
+      entry.listen((status) {
+        _checkStateUpdate();
+      });
+    }
+  }
+
+  void _checkStateUpdate() {
+    if (widget.entries.all((entry) => entry.status == CheckStatus.completed)) {
+      setState(() {
+        _status = CheckStatus.completed;
+      });
+    } else if (widget.entries.any((element) => element.status == CheckStatus.failed)) {
+      if (_status != CheckStatus.failed) {
+        setState(() {
+          _status = CheckStatus.failed;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text("${widget.entries.length}件読み取りました"),
+      subtitle: Text(_getLatestTime().time.toStringWithSec()),
+      trailing: _status.icon,
+    );
+  }
+
+  CheckEntry _getLatestTime() {
+    return widget.entries.maxByCompare((p0, p1) => p0.time.toDateTime().compareTo(p1.time.toDateTime()));
+  }
 }

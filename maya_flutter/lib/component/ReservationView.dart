@@ -30,31 +30,41 @@ class _ReservationViewState extends State<ReservationView> {
                   width: constraints.maxWidth, height: constraints.maxHeight),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    StyledTextWidget.mdFromString(
-                        '''**開始日時: ${widget.reservation.event.date_start.toDateTime().toString()}**
+                child: ChangeNotifierProvider(
+                  create: (context) => TicketScroller(),
+                  builder: (ctx, child) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        StyledTextWidget.mdFromString(
+                            '''**開始日時: ${widget.reservation.event.date_start.toDateTime().toString()}**
         \\\nイベント名: ${widget.reservation.event.display_name}
         \\\nイベントID: ${widget.reservation.event.event_id}
         \\\n予約ID:${widget.reservation.reservation_id}
         \\\n予約人数:${widget.reservation.headCount()}人
         \\\nチケットタイプ:[${widget.reservation.tickets.map((e) => e.ticket_type.display_ticket_name).join(",")}]
         ''', true),
-                    ElevatedButton(
-                        onPressed: () {
-                          _navigateToModifyPage();
-                        },
-                        child: const Text("予約内容を変更する")),
-                    ElevatedButton(
-                        onPressed: () {
-                          _navigateToCancelPage();
-                        },
-                        style: ElevatedButton.styleFrom(primary: Colors.red),
-                        child: const Text("予約をキャンセルする")),
-                    ReservationTicket(user: user, tickets: widget.reservation.tickets)
-                  ],
+                        ElevatedButton(
+                            onPressed: () {
+                              _navigateToModifyPage();
+                            },
+                            child: const Text("予約内容を変更する")),
+                        ElevatedButton(
+                            onPressed: () {
+                              _navigateToCancelPage();
+                            },
+                            style: ElevatedButton.styleFrom(primary: Colors.red),
+                            child: const Text("予約をキャンセルする")),
+                        ElevatedButton(
+                            onPressed: () {
+                              _allScroll(ctx);
+                            },
+                            child: const Text("チケットを一斉に表示する")),
+                        ReservationTicket(user: user, tickets: widget.reservation.tickets)
+                      ],
+                    );
+                  },
                 ),
               ));
         }));
@@ -66,5 +76,22 @@ class _ReservationViewState extends State<ReservationView> {
 
   void _navigateToCancelPage() {
     Navigator.of(context).pushNamed("/cancel", arguments: widget.reservation);
+  }
+
+  void _allScroll(BuildContext ctx) {
+    Provider.of<TicketScroller>(ctx,listen: false).scroll();
+  }
+}
+
+class TicketScroller extends ChangeNotifier {
+  DateTime scrollDate = DateTime.now();
+
+  void scroll() {
+    scrollDate = DateTime.now();
+    notifyListeners();
+  }
+
+  bool get isScroll {
+    return DateTime.now().difference(scrollDate).inMilliseconds < 100;
   }
 }
