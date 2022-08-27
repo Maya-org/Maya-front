@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,71 +19,99 @@ class TicketListPage extends StatefulWidget {
 }
 
 class _TicketListPageState extends State<TicketListPage> {
-  static const int scrollDuration = 500;
-  int _index = -1;
-
-  List<TicketQRCode>? _generated;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: defaultAppBar("チケット一斉表示"),
-      body: Column(
-        children: [
-          Center(
-            child: LayoutBuilder(
-              builder: (ctx, con) {
-                double min = con.maxWidth < con.maxHeight ? con.maxWidth : con.maxHeight;
-                return SizedBox(
-                  width: min,
-                  height: min,
-                  child: _index >= 0 ? _generated![_index] : Container(),
-                );
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    _start();
-                  },
-                  child: const Text("表示開始")),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _index = -1;
-                    });
-                  },
-                  child: const Text("表示消去")),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Center(child: Text(_index == -1 ? "未表示" : "${_index + 1} / ${widget.tickets.length}")),
-        ],
-      ),
+        appBar: defaultAppBar("チケット一斉表示"),
+        body: TicketListPageBody(tickets: widget.tickets, user: widget.user));
+  }
+}
+
+class TicketListPageBody extends StatefulWidget {
+  final List<Ticket> tickets;
+  final User user;
+
+  const TicketListPageBody({super.key, required this.tickets, required this.user});
+
+  @override
+  State<StatefulWidget> createState() => _TicketListPageBodyState();
+}
+
+class _TicketListPageBodyState extends State<TicketListPageBody> {
+  static const int scrollDuration = 500;
+  final PageController _scrollController = PageController();
+  List<TicketQRCode>? _generated;
+  late Row _row;
+  late PageView _pageView;
+
+  _TicketListPageBodyState() {
+    _row = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+            onPressed: () {
+              _start();
+            },
+            child: const Text("表示開始")),
+        const SizedBox(width: 10),
+        ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _generated = null;
+              });
+            },
+            child: const Text("表示消去")),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox.square(
+          dimension: MediaQuery.of(context).size.minPixel(),
+          child: _generated != null
+              ? _pageView
+              : Container(),
+        ),
+        _row,
+        const SizedBox(height: 20),
+        Center(
+            child: Text("${widget.tickets.length}枚")),
+      ],
     );
   }
 
   void _start() async {
-    _generate();
+    setState(() {
+      _generated =
+          widget.tickets.map((ticket) => TicketQRCode(ticket: ticket, user: widget.user)).toList();
+      _pageView = PageView.builder(
+        itemBuilder: (ctx, index) {
+          return _generated![index];
+        },
+        itemCount: _generated!.length,
+        controller: _scrollController,
+      );
+    });
     _next(-1, widget.tickets.length - 1);
   }
 
-  void _generate() {
-    _generated =
-        widget.tickets.map((ticket) => TicketQRCode(ticket: ticket, user: widget.user)).toList();
-  }
-
   void _next(int now, int max) {
-    setState(() {
-      _index = now + 1;
-    });
+    if (_scrollController.hasClients) {
+      _scrollController.jumpToPage(now + 1);
+      setState(() {});
+    }
     if (max == now + 1) return;
     Future.delayed(const Duration(milliseconds: scrollDuration), () {
       _next(now + 1, max);
     });
+  }
+}
+
+extension SizeExtension on Size {
+  double minPixel() {
+    return min(width, height);
   }
 }

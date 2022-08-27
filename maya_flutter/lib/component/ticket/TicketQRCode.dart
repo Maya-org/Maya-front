@@ -7,9 +7,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 class TicketQRCode extends StatefulWidget {
   final User user;
   final Ticket ticket;
-  late String? _qrCodeString;
-  late QrImage? _cached;
-  late QrCode? _cachedQrCode;
+  late String _qrCodeString;
+  late QrImage _cached;
+  late QrCode _cachedQrCode;
 
   TicketQRCode({super.key, required this.user, required this.ticket}){
     _doCache();
@@ -20,9 +20,9 @@ class TicketQRCode extends StatefulWidget {
 
   void _doCache() {
     _qrCodeString = generateQRCodeData(user, ticket);
-    _cachedQrCode = QrCode.fromData(data: _qrCodeString!, errorCorrectLevel: QrErrorCorrectLevel.L);
-    _cachedQrCode!.make();
-    _cached = QrImage.withQr(qr: _cachedQrCode!, version: QrVersions.auto);
+    _cachedQrCode = QrCode.fromData(data: _qrCodeString, errorCorrectLevel: QrErrorCorrectLevel.L);
+    _cachedQrCode.make();
+    _cached = QrImage.withQr(qr: _cachedQrCode, version: QrVersions.auto);
   }
 }
 
@@ -34,10 +34,7 @@ class _TicketQRCodeState extends State<TicketQRCode> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: updateQR,
-      child: widget._cached,
-    );
+    return widget._cached;
   }
 
   void updateQR() {
