@@ -7,50 +7,45 @@ import 'package:qr_flutter/qr_flutter.dart';
 class TicketQRCode extends StatefulWidget {
   final User user;
   final Ticket ticket;
+  late String? _qrCodeString;
+  late QrImage? _cached;
+  late QrCode? _cachedQrCode;
 
-  const TicketQRCode({super.key, required this.user, required this.ticket});
+  TicketQRCode({super.key, required this.user, required this.ticket}){
+    _doCache();
+  }
 
   @override
   State<TicketQRCode> createState() => _TicketQRCodeState();
+
+  void _doCache() {
+    _qrCodeString = generateQRCodeData(user, ticket);
+    _cachedQrCode = QrCode.fromData(data: _qrCodeString!, errorCorrectLevel: QrErrorCorrectLevel.L);
+    _cachedQrCode!.make();
+    _cached = QrImage.withQr(qr: _cachedQrCode!, version: QrVersions.auto);
+  }
 }
 
 class _TicketQRCodeState extends State<TicketQRCode> {
-  String? _qrCodeString;
-
   @override
   void initState() {
     super.initState();
-    generateQRCodeData(widget.user, widget.ticket).then((value) {
-      setState(() {
-        _qrCodeString = value;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: updateQR,
-      child: _child(),
+      child: widget._cached,
     );
   }
 
-  Widget _child() {
-    if (_qrCodeString != null) {
-      return QrImage(data: _qrCodeString!, version: QrVersions.auto);
-    } else {
-      return Container();
-    }
-  }
-
-  Future<void> updateQR() async {
-    String str = await generateQRCodeData(widget.user, widget.ticket);
-    setState(() {
-      _qrCodeString = str;
-    });
+  void updateQR() {
+    widget._doCache();
+    setState(() {});
   }
 }
 
-Future<String> generateQRCodeData(User user, Ticket ticket) async {
+String generateQRCodeData(User user, Ticket ticket) {
   return "${user.uid}#${ticket.ticket_id}";
 }
