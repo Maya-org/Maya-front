@@ -51,7 +51,18 @@ class _DebugPageState extends State<DebugPage> {
               onPressed: () {
                 Provider.of<EventChangeNotifier>(context, listen: false).updateEvents();
               },
-              child: const Text("Refresh Event"))
+              child: const Text("Refresh Event")),
+          const SizedBox(height: 16),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed("/register/phoneVerifier");
+              },
+              child: const Text("PhoneVerifier Page")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed("/signup");
+              },
+              child: const Text("SignUp Page")),
         ],
       ),
     );

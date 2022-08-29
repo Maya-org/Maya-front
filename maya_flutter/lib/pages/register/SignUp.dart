@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/messages.i18n.dart';
@@ -15,19 +14,31 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool _isInited = false;
+
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_isInited) {
+        _isInited = true;
+        if (Provider.of<UserChangeNotifier>(context, listen: false).user != null){
+          Navigator.pushReplacementNamed(context, "/loading");
+          return;
+        }
+        Provider.of<UserChangeNotifier>(context, listen: false).addListener(() {
+          if (Provider.of<UserChangeNotifier>(context, listen: false).user != null){
+            Navigator.pushReplacementNamed(context, "/loading");
+          }
+        });
+      }
+    });
   }
 
   // TODO Restyle
   @override
   Widget build(BuildContext context) {
-    User? user = Provider.of<UserChangeNotifier>(context, listen: true).user;
-    if (user != null) {
-      Future.microtask(() => Navigator.pushReplacementNamed(context, "/loading"));
-    }
-
     return Scaffold(
       body: Center(
         child: Column(
