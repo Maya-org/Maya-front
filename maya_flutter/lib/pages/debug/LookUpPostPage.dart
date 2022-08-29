@@ -26,7 +26,7 @@ class _LookUpPostPageState extends State<LookUpPostPage> {
 
   List<Widget> _body() {
     List<Widget> list = [const Center(child: Text("情報照会結果"))];
-    list.addAll(handle(widget.response, (LookUpData p0) => [Text(p0.toString())], (p0, p1) => [const Text("照会に失敗しました")]));
+    list.addAll(handle(widget.response, (LookUpData p0) => [Text(p0.toString())], (p0, p1) => [const Text("照会に失敗しました"),Text(p1.toString())]));
     return list;
   }
 }
