@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:maya_flutter/messages.i18n.dart';
 import 'package:maya_flutter/models/UserChangeNotifier.dart';
+import 'package:maya_flutter/ui/StyledText.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -14,7 +14,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isInited = false;
+  bool _isInited = true;
+  bool _checked = false;
 
 
   @override
@@ -44,12 +45,22 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(const Messages().sign_up_message),
+            StyledTextWidget.mdFromAsset("assets/signUp.md"),
+            Row(
+              children: [
+                Checkbox(value: _checked, onChanged: (bool? b){
+                  setState(() {
+                    _checked = b!;
+                  });
+                }),
+                const Text("上記の規約に同意します。")
+              ],
+            ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: _checked ? () {
                   Navigator.of(context).pushReplacementNamed("/register/phoneVerifier");
-                },
-                child: const Text("Login"))
+                } : null,
+                child: const Text("新規登録"))
           ],
         ),
       ),
