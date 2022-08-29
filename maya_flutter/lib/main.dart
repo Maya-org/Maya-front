@@ -11,7 +11,7 @@ import 'package:maya_flutter/pages/LoadingPage.dart';
 import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/pages/ReservationPage.dart';
 import 'package:maya_flutter/pages/register/SignUp.dart';
-import 'package:maya_flutter/pages/register/verifyer.dart';
+import 'package:maya_flutter/pages/register/verifier.dart';
 import 'package:maya_flutter/pages/reserve/CancelPage.dart';
 import 'package:maya_flutter/pages/reserve/ModifyPage.dart';
 import 'package:maya_flutter/pages/reserve/ReservePage.dart';
