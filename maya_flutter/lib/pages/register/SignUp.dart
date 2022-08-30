@@ -14,7 +14,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isInited = true;
+  bool _isInited = false;
   bool _checked = false;
 
 
