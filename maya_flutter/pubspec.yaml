@@ -49,6 +49,8 @@ dependencies:
   flutter_markdown: ^0.6.10+3
   url_launcher: ^6.1.5
   file_saver: ^0.1.1
+  shared_preferences: ^2.0.15
+  material_segmented_control: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -80,8 +82,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/document.md
-    - assets/onReserve.md
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

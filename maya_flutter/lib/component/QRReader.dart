@@ -5,10 +5,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 class QRReader extends StatefulWidget {
   final Route<dynamic> Function(Barcode)? builder;
   final bool Function(Barcode) validator;
-  final void Function(Barcode)? onNavigate;
+  final void Function(Barcode)? onValidData;
 
-  const QRReader({Key? key, this.builder, required this.validator, this.onNavigate})
-      : super(key: key);
+  const QRReader({Key? key, this.builder, required this.validator, this.onValidData}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _QRReaderState();
@@ -19,23 +18,18 @@ class _QRReaderState extends State<QRReader> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('QRコード読み取り画面'),
-      ),
-      body: MobileScanner(
-        allowDuplicates: false,
-        controller: _controller,
-        onDetect: (Barcode barcode, MobileScannerArguments? args) {
-          if (barcode.rawValue != null && widget.validator(barcode)) {
-            if (widget.builder != null) {
-              _controller.stop();
-              widget.onNavigate?.call(barcode);
-              Navigator.of(context).pushReplacement(widget.builder!(barcode));
-            }
+    return MobileScanner(
+      allowDuplicates: false,
+      controller: _controller,
+      onDetect: (Barcode barcode, MobileScannerArguments? args) {
+        if (barcode.rawValue != null && widget.validator(barcode)) {
+          widget.onValidData?.call(barcode);
+          if (widget.builder != null) {
+            _controller.stop();
+            Navigator.of(context).pushReplacement(widget.builder!(barcode));
           }
-        },
-      ),
+        }
+      },
     );
   }
 

@@ -9,6 +9,7 @@ import 'package:maya_flutter/api/processer/CancelProcesser.dart';
 import 'package:maya_flutter/api/processer/CheckProcessor.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
+import 'package:maya_flutter/api/processer/LookUpProcessor.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
@@ -123,6 +124,10 @@ Future<APIResponse<bool?>> check(
 
 Future<APIResponse<List<Room>?>> rooms(){
   return getProcessed("room", const RoomsProcessor());
+}
+
+Future<APIResponse<LookUpData?>> lookUp(String userId,String ticketID){
+  return postProcessed("lookup", LookUpProcessor(),body: {"user_id":userId,"ticket_id":ticketID});
 }
 
 /// For Debugging purposes

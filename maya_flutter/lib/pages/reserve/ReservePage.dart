@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 
 import '../../api/models/Models.dart';
 import '../../component/reserve/ReservePageView.dart';
@@ -10,9 +11,7 @@ class ReservePage extends StatelessWidget {
   Widget build(BuildContext context) {
     ReservableEvent event = ModalRoute.of(context)!.settings.arguments as ReservableEvent;
     return Scaffold(
-        appBar: AppBar(
-          title: Text("${event.display_name}の新規予約"),
-        ),
+        appBar: defaultAppBar("${event.display_name}の新規予約"),
         body: ReservePageView(event: event)
     );
   }

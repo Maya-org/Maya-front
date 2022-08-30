@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../api/models/Models.dart';
+import '../../ui/DefaultAppBar.dart';
 
 class CancelPostPageView extends StatelessWidget {
   final Reservation cancelledReservation;
@@ -18,9 +19,7 @@ class CancelPostPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約キャンセル結果"),
-      ),
+      appBar: defaultAppBar("予約キャンセル結果"),
       body: Text(_bodyString()),
     );
   }

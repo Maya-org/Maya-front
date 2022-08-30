@@ -51,7 +51,7 @@ class _CheckSelectPageState extends State<CheckSelectPage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('CheckSelectPage'),
+              const Text('入退場処理設定'),
               DropdownButton<Room>(
                 items: _dropdownRooms,
                 value: _selectedRoom,

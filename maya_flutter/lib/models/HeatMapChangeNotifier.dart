@@ -15,7 +15,6 @@ class HeatMapChangeNotifier extends ChangeNotifier {
   }
 
   void _update(DatabaseEvent event) {
-    print('update');
     if (event.snapshot.value is int) {
       _data[event.snapshot.key!] = event.snapshot.value as int;
       notifyListeners();
@@ -23,7 +22,6 @@ class HeatMapChangeNotifier extends ChangeNotifier {
   }
 
   void _update_(DataSnapshot snapshot) {
-    print('init data');
     if (snapshot.value != null) {
       _data = Map<String, int>.from(snapshot.value as Map<dynamic, dynamic>);
       notifyListeners();

@@ -21,7 +21,7 @@ Guest _$GuestFromJson(Map<String, dynamic> json) => Guest(
     );
 
 Map<String, dynamic> _$GuestToJson(Guest instance) => <String, dynamic>{
-      'type': _$GuestTypeEnumMap[instance.type],
+      'type': _$GuestTypeEnumMap[instance.type]!,
     };
 
 const _$GuestTypeEnumMap = {
@@ -189,3 +189,52 @@ Map<String, dynamic> _$TicketToJson(Ticket instance) => <String, dynamic>{
       'ticket_type': instance.ticket_type,
       'event': instance.event,
     };
+
+LookUpData _$LookUpDataFromJson(Map<String, dynamic> json) => LookUpData(
+      tracks: (json['tracks'] as List<dynamic>)
+          .map((e) => e == null
+              ? null
+              : RawTrackData.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      reserveId: json['reserveId'] as String?,
+      reservation: json['reservation'] == null
+          ? null
+          : Reservation.fromJson(json['reservation'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$LookUpDataToJson(LookUpData instance) =>
+    <String, dynamic>{
+      'tracks': instance.tracks,
+      'reserveId': instance.reserveId,
+      'reservation': instance.reservation,
+    };
+
+RawTrackData _$RawTrackDataFromJson(Map<String, dynamic> json) => RawTrackData(
+      data: TrackData.fromJson(json['data'] as Map<String, dynamic>),
+      time: TimeStamp.fromJson(json['time'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$RawTrackDataToJson(RawTrackData instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'time': instance.time,
+    };
+
+TrackData _$TrackDataFromJson(Map<String, dynamic> json) => TrackData(
+      operation: $enumDecode(_$OperationEnumMap, json['operation']),
+      fromRoom: json['fromRoom'] == null
+          ? null
+          : Room.fromJson(json['fromRoom'] as Map<String, dynamic>),
+      toRoom: Room.fromJson(json['toRoom'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$TrackDataToJson(TrackData instance) => <String, dynamic>{
+      'operation': _$OperationEnumMap[instance.operation]!,
+      'fromRoom': instance.fromRoom,
+      'toRoom': instance.toRoom,
+    };
+
+const _$OperationEnumMap = {
+  Operation.Enter: 'Enter',
+  Operation.Exit: 'Exit',
+};

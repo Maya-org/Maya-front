@@ -162,10 +162,10 @@ abstract class APIResponseError<T> implements APIResponse<T> {
           final T? dummy, final Response res, final String displayMessage) =
       _$APIResponseError<T>;
 
-  T? get dummy => throw _privateConstructorUsedError;
-  Response get res => throw _privateConstructorUsedError;
+  T? get dummy;
+  Response get res;
   @override
-  String get displayMessage => throw _privateConstructorUsedError;
+  String get displayMessage;
 }
 
 /// @nodoc
@@ -267,7 +267,7 @@ abstract class APIResponseSuccess<T> implements APIResponse<T> {
   const factory APIResponseSuccess(final T body, final String displayMessage) =
       _$APIResponseSuccess<T>;
 
-  T get body => throw _privateConstructorUsedError;
+  T get body;
   @override
-  String get displayMessage => throw _privateConstructorUsedError;
+  String get displayMessage;
 }

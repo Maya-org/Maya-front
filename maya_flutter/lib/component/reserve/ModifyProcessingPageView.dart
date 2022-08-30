@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/component/reserve/ModifyPostPageView.dart';
+import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:maya_flutter/ui/APIResponseHandler.dart';
+import 'package:maya_flutter/ui/DefaultAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/APIResponse.dart';
 import '../../api/models/Models.dart';
 import '../../models/ReservationChangeNotifier.dart';
-import '../../pages/HomePage.dart';
 
 class ModifyProcessingPageView extends StatefulWidget {
   final Future<APIResponse<bool?>> future;
@@ -26,9 +27,7 @@ class _ModifyProcessingPageViewState extends State<ModifyProcessingPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("予約変更処理中"),
-      ),
+      appBar: defaultAppBar("予約変更処理中"),
       body: Center(
         child: Column(
           children: const [
@@ -55,7 +54,7 @@ class _ModifyProcessingPageViewState extends State<ModifyProcessingPageView> {
       Provider.of<ReservationChangeNotifier>(context, listen: false).update(); // 予約データを更新
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const MainPage(),
         ),
       );
       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
@@ -65,7 +64,7 @@ class _ModifyProcessingPageViewState extends State<ModifyProcessingPageView> {
       // 変更に失敗
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const MainPage(),
         ),
       );
       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){

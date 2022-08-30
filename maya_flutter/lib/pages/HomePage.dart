@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../component/EventsView.dart';
 import '../component/ReservationsView.dart';
+import '../component/event/EventsView.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
