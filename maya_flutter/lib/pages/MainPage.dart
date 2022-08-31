@@ -7,6 +7,7 @@ import 'package:maya_flutter/pages/HomePage.dart';
 import 'package:maya_flutter/pages/check/CheckSelectPage.dart';
 import 'package:maya_flutter/pages/debug/DebugPage.dart';
 import 'package:maya_flutter/pages/debug/LookUpPage.dart';
+import 'package:maya_flutter/pages/permission/PermissionPage.dart';
 import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -115,7 +116,7 @@ class Pages {
             activeIcon: Icon(Icons.qr_code_scanner, color: Colors.blue),
             label: '入退場処理',
           )),
-      ["Entrance"]);
+      ["entrance"]);
 
   static const heatMapPage = Tuple2(
       Tuple2(
@@ -145,9 +146,19 @@ class Pages {
             activeIcon: Icon(Icons.search, color: Colors.blue),
             label: '情報照会',
           )),
-      <String>["Debug"]);
+      <String>["debug"]);
 
-  static const pages = [reservePage, checkPage,lookUpPage, heatMapPage, documentPage];
+  static const permissionPage = Tuple2(
+      Tuple2(
+          PermissionPage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings, color: Colors.blue),
+            label: '権限付与',
+          )),
+      <String>["promote"]);
+
+  static const pages = [reservePage, checkPage,lookUpPage, heatMapPage, documentPage,permissionPage];
 
   static List<Tuple2<Widget, BottomNavigationBarItem>> generate(List<String> permissions) {
     return pages

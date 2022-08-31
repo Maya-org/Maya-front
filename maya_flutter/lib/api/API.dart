@@ -130,6 +130,11 @@ Future<APIResponse<LookUpData?>> lookUp(String userId,String ticketID){
   return postProcessed("lookup", LookUpProcessor(),body: {"user_id":userId,"ticket_id":ticketID});
 }
 
+Future<APIResponse<bool?>> postPermission(String targetUserUid, Map<String, bool> permissions) {
+  return postProcessed("permissions", PostPermissionsProcessor(),
+      body: {"target_user_uid": targetUserUid, "data": permissions});
+}
+
 /// For Debugging purposes
 Future<Tuple2<Duration, R>> measureTime<R>(Future<R> Function() block) async {
   Stopwatch stopwatch = Stopwatch();
