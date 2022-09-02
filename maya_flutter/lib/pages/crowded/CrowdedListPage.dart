@@ -19,14 +19,15 @@ class CrowdedListPage extends StatefulWidget {
 }
 
 class _CrowdedListPageState extends State<CrowdedListPage> {
-  List<CrowdedListEntry> _base = [];
+  List<CrowdedListEntry> _baseCount = [];
+  List<CrowdedListEntry> _baseSum = [];
   List<CrowdedListEntry> _sorted = [];
   ComparatorType _type = ComparatorType.COUNT;
 
   @override
   Widget build(BuildContext context) {
     updateList(Provider.of<RoomsProvider>(context).list ?? [],
-        Provider.of<HeatMapChangeNotifier>(context).data);
+        Provider.of<HeatMapChangeNotifier>(context));
 
     return Scaffold(
       appBar: defaultAppBar('混雑状況一覧'),
@@ -47,6 +48,7 @@ class _CrowdedListPageState extends State<CrowdedListPage> {
                   ComparatorType.COUNT: Text("人数"),
                   ComparatorType.NAME: Text("部屋名"),
                   ComparatorType.PERCENTAGE: Text("混雑率"),
+                  ComparatorType.SUM: Text("累計人数"),
                 },
                 onSegmentChosen: (ComparatorType type) {
                   setState(() {
@@ -69,10 +71,11 @@ class _CrowdedListPageState extends State<CrowdedListPage> {
     );
   }
 
-  void updateList(List<Room> list, Map<String, int> data) {
-    _base = list
+  void updateList(List<Room> list, HeatMapChangeNotifier notifier) {
+    Map<String, int> count = notifier.guestCount;
+    _baseCount = list
         .map((Room room) {
-          MapEntry<String, int>? en = data.getFirstOrNull((e) => e.key == room.room_id);
+          MapEntry<String, int>? en = count.getFirstOrNull((e) => e.key == room.room_id);
           if (en != null) {
             return Tuple2(room, en.value);
           }
@@ -90,18 +93,38 @@ class _CrowdedListPageState extends State<CrowdedListPage> {
         })
         .toList();
 
+    Map<String, int> sum = notifier.guestCountSum;
+    _baseSum = list
+        .map((Room room) {
+          MapEntry<String, int>? en = sum.getFirstOrNull((e) => e.key == room.room_id);
+          if (en != null) {
+            return Tuple2(room, en.value);
+          }
+          return null;
+        })
+        .toList()
+        .filterNotNull()
+        .filter((Tuple2<Room, int> element) =>
+            rooms.any((r) => r.item1 == element.item1.room_id)) // roomsに記載があるものだけにする
+        .map((Tuple2<Room, int> element) {
+          return CrowdedListEntry(
+            room: element.item1,
+            count: element.item2,
+          );
+        })
+        .toList();
     _doSort();
   }
 
   void _doSort() {
-    _sorted = _base.toList();
+    _sorted = _baseCount.toList();
     switch (_type) {
       case ComparatorType.NAME:
         _sorted.sort((CrowdedListEntry a, CrowdedListEntry b) =>
-            b.room.display_name.compareTo(a.room.display_name));
+            b.room.display_name.compareTo(a.room.display_name)); // TODO 挙動が不明
         break;
       case ComparatorType.COUNT:
-        _sorted.sort((CrowdedListEntry a, CrowdedListEntry b) => b.count.compareTo(a.count)); // TODO 挙動が不明
+        _sorted.sort((CrowdedListEntry a, CrowdedListEntry b) => b.count.compareTo(a.count));
         break;
       case ComparatorType.PERCENTAGE:
         _sorted.sort((CrowdedListEntry a, CrowdedListEntry b) {
@@ -113,11 +136,15 @@ class _CrowdedListPageState extends State<CrowdedListPage> {
           return b.percentage!.compareTo(a.percentage!);
         });
         break;
+      case ComparatorType.SUM:
+        _sorted = _baseSum.toList();
+        _sorted.sort((CrowdedListEntry a, CrowdedListEntry b) => b.count.compareTo(a.count));
+        break;
     }
   }
 }
 
-enum ComparatorType { NAME, COUNT, PERCENTAGE }
+enum ComparatorType { NAME, COUNT, PERCENTAGE, SUM }
 
 class CrowdedListEntry extends StatefulWidget {
   final Room room;

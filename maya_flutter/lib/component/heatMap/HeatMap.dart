@@ -29,7 +29,7 @@ class _HeatMapState extends State<HeatMap> {
               width: constraints.maxWidth,
               height: (constraints.maxWidth / widthScale.toDouble()) * heightScale.toDouble(),
               child: CustomPaint(
-                painter: _HeatMapPainter(Provider.of<HeatMapChangeNotifier>(context).data,
+                painter: _HeatMapPainter(Provider.of<HeatMapChangeNotifier>(context).guestCount,
                     Provider.of<RoomsProvider>(context).list),
               ),
             );

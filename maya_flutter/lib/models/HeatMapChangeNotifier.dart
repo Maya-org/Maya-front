@@ -5,25 +5,51 @@ import 'package:flutter/cupertino.dart';
 
 class HeatMapChangeNotifier extends ChangeNotifier {
   StreamSubscription<DatabaseEvent>? _subscription;
-  Map<String, int> _data = {};
+  Map<String, int> _guestCountData = {};
+  Map<String, int> _guestCountSumData = {};
 
   HeatMapChangeNotifier() {
     FirebaseDatabase.instance.ref("/guestCount").get().then((value) {
-      _update_(value);
-      _subscription = FirebaseDatabase.instance.ref("/guestCount").onChildChanged.listen(_update);
+      _updateCount_(value);
+      _subscription = FirebaseDatabase.instance
+          .ref("/guestCount")
+          .onChildChanged
+          .listen(_updateCount);
+    });
+
+    FirebaseDatabase.instance.ref("/guestCountSum").get().then((value) {
+      _updateSum_(value);
+      _subscription = FirebaseDatabase.instance
+          .ref("/guestCountSum")
+          .onChildChanged
+          .listen(_updateSum);
     });
   }
 
-  void _update(DatabaseEvent event) {
+  void _updateCount(DatabaseEvent event) {
     if (event.snapshot.value is int) {
-      _data[event.snapshot.key!] = event.snapshot.value as int;
+      _guestCountData[event.snapshot.key!] = event.snapshot.value as int;
       notifyListeners();
     }
   }
 
-  void _update_(DataSnapshot snapshot) {
+  void _updateSum(DatabaseEvent event){
+    if (event.snapshot.value is int) {
+      _guestCountSumData[event.snapshot.key!] = event.snapshot.value as int;
+      notifyListeners();
+    }
+  }
+
+  void _updateCount_(DataSnapshot snapshot) {
     if (snapshot.value != null) {
-      _data = Map<String, int>.from(snapshot.value as Map<dynamic, dynamic>);
+      _guestCountData = Map<String, int>.from(snapshot.value as Map<dynamic, dynamic>);
+      notifyListeners();
+    }
+  }
+
+  void _updateSum_(DataSnapshot snapshot) {
+    if (snapshot.value != null) {
+      _guestCountSumData = Map<String, int>.from(snapshot.value as Map<dynamic, dynamic>);
       notifyListeners();
     }
   }
@@ -34,5 +60,7 @@ class HeatMapChangeNotifier extends ChangeNotifier {
     _subscription?.cancel();
   }
 
-  Map<String, int> get data => _data;
+  Map<String, int> get guestCount => _guestCountData;
+
+  Map<String, int> get guestCountSum => _guestCountSumData;
 }
