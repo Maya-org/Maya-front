@@ -29,7 +29,7 @@ class _CheckSelectPageState extends State<CheckSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (checkPermission("Entrance", context)) {
+    if (checkPermission("entrance", context)) {
       if (_rooms == null) {
         List<Room>? _r = Provider.of<RoomsProvider>(context, listen: true).list;
         if (_r != null) {

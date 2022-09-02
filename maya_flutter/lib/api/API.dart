@@ -12,6 +12,7 @@ import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/LookUpProcessor.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
+import 'package:maya_flutter/api/processer/PostPermissionsProcessor.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
 import 'package:maya_flutter/api/processer/RoomsProcessor.dart';
