@@ -38,10 +38,10 @@ extension ListUtil<E> on List<E> {
     return max;
   }
 
-  E maxByCompare(int Function(E,E) f){
+  E maxByCompare(int Function(E, E) f) {
     E max = elementAt(0);
     for (E e in this) {
-      if (f(e,max) > 0) max = e;
+      if (f(e, max) > 0) max = e;
     }
     return max;
   }
@@ -74,5 +74,11 @@ extension MapUtil<K, V> on Map<K, V> {
 
   MapEntry<K, V>? getFirstOrNull(bool Function(MapEntry<K, V> element) test) {
     return entries.toList().getFirstOrNull(test);
+  }
+}
+
+extension ListFlattenUtil<E> on List<List<E>> {
+  List<E> flatten() {
+    return expand((e) => e).toList();
   }
 }

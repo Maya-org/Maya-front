@@ -12,6 +12,7 @@ import 'package:maya_flutter/util/CollectionUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+import 'bind/BindNavigatePage.dart';
 import 'crowded/CrowdedPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -158,7 +159,25 @@ class Pages {
           )),
       <String>["promote"]);
 
-  static const pages = [reservePage, checkPage,lookUpPage, heatMapPage, documentPage,permissionPage];
+  static const bindPage = Tuple2(
+      Tuple2(
+          BindNavigatePage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.link),
+            activeIcon: Icon(Icons.link, color: Colors.blue),
+            label: '紐づけ',
+          )),
+      <String>["bind"]);
+
+  static const pages = [
+    reservePage,
+    bindPage,
+    checkPage,
+    lookUpPage,
+    heatMapPage,
+    documentPage,
+    permissionPage
+  ];
 
   static List<Tuple2<Widget, BottomNavigationBarItem>> generate(List<String> permissions) {
     return pages

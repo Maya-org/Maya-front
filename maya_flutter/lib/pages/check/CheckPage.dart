@@ -36,34 +36,38 @@ class _CheckPageState extends State<CheckPage> {
       body: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         QRReader qrReader = QRReader(
           validator: (Barcode barcode) {
-            return readFromBarcode(barcode) != null;
+            return barcode.rawValue != null && barcode.rawValue!.isNotEmpty;
           },
           onValidData: (Barcode barcode) {
-            Tuple2<String, String> data = readFromBarcode(barcode)!;
-            setState(() {
-              _results.add(CheckResultItem(
-                  checkResult: CheckEntry.now(
-                      widget.operation,
-                      widget.selectedRoom,
-                      check(
+            Tuple2<String, String>? data = readFromBarcode(barcode);
+            if (data != null) {
+              // チケットを直接読み取っているのでリストバンドを読み取るよう促す
+              _showInfoSnackBar();
+            } else {
+              setState(() {
+                _results.add(CheckResultItem(
+                    checkResult: CheckEntry.now(
                         widget.operation,
-                        data.item1,
                         widget.selectedRoom,
-                        data.item2,
-                      ))));
+                        check(
+                          widget.operation,
+                          widget.selectedRoom,
+                          barcode.rawValue!,
+                        ))));
 
-              _scannedCount++;
-              _timer?.cancel();
-              _timer = Timer(const Duration(seconds: 1), () {
-                // 一連の読み取りが終了
-                List<CheckEntry> entries = _collect();
-                _clearCollected();
-                setState(() {
-                  _results.add(ScannedEntry(entries: entries));
-                  _scannedCount = 0;
+                _scannedCount++;
+                _timer?.cancel();
+                _timer = Timer(const Duration(seconds: 1), () {
+                  // 一連の読み取りが終了
+                  List<CheckEntry> entries = _collect();
+                  _clearCollected();
+                  setState(() {
+                    _results.add(ScannedEntry(entries: entries));
+                    _scannedCount = 0;
+                  });
                 });
               });
-            });
+            }
           },
         );
 
@@ -108,6 +112,15 @@ class _CheckPageState extends State<CheckPage> {
 
   void _clearCollected() {
     _results.removeWhere((element) => element is CheckResultItem);
+  }
+
+  /// チケットを直接読み取っているのでリストバンドを読み取るよう促す
+  void _showInfoSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("リストバンドを読み取ってください"),
+      duration: Duration(seconds: 1),
+      backgroundColor: Colors.red,
+    ));
   }
 }
 
@@ -191,17 +204,17 @@ class CheckEntry {
   Room toRoom;
   TimeStamp time;
   Future<APIResponse<bool?>> future;
-  CheckStatus status = CheckStatus.pending;
+  RequestStatus status = RequestStatus.pending;
 
-  List<void Function(CheckStatus status)> _onStatusChanged = [];
+  List<void Function(RequestStatus status)> _onStatusChanged = [];
 
   CheckEntry(
       {required this.operation, required this.toRoom, required this.time, required this.future}) {
     future.then((APIResponse<bool?> response) {
       handle(response, (p) {
-        status = CheckStatus.completed;
+        status = RequestStatus.completed;
       }, (r, e) {
-        status = CheckStatus.failed;
+        status = RequestStatus.failed;
       });
 
       for (var f in _onStatusChanged) {
@@ -214,12 +227,12 @@ class CheckEntry {
     return CheckEntry(operation: operation, toRoom: toRoom, time: TimeStamp.now(), future: future);
   }
 
-  void listen(void Function(CheckStatus status) f) {
+  void listen(void Function(RequestStatus status) f) {
     _onStatusChanged.add(f);
   }
 }
 
-enum CheckStatus {
+enum RequestStatus {
   pending(Icon(Icons.hourglass_empty)),
   completed(Icon(
     Icons.check_circle_outline,
@@ -232,7 +245,7 @@ enum CheckStatus {
 
   final Icon icon;
 
-  const CheckStatus(this.icon);
+  const RequestStatus(this.icon);
 }
 
 class ScannedEntry extends StatefulWidget {
@@ -245,7 +258,7 @@ class ScannedEntry extends StatefulWidget {
 }
 
 class _ScannedEntryState extends State<ScannedEntry> {
-  CheckStatus _status = CheckStatus.pending;
+  RequestStatus _status = RequestStatus.pending;
 
   @override
   void initState() {
@@ -258,16 +271,16 @@ class _ScannedEntryState extends State<ScannedEntry> {
   }
 
   void _checkStateUpdate() {
-    if (_status == CheckStatus.completed || _status == CheckStatus.failed) {
+    if (_status == RequestStatus.completed || _status == RequestStatus.failed) {
       return;
     }
-    if (widget.entries.all((entry) => entry.status == CheckStatus.completed)) {
+    if (widget.entries.all((entry) => entry.status == RequestStatus.completed)) {
       setState(() {
-        _status = CheckStatus.completed;
+        _status = RequestStatus.completed;
       });
-    } else if (widget.entries.any((element) => element.status == CheckStatus.failed)) {
+    } else if (widget.entries.any((element) => element.status == RequestStatus.failed)) {
       setState(() {
-        _status = CheckStatus.failed;
+        _status = RequestStatus.failed;
       });
     }
   }

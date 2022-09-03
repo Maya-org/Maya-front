@@ -12,6 +12,7 @@ import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/LookUpProcessor.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
+import 'package:maya_flutter/api/processer/PostBindProcessor.dart';
 import 'package:maya_flutter/api/processer/PostPermissionsProcessor.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
@@ -95,7 +96,8 @@ Future<APIResponse<List<String>?>> getPermissions() async {
   return await getProcessed("permissions", const PermissionsProcessor());
 }
 
-Future<APIResponse<bool?>> modifyReserve(List<TicketType> toUpdate,Reservation modifyReservation, {String? twoFactorKey}) async {
+Future<APIResponse<bool?>> modifyReserve(List<TicketType> toUpdate, Reservation modifyReservation,
+    {String? twoFactorKey}) async {
   Map<String, dynamic> json = {
     "tickets": toUpdate.map((e) => e.toJson()).toList(),
     "reservation_id": modifyReservation.reservation_id,
@@ -112,28 +114,32 @@ Future<APIResponse<bool?>> cancelReserve(Reservation reservation) {
   return postProcessed("cancel", const CancelProcessor(), body: json);
 }
 
-Future<APIResponse<bool?>> check(
-    Operation operation, String uid, Room room, String ticketID) {
+Future<APIResponse<bool?>> check(Operation operation, Room room, String wristbandID) {
   Map<String, dynamic> json = {
     "operation": operation.operationName,
-    "auth_uid": uid,
+    "wristbandID": wristbandID,
     "room_id": room.room_id,
-    "ticket_id": ticketID,
   };
   return postProcessed("check", const CheckProcessor(), body: json);
 }
 
-Future<APIResponse<List<Room>?>> rooms(){
+Future<APIResponse<List<Room>?>> rooms() {
   return getProcessed("room", const RoomsProcessor());
 }
 
-Future<APIResponse<LookUpData?>> lookUp(String userId,String ticketID){
-  return postProcessed("lookup", LookUpProcessor(),body: {"user_id":userId,"ticket_id":ticketID});
+Future<APIResponse<LookUpData?>> lookUp(String userId, String ticketID) {
+  return postProcessed("lookup", LookUpProcessor(),
+      body: {"user_id": userId, "ticket_id": ticketID});
 }
 
 Future<APIResponse<bool?>> postPermission(String targetUserUid, Map<String, bool> permissions) {
   return postProcessed("permissions", PostPermissionsProcessor(),
       body: {"target_user_uid": targetUserUid, "data": permissions});
+}
+
+Future<APIResponse<bool?>> postBind(String wristBandID, String reserverID, String ticketID) {
+  return postProcessed("bind", PostBindProcessor(),
+      body: {"wristbandID": wristBandID, "reserverID": reserverID, "ticketID": ticketID});
 }
 
 /// For Debugging purposes
