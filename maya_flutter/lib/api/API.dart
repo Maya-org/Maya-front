@@ -12,6 +12,7 @@ import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/LookUpProcessor.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
 import 'package:maya_flutter/api/processer/PermissionsProcesser.dart';
+import 'package:maya_flutter/api/processer/PostPermissionsProcessor.dart';
 import 'package:maya_flutter/api/processer/PostReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/RegisterProcesser.dart';
 import 'package:maya_flutter/api/processer/RoomsProcessor.dart';
@@ -128,6 +129,11 @@ Future<APIResponse<List<Room>?>> rooms(){
 
 Future<APIResponse<LookUpData?>> lookUp(String userId,String ticketID){
   return postProcessed("lookup", LookUpProcessor(),body: {"user_id":userId,"ticket_id":ticketID});
+}
+
+Future<APIResponse<bool?>> postPermission(String targetUserUid, Map<String, bool> permissions) {
+  return postProcessed("permissions", PostPermissionsProcessor(),
+      body: {"target_user_uid": targetUserUid, "data": permissions});
 }
 
 /// For Debugging purposes
