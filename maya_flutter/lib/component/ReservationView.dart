@@ -58,7 +58,7 @@ class _ReservationViewState extends State<ReservationView> {
                       style: ElevatedButton.styleFrom(primary: Colors.green),
                       child: const Text("チケットを一斉に表示する"),
                     ),
-                    ReservationTicket(user: user, tickets: widget.reservation.tickets)
+                    ReservationTicket(uid: user?.uid, tickets: widget.reservation.tickets)
                   ],
                 ),
               ));

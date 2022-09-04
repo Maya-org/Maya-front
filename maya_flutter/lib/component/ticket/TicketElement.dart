@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:file_saver/file_saver.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -11,9 +10,9 @@ import 'TicketQRCode.dart';
 
 class TicketElement extends StatefulWidget {
   final Ticket ticket;
-  final User user;
+  final String? uid;
 
-  TicketElement({super.key, required this.ticket, required this.user});
+  TicketElement({super.key, required this.ticket, required this.uid});
 
   @override
   State<TicketElement> createState() => _TicketElementState();
@@ -30,7 +29,7 @@ class _TicketElementState extends State<TicketElement> {
           key: _key,
           child: Column(
             children: [
-              TicketQRCode(ticket: widget.ticket, user: widget.user),
+              TicketQRCode(ticket: widget.ticket, uid: widget.uid),
               Text(widget.ticket.ticket_type.display_ticket_name),
             ],
           ),

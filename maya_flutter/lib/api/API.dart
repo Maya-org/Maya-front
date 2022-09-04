@@ -8,6 +8,7 @@ import 'package:maya_flutter/api/models/Models.dart';
 import 'package:maya_flutter/api/processer/CancelProcesser.dart';
 import 'package:maya_flutter/api/processer/CheckProcessor.dart';
 import 'package:maya_flutter/api/processer/EventProcesser.dart';
+import 'package:maya_flutter/api/processer/ForceProcessor.dart';
 import 'package:maya_flutter/api/processer/GetReserveProcesser.dart';
 import 'package:maya_flutter/api/processer/LookUpProcessor.dart';
 import 'package:maya_flutter/api/processer/ModifyProcesser.dart';
@@ -140,6 +141,14 @@ Future<APIResponse<bool?>> postPermission(String targetUserUid, Map<String, bool
 Future<APIResponse<bool?>> postBind(String wristBandID, String reserverID, String ticketID) {
   return postProcessed("bind", PostBindProcessor(),
       body: {"wristbandID": wristBandID, "reserverID": reserverID, "ticketID": ticketID});
+}
+
+Future<APIResponse<List<Ticket>?>> force(ReserveRequest request, String? data) {
+  Map<String, dynamic> json = request.toJson();
+  if (data != null) {
+    json["data"] = data;
+  }
+  return postProcessed("force", ForceProcessor(), body: json);
 }
 
 /// For Debugging purposes

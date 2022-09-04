@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,9 +9,9 @@ import 'TicketElement.dart';
 
 class ReservationTicket extends StatefulWidget {
   final List<Ticket> tickets;
-  final User? user;
+  final String? uid;
 
-  const ReservationTicket({super.key, required this.tickets, required this.user});
+  const ReservationTicket({super.key, required this.tickets, required this.uid});
 
   @override
   State<ReservationTicket> createState() => _ReservationTicketState();
@@ -45,6 +44,6 @@ class _ReservationTicketState extends State<ReservationTicket> {
 
   Widget _builder(BuildContext context, int index) {
     Ticket ticket = widget.tickets[index];
-    return TicketElement(ticket: ticket, user: widget.user!);
+    return TicketElement(ticket: ticket, uid: widget.uid);
   }
 }

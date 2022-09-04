@@ -71,22 +71,20 @@ class _TicketListPageBodyState extends State<TicketListPageBody> {
       children: [
         SizedBox.square(
           dimension: MediaQuery.of(context).size.minPixel(),
-          child: _generated != null
-              ? _pageView
-              : Container(),
+          child: _generated != null ? _pageView : Container(),
         ),
         _row,
         const SizedBox(height: 20),
-        Center(
-            child: Text("${widget.tickets.length}枚")),
+        Center(child: Text("${widget.tickets.length}枚")),
       ],
     );
   }
 
   void _start() async {
     setState(() {
-      _generated =
-          widget.tickets.map((ticket) => TicketQRCode(ticket: ticket, user: widget.user)).toList();
+      _generated = widget.tickets
+          .map((ticket) => TicketQRCode(ticket: ticket, uid: widget.user.uid))
+          .toList();
       _pageView = PageView.builder(
         itemBuilder: (ctx, index) {
           return _generated![index];

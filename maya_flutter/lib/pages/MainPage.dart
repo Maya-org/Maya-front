@@ -14,6 +14,7 @@ import 'package:tuple/tuple.dart';
 
 import 'bind/BindNavigatePage.dart';
 import 'crowded/CrowdedPage.dart';
+import 'force/ForcePage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -169,6 +170,16 @@ class Pages {
           )),
       <String>["bind"]);
 
+  static const forcePage = Tuple2(
+      Tuple2(
+          ForcePage(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.warning),
+            activeIcon: Icon(Icons.warning, color: Colors.blue),
+            label: '強制発券',
+          )),
+      <String>["force_reserve"]);
+
   static const pages = [
     reservePage,
     bindPage,
@@ -176,7 +187,8 @@ class Pages {
     lookUpPage,
     heatMapPage,
     documentPage,
-    permissionPage
+    permissionPage,
+    forcePage
   ];
 
   static List<Tuple2<Widget, BottomNavigationBarItem>> generate(List<String> permissions) {

@@ -1,17 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/models/Models.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketQRCode extends StatefulWidget {
-  final User user;
+  final String? uid;
   final Ticket ticket;
   late String _qrCodeString;
   late QrImage _cached;
   late QrCode _cachedQrCode;
 
-  TicketQRCode({super.key, required this.user, required this.ticket}){
+  TicketQRCode({super.key, required this.uid, required this.ticket}) {
     _doCache();
   }
 
@@ -19,10 +18,13 @@ class TicketQRCode extends StatefulWidget {
   State<TicketQRCode> createState() => _TicketQRCodeState();
 
   void _doCache() {
-    _qrCodeString = generateQRCodeData(user, ticket);
-    _cachedQrCode = QrCode.fromData(data: _qrCodeString, errorCorrectLevel: QrErrorCorrectLevel.L);
-    _cachedQrCode.make();
-    _cached = QrImage.withQr(qr: _cachedQrCode, version: QrVersions.auto);
+    if (uid != null) {
+      _qrCodeString = generateQRCodeData(uid!, ticket);
+      _cachedQrCode =
+          QrCode.fromData(data: _qrCodeString, errorCorrectLevel: QrErrorCorrectLevel.L);
+      _cachedQrCode.make();
+      _cached = QrImage.withQr(qr: _cachedQrCode, version: QrVersions.auto);
+    }
   }
 }
 
@@ -34,7 +36,11 @@ class _TicketQRCodeState extends State<TicketQRCode> {
 
   @override
   Widget build(BuildContext context) {
-    return widget._cached;
+    if (widget.uid != null) {
+      return widget._cached;
+    } else {
+      return Container();
+    }
   }
 
   void updateQR() {
@@ -43,6 +49,6 @@ class _TicketQRCodeState extends State<TicketQRCode> {
   }
 }
 
-String generateQRCodeData(User user, Ticket ticket) {
-  return "${user.uid}#${ticket.ticket_id}";
+String generateQRCodeData(String uid, Ticket ticket) {
+  return "$uid#${ticket.ticket_id}";
 }
