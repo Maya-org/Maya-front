@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maya_flutter/api/APIResponse.dart';
 import 'package:maya_flutter/models/ReservationChangeNotifier.dart';
+import 'package:maya_flutter/pages/MainPage.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/models/Models.dart';
@@ -44,22 +45,22 @@ class _CancelProcessingPageViewState extends State<CancelProcessingPageView> {
       // 変更に成功
       // Update the reservation list
       Provider.of<ReservationChangeNotifier>(context, listen: false).update();
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
-        return CancelPostPageView(
-          isCancelled: res,
-          cancelledReservation: widget.reservation,
-          displayMessage: null,
-        );
-      }), ModalRoute.withName("/main"));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const MainPage()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => CancelPostPageView(
+                isCancelled: res,
+                cancelledReservation: widget.reservation,
+                displayMessage: null,
+              )));
     }, (response, displayString) {
       // 変更に失敗
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
-        return CancelPostPageView(
-          isCancelled: false,
-          cancelledReservation: widget.reservation,
-          displayMessage: displayString,
-        );
-      }), ModalRoute.withName("/main"));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const MainPage()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => CancelPostPageView(
+                isCancelled: false,
+                cancelledReservation: widget.reservation,
+                displayMessage: displayString,
+              )));
     });
   }
 }

@@ -19,6 +19,7 @@ class EventChangeNotifier extends ChangeNotifier {
       notifyListeners();
     }, (p0, p1) {
       // Failed to get events.
+      print('Failed to get events.: $p1');
     });
   }
 

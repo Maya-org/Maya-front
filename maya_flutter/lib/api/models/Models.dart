@@ -90,10 +90,13 @@ class ReservableEvent {
   TimeStamp date_start;
   TimeStamp? date_end;
   TimeStamp? available_at;
+  TimeStamp? closed_at; // 予約受付終了時刻
   int? capacity;
   int taken_capacity;
   ReservableEvent?
       required_reservation; // Reference to a reservation that is required to attend this event.
+  ReservableEvent?
+      not_co_exist_reservation; // Reference to a reservation that is not allowed to co-exist with this event.
   List<TicketType> reservable_ticket_type;
   bool require_two_factor;
   int? maximum_reservations_per_user;
@@ -114,11 +117,6 @@ class ReservableEvent {
   factory ReservableEvent.fromJson(Map<String, dynamic> json) => _$ReservableEventFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReservableEventToJson(this);
-
-  @override
-  String toString() {
-    return "{イベント:$display_name,id:$event_id,開始:$date_start,終了:$date_end,最大参加人数$capacity,参加人数:$taken_capacity,必要予約:$required_reservation,予約可能:$reservable_ticket_type}";
-  }
 }
 
 @JsonSerializable()
@@ -183,9 +181,14 @@ class TimeStamp {
     return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分";
   }
 
-  String toStringWithSec(){
+  String toStringWithSec() {
     DateTime time = toDateTime();
     return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分${time.second}秒";
+  }
+
+  String toStringWithMin(){
+    DateTime time = toDateTime();
+    return "${time.year}年${time.month}月${time.day}日 ${time.hour}時${time.minute}分";
   }
 
   static now() {

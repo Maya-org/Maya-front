@@ -35,7 +35,7 @@ class _ReservationViewState extends State<ReservationView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    EventDescriber(event: widget.reservation.event),
+                    EventDescriber(event: widget.reservation.event, toDescribeMore: false),
                     ElevatedButton(
                         onPressed: () {
                           _navigateToModifyPage();

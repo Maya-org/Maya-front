@@ -14,31 +14,17 @@ class EventDescriber extends StatelessWidget {
       children: [
         Center(child: Text(event.display_name)),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  const Text("開始時刻"),
-                  Text(event.date_start.toString()),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  const Text("終了時刻"),
-                  Text(event.date_end?.toString() ?? "未定"),
-                ],
-              ),
-            ),
-          ],
-        ),
+        const Text("イベント開催時刻"),
+        Text(_genTimeString()),
         if (event.description != null) ...[
           const SizedBox(height: 10),
           const Text("イベント概要"),
-          const SizedBox(height: 10),
           Text(event.description!),
+        ],
+        if (_isLimitedReserveable()) ...[
+          const SizedBox(height: 10),
+          const Text("予約受付期間"),
+          Text(_genLimitedTimeString()),
         ],
         if (event.require_two_factor && (toDescribeMore ?? true)) ...[
           const SizedBox(height: 10),
@@ -59,11 +45,39 @@ class EventDescriber extends StatelessWidget {
             (toDescribeMore ?? true)) ...[
           const SizedBox(height: 10),
           Text(
-            "このイベントは${event.available_at!.toString()}までは予約できません。",
+            "このイベントは${event.available_at!.toStringWithSec()}までは予約できません。",
+            style: const TextStyle(color: Colors.redAccent),
+          ),
+        ],
+        if (event.closed_at != null &&
+            event.closed_at!.toDateTime().isBefore(DateTime.now()) &&
+            (toDescribeMore ?? true)) ...[
+          const SizedBox(height: 10),
+          Text(
+            "このイベントは${event.closed_at!.toStringWithSec()}に受付を終了しました。",
+            style: const TextStyle(color: Colors.redAccent),
+          )
+        ],
+        if (event.not_co_exist_reservation != null && (toDescribeMore ?? true)) ...[
+          const SizedBox(height: 10),
+          Text(
+            "このイベントの予約と「${event.not_co_exist_reservation!.display_name}」の予約は同時にできません。",
             style: const TextStyle(color: Colors.redAccent),
           ),
         ],
       ],
     );
+  }
+
+  String _genTimeString() {
+    return "${event.date_start.toStringWithMin()} ~ ${event.date_end?.toStringWithMin() ?? "未定"}";
+  }
+
+  bool _isLimitedReserveable() {
+    return event.available_at != null || event.closed_at != null;
+  }
+
+  String _genLimitedTimeString() {
+    return "${event.available_at?.toStringWithMin() ?? ""} ~ ${event.closed_at?.toStringWithMin() ?? ""}";
   }
 }

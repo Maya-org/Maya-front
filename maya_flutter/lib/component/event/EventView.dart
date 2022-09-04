@@ -81,6 +81,11 @@ class _EventViewState extends State<EventView> {
   }
 
   void checkReserved(List<Reservation> reservations) {
+    _checkRequired(reservations);
+    _checkNotCoExist(reservations);
+  }
+
+  void _checkRequired(List<Reservation> reservations) {
     if (widget.event.required_reservation == null) {
       _isReservedRequiredEvent = true;
       return;
@@ -94,15 +99,36 @@ class _EventViewState extends State<EventView> {
     }
   }
 
+  void _checkNotCoExist(List<Reservation> reservations) {
+    if (widget.event.not_co_exist_reservation == null) {
+      _isReservedNotCoExistEvent = false;
+      return;
+    }
+    _isReservedNotCoExistEvent = false;
+    for (var reservation in reservations) {
+      if (reservation.event.event_id == widget.event.not_co_exist_reservation!.event_id) {
+        _isReservedNotCoExistEvent = true;
+        return;
+      }
+    }
+  }
+
   bool _isReservedRequiredEvent = false;
+  bool _isReservedNotCoExistEvent = false;
 
   bool _isReservable() {
     bool b = true;
     if (widget.event.available_at != null) {
       b = b && widget.event.available_at!.toDateTime().isBefore(DateTime.now());
     }
+    if (widget.event.closed_at != null) {
+      b = b && widget.event.closed_at!.toDateTime().isAfter(DateTime.now());
+    }
     if (widget.event.required_reservation != null) {
       b = b && _isReservedRequiredEvent;
+    }
+    if (widget.event.not_co_exist_reservation != null) {
+      b = b && !_isReservedNotCoExistEvent;
     }
     return b;
   }
