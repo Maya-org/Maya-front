@@ -20,7 +20,7 @@ class _DebugPageState extends State<DebugPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: defaultAppBar("デバッグページ"),
+      appBar: defaultAppBar("デバッグページ(V1.1)"),
       body: SizedBox.expand(
         child: SingleChildScrollView(
           child: Column(
